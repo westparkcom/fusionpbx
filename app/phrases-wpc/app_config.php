@@ -14,6 +14,7 @@
 		$apps[$x]['description']['de-ch'] = "";
 		$apps[$x]['description']['de-de'] = "Phrasen verwalten. Diese werden hauptsächlich für Anrufzentralen (IVR) verwendet.";
 		$apps[$x]['description']['es-cl'] = "Administrador de grabaciones, utilizadas primordialmente con un IVR";
+		$apps[$x]['description']['es-mx'] = "";
 		$apps[$x]['description']['fr-ca'] = "";
 		$apps[$x]['description']['fr-fr'] = "Gestion des enregistrements principalement utilisés dans les IVR";
 		$apps[$x]['description']['he-il'] = "";
