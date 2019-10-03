@@ -66,6 +66,14 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 		$ibr_pilot_uuid = $_POST["ibr_pilot_uuid"];
 	}
 
+	//validate the token
+		$token = new token;
+		if (!$token->validate($_SERVER['PHP_SELF'])) {
+			message::add($text['message-invalid_token'],'negative');
+			header('Location: ibr_pilots.php');
+			exit;
+		}
+
 	//check for all required data
 		if (strlen($ibr_pilot) == 0) { $msg .= $text['message-required']." ".$text['label-ibr_pilot']."<br>\n"; }
 		//if (strlen($accountcode) == 0) { $msg .= $text['message-required']." ".$text['label-accountcode']."<br>\n"; }
@@ -140,6 +148,10 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 		}
 		unset($sql, $parameters, $row);
 	}
+
+//create token
+	$object = new token;
+	$token = $object->create($_SERVER['PHP_SELF']);
 
 //show the header
 	require_once "resources/header.php";
