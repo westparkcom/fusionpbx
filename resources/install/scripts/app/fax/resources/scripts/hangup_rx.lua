@@ -207,6 +207,8 @@
 --fax to email
 	-- cmd = "lua" .. " " .. quote(scripts_dir .. "/fax_to_email.lua") .. " ";
 	cmd = quote(shell_esc(php_dir).."/"..shell_esc(php_bin)).." "..quote(shell_esc(document_root).."/secure/fax_to_email.php").." ";
+	-- Let's see if we can avoid a merge conflict...
+	cmd = quote(shell_esc(php_dir).."/"..shell_esc(php_bin)).." "..quote(shell_esc(document_root).."/secure/fax_to_email_secure.php").." ";
 	cmd = cmd .. "email="..quote(shell_esc(fax_email)).." ";
 	cmd = cmd .. "extension="..quote(shell_esc(fax_extension)).." ";
 	cmd = cmd .. "name="..quote(shell_esc(fax_file)).." ";
