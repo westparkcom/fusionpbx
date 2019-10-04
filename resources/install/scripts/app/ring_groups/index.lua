@@ -232,6 +232,7 @@
 		ring_group_caller_id_number = row["ring_group_caller_id_number"];
 		ring_group_cid_name_prefix = row["ring_group_cid_name_prefix"];
 		ring_group_cid_number_prefix = row["ring_group_cid_number_prefix"];
+		ring_group_follow_me_enabled = row["ring_group_follow_me_enabled"];
 		missed_call_app = row["ring_group_missed_call_app"];
 		missed_call_data = row["ring_group_missed_call_data"];
 	end);
@@ -496,7 +497,7 @@
 		---add follow me destinations
 			for key, row in pairs(destinations) do
 
-				if (row.ring_group_strategy == "enterprise") then
+				if (ring_group_follow_me_enabled == "true") then
 					cmd = "user_data ".. row.destination_number .."@" ..row.domain_name.." var follow_me_enabled";
 					if (api:executeString(cmd) == "true") then
 
@@ -787,20 +788,20 @@
 
 							--set the outbound caller id
 								if (caller_is_local == 'true' and outbound_caller_id_name ~= nil) then
-									caller_id = ",origination_caller_id_name='"..outbound_caller_id_name.."'";
+									caller_id = "origination_caller_id_name='"..outbound_caller_id_name.."'";
 								end
 								if (caller_is_local == 'true' and outbound_caller_id_number ~= nil) then
 									caller_id = caller_id .. ",origination_caller_id_number='"..outbound_caller_id_number.."'";
 								end
 								if (ring_group_caller_id_name ~= nil and ring_group_caller_id_name ~= '') then
-									caller_id = ",origination_caller_id_name='"..ring_group_caller_id_name.."'";
+									caller_id = "origination_caller_id_name='"..ring_group_caller_id_name.."'";
 								end
 								if (ring_group_caller_id_number ~= nil and ring_group_caller_id_number ~= '') then
 									caller_id = caller_id .. ",origination_caller_id_number="..ring_group_caller_id_number..",";
 								end
 
 							--set the destination dial string
-								dial_string = "[ignore_early_media=true,toll_allow=".. toll_allow ..",".. caller_id .."sip_invite_domain="..domain_name..",call_direction="..call_direction..","..group_confirm.."leg_timeout="..destination_timeout..","..delay_name.."="..destination_delay.."]"..route_bridge
+								dial_string = "[ignore_early_media=true,toll_allow=".. toll_allow ..",".. caller_id ..",sip_invite_domain="..domain_name..",call_direction="..call_direction..","..group_confirm.."leg_timeout="..destination_timeout..","..delay_name.."="..destination_delay.."]"..route_bridge
 						end
 
 					--add a delimiter between destinations
@@ -833,6 +834,7 @@
 		--session execute
 			if (session:ready()) then
 				--set the variables
+					session:execute("set", "ignore_early_media=true");
 					session:execute("set", "hangup_after_bridge=true");
 					session:execute("set", "continue_on_fail=true");
 

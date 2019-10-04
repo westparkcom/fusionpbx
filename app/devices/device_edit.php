@@ -72,7 +72,6 @@
 		//device mac address
 			if (permission_exists('device_mac_address')) {
 				$device_mac_address = $_POST["device_mac_address"];
-				$device_mac_address = strtolower(preg_replace('#[^a-fA-F0-9./]#', '', $device_mac_address));
 			}
 			else {
 				$sql = "select * from v_devices ";
@@ -90,10 +89,9 @@
 		//devices
 			$domain_uuid = $_POST["domain_uuid"];
 			$device_uuid = $_POST["device_uuid"];
-			$device_provisioned_ip = $_POST["device_provisioned_ip"];
+			//$device_provisioned_ip = $_POST["device_provisioned_ip"];
 			$domain_uuid = $_POST["domain_uuid"];
 			$device_label = $_POST["device_label"];
-			$device_mac_address = $_POST["device_mac_address"];
 			$device_label = $_POST["device_label"];
 			$device_user_uuid = $_POST["device_user_uuid"];
 			$device_username = $_POST["device_username"];
@@ -136,6 +134,12 @@
 			//$device_setting_value = $_POST["device_setting_value"];
 			//$device_setting_enabled = $_POST["device_setting_enabled"];
 			//$device_setting_description = $_POST["device_setting_description"];
+
+		//normalize the mac address
+			if (isset($device_mac_address) && strlen($device_mac_address) > 0) {
+				$device_mac_address = strtolower($device_mac_address);
+				$device_mac_address = preg_replace('#[^a-fA-F0-9./]#', '', $device_mac_address);
+			}
 	}
 
 //use the mac address to get the vendor
@@ -216,7 +220,7 @@
 					$array['devices'][0]['domain_uuid'] = $domain_uuid;
 					$array['devices'][0]['device_uuid'] = $device_uuid;
 					$array['devices'][0]['device_mac_address'] = $device_mac_address;
-					$array['devices'][0]['device_provisioned_ip'] = $device_provisioned_ip;
+					//$array['devices'][0]['device_provisioned_ip'] = $device_provisioned_ip;
 					$array['devices'][0]['domain_uuid'] = $domain_uuid;
 					$array['devices'][0]['device_label'] = $device_label;
 					$array['devices'][0]['device_user_uuid'] = $device_user_uuid;
@@ -225,9 +229,7 @@
 					$array['devices'][0]['device_uuid_alternate'] = $device_uuid_alternate;
 					$array['devices'][0]['device_model'] = $device_model;
 					$array['devices'][0]['device_firmware_version'] = $device_firmware_version;
-					if ($_POST["device_enabled"] == "true") {
-						$array['devices'][0]['device_enabled'] = $device_enabled;
-					}
+					$array['devices'][0]['device_enabled'] = $device_enabled;
 					$array['devices'][0]['device_enabled_date'] = 'now()';
 					$array['devices'][0]['device_template'] = $device_template;
 					$array['devices'][0]['device_profile_uuid'] = $device_profile_uuid;

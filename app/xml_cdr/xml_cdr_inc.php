@@ -52,7 +52,7 @@
 		$caller_id_name = $_REQUEST["caller_id_name"];
 		$caller_id_number = $_REQUEST["caller_id_number"];
 		$caller_destination = $_REQUEST["caller_destination"];
-		$caller_extension_uuid = $_REQUEST["caller_extension_uuid"];
+		$extension_uuid = $_REQUEST["extension_uuid"];
 		$destination_number = $_REQUEST["destination_number"];
 		$context = $_REQUEST["context"];
 		$start_stamp_begin = $_REQUEST["start_stamp_begin"];
@@ -63,7 +63,8 @@
 		$end_stamp_end = $_REQUEST["end_stamp_end"];
 		$start_epoch = $_REQUEST["start_epoch"];
 		$stop_epoch = $_REQUEST["stop_epoch"];
-		$duration = $_REQUEST["duration"];
+		$duration_min = $_REQUEST["duration_min"];
+		$duration_max = $_REQUEST["duration_max"];
 		$billsec = $_REQUEST["billsec"];
 		$hangup_cause = $_REQUEST["hangup_cause"];
 		$call_result = $_REQUEST["call_result"];
@@ -75,6 +76,9 @@
 		$remote_media_ip = $_REQUEST["remote_media_ip"];
 		$network_addr = $_REQUEST["network_addr"];
 		$bridge_uuid = $_REQUEST["network_addr"];
+		$tta_min = $_REQUEST['tta_min'];
+		$tta_max = $_REQUEST['tta_max'];
+		$recording = $_REQUEST['recording'];
 		$order_by = $_REQUEST["order_by"];
 		$order = $_REQUEST["order"];
 		if (is_array($_SESSION['cdr']['field'])) {
@@ -139,7 +143,7 @@
 	$param .= "&caller_id_name=".urlencode($caller_id_name);
 	$param .= "&caller_id_number=".urlencode($caller_id_number);
 	$param .= "&caller_destination=".urlencode($caller_destination);
-	$param .= "&caller_extension_uuid=".urlencode($caller_extension_uuid);
+	$param .= "&extension_uuid=".urlencode($extension_uuid);
 	$param .= "&destination_number=".urlencode($destination_number);
 	$param .= "&context=".urlencode($context);
 	$param .= "&start_stamp_begin=".urlencode($start_stamp_begin);
@@ -150,7 +154,8 @@
 	$param .= "&end_stamp_end=".urlencode($end_stamp_end);
 	$param .= "&start_epoch=".urlencode($start_epoch);
 	$param .= "&stop_epoch=".urlencode($stop_epoch);
-	$param .= "&duration=".urlencode($duration);
+	$param .= "&duration_min=".urlencode($duration_min);
+	$param .= "&duration_max=".urlencode($duration_max);
 	$param .= "&billsec=".urlencode($billsec);
 	$param .= "&hangup_cause=".urlencode($hangup_cause);
 	$param .= "&call_result=".urlencode($call_result);
@@ -164,6 +169,9 @@
 	$param .= "&bridge_uuid=".urlencode($bridge_uuid);
 	$param .= "&mos_comparison=".urlencode($mos_comparison);
 	$param .= "&mos_score=".urlencode($mos_score);
+	$param .= "&tta_min=".urlencode($tta_min);
+	$param .= "&tta_max=".urlencode($tta_max);
+	$param .= "&recording=".urlencode($recording);
 	if (is_array($_SESSION['cdr']['field'])) {
 		foreach ($_SESSION['cdr']['field'] as $field) {
 			$array = explode(",", $field);
@@ -180,8 +188,9 @@
 		$param .= "&order_by=".urlencode($order_by)."&order=".urlencode($order);
 	}
 
+
 //create the sql query to get the xml cdr records
-	if (strlen($order_by) == 0) { $order_by  = "start_epoch"; }
+	if (strlen($order_by) == 0) { $order_by  = "start_stamp"; }
 	if (strlen($order) == 0) { $order  = "desc"; }
 
 //set a default number of rows to show
@@ -310,9 +319,9 @@
 		$parameters['caller_id_number'] = '%'.$mod_caller_id_number.'%';
 	}
 
-	if (strlen($caller_extension_uuid) > 0 && is_uuid($caller_extension_uuid)) {
+	if (strlen($extension_uuid) > 0 && is_uuid($extension_uuid)) {
 		$sql .= "and e.extension_uuid = :extension_uuid \n";
-		$parameters['extension_uuid'] = $caller_extension_uuid;
+		$parameters['extension_uuid'] = $extension_uuid;
 	}
 	if (strlen($caller_destination) > 0) {
 		$mod_caller_destination = preg_replace("#[^0-9./]#", "", $caller_destination);
@@ -393,9 +402,13 @@
 			$parameters['end_stamp'] = $end_stamp_end.':59.999';
 		}
 	}
-	if (strlen($duration) > 0) {
-		$sql .= "and duration like :duration ";
-		$parameters['duration'] = '%'.$duration.'%';
+	if (is_numeric($duration_min)) {
+		$sql .= "and duration >= :duration_min ";
+		$parameters['duration_min'] = $duration_min;
+	}
+	if (is_numeric($duration_max)) {
+		$sql .= "and duration <= :duration_max ";
+		$parameters['duration_max'] = $duration_max;
 	}
 	if (strlen($billsec) > 0) {
 		$sql .= "and billsec like :billsec ";
@@ -479,6 +492,22 @@
 		$sql .= "and leg = :leg ";
 		$parameters['leg'] = $leg;
 	}
+	if (is_numeric($tta_min)) {
+		$sql .= "and (c.answer_epoch - c.start_epoch) >= :tta_min ";
+		$parameters['tta_min'] = $tta_min;
+	}
+	if (is_numeric($tta_max)) {
+		$sql .= "and (c.answer_epoch - c.start_epoch) <= :tta_max ";
+		$parameters['tta_max'] = $tta_max;
+	}
+	if ($recording == 'true' || $recording == 'false') {
+		if ($recording == 'true') {
+			$sql .= "and c.record_path is not null and c.record_name is not null ";
+		}
+		if ($recording == 'false') {
+			$sql .= "and (c.record_path is null or c.record_name is null) ";
+		}
+	}
 	//end where
 	if (strlen($order_by) > 0) {
 		$sql .= order_by($order_by, $order);
@@ -510,7 +539,7 @@
 	}
 	$result = $database->select($sql, $parameters, 'all');
 	$result_count = count($result);
-	unset($database, $sql);
+	unset($database, $sql, $parameters);
 
 //return the paging
 	list($paging_controls_mini, $rows_per_page, $offset) = paging($num_rows, $param, $rows_per_page, true, $result_count); //top

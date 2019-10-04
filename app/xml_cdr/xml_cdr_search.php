@@ -125,9 +125,9 @@
 	echo "		<td class='vtable'><input type='text' class='formfld' name='caller_id_name' value='".escape($caller_id_name)."'></td>";
 	echo "	</tr>";
 	echo "	<tr>";
-	echo "		<td class='vncell'>".$text['label-caller_id_number']."</td>"; //source number
+	echo "		<td class='vncell'>".$text['label-extension']."</td>"; //source number
 	echo "		<td class='vtable'>";
-	echo "			<select class='formfld' name='caller_extension_uuid' id='caller_extension_uuid'>\n";
+	echo "			<select class='formfld' name='extension_uuid' id='extension_uuid'>\n";
 	echo "				<option value=''></option>";
 	$sql = "select extension_uuid, extension, number_alias from v_extensions ";
 	$sql .= "where domain_uuid = :domain_uuid ";
@@ -189,8 +189,11 @@
 	echo "		</td>";
 	echo "	</tr>";
 	echo "	<tr>";
-	echo "		<td class='vncell'>".$text['label-duration']."</td>";
-	echo "		<td class='vtable'><input type='text' class='formfld' name='duration' value='".escape($duration)."'></td>";
+	echo "		<td class='vncell'>".$text['label-duration']." (".$text['label-seconds'].")</td>";
+	echo "		<td class='vtable'>\n";
+	echo "			<input type='text' class='formfld' style='min-width: 75px; width: 75px;' name='duration_min' value='".escape($duration_min)."' placeholder=\"".$text['label-minimum']."\">\n";
+	echo "			<input type='text' class='formfld' style='min-width: 75px; width: 75px;' name='duration_max' value='".escape($duration_max)."' placeholder=\"".$text['label-maximum']."\">\n";
+	echo "		</td>";
 	echo "	</tr>";
 	if (permission_exists('xml_cdr_all')) {
 		echo "	<tr>";
