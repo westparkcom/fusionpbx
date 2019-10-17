@@ -391,6 +391,9 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "</td>\n";
 	echo "<td class='vtable' align='left'>\n";
 	if (permission_exists('domain_setting_category_edit')) {
+		if ($action == 'add') {
+			$domain_setting_category = $_GET['domain_setting_category'];
+		}
 		echo "	<input type='text' class='formfld' name='domain_setting_category' id='domain_setting_category' maxlength='255' value=\"".escape($domain_setting_category)."\">\n";
 	}
 	else {
@@ -649,6 +652,17 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 		echo "    	<option value='left' ".(($row['domain_setting_value'] == "left") ? "selected='selected'" : null).">".$text['label-left']."</option>\n";
 		echo "    	<option value='center' ".(($row['domain_setting_value'] == "center") ? "selected='selected'" : null).">".$text['label-center']."</option>\n";
 		echo "    	<option value='right' ".(($row['domain_setting_value'] == "right") ? "selected='selected'" : null).">".$text['label-right']."</option>\n";
+		echo "    </select>\n";
+	}
+	elseif ($category == "theme" && $subcategory == "custom_css_code" && $name == "text" ) {
+		echo "	<textarea class='formfld' style='min-width: 100%; height: 300px; font-family: courier, monospace; overflow: auto; resize: vertical' id='domain_setting_value' name='domain_setting_value' wrap='off'>".$row['domain_setting_value']."</textarea>\n";
+	}
+	elseif ($category == "theme" && $subcategory == "button_icons" && $name == "text" ) {
+		echo "    <select class='formfld' id='domain_setting_value' name='domain_setting_value'>\n";
+		echo "    	<option value='auto'>".$text['option-button_icons_auto']."</option>\n";
+		echo "    	<option value='only' ".($row['domain_setting_value'] == "only" ? "selected='selected'" : null).">".$text['option-button_icons_only']."</option>\n";
+		echo "    	<option value='always' ".($row['domain_setting_value'] == "always" ? "selected='selected'" : null).">".$text['option-button_icons_always']."</option>\n";
+		echo "    	<option value='never' ".($row['domain_setting_value'] == "never" ? "selected='selected'" : null).">".$text['option-button_icons_never']."</option>\n";
 		echo "    </select>\n";
 	}
 	else {

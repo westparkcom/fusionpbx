@@ -405,7 +405,6 @@
 			$c = $c == 0 ? 1 : 0;
 		}
 	}
-	unset($dialplans, $row);
 
 	echo "<tr>\n";
 	echo "<td colspan='9'>\n";
@@ -446,8 +445,7 @@
 	}
 	echo "<br><br>";
 
-	if (is_array($dialplans)) {
-		if (sizeof($dialplan_ids) > 0) {
+		if (!empty($dialplan_ids) && sizeof($dialplan_ids) > 0) {
 			echo "<script>\n";
 			echo "	function check(what) {\n";
 			echo "		document.getElementById('chk_all').checked = (what == 'all') ? true : false;\n";
@@ -457,7 +455,9 @@
 			echo "	}\n";
 			echo "</script>\n";
 		}
-	}
+
+	unset($dialplans, $row);
+
 //include the footer
 	require_once "resources/footer.php";
 

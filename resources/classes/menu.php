@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Copyright (C) 2010 - 2014
+	Copyright (C) 2010 - 2019
 	All Rights Reserved.
 
 	Contributor(s):
@@ -49,6 +49,7 @@ if (!class_exists('menu')) {
 					$database = new database;
 					$database->execute($sql, $parameters);
 					unset($sql, $parameters);
+
 				//remove existing unprotected menu item groups
 					$sql = "delete from v_menu_item_groups ";
 					$sql .= "where menu_uuid = :menu_uuid ";
@@ -65,11 +66,14 @@ if (!class_exists('menu')) {
 					$database = new database;
 					$database->execute($sql, $parameters);
 					unset($sql, $parameters);
+
 				//remove existing unprotected menu items
 					$sql  = "delete from v_menu_items ";
 					$sql .= "where menu_uuid = :menu_uuid ";
-					$sql .= "and (menu_item_protected <> 'true' ";
-					$sql .= "or menu_item_protected is null) ";
+					$sql .= "and ( ";
+					$sql .= "	menu_item_protected <> 'true' ";
+					$sql .= "	or menu_item_protected is null ";
+					$sql .= ") ";
 					$parameters['menu_uuid'] = $this->menu_uuid;
 					$database = new database;
 					$database->execute($sql, $parameters);
@@ -102,6 +106,25 @@ if (!class_exists('menu')) {
 				//get the list of languages
 					$language = new text;
 
+				//create a uuid array of the original uuid used as the key and new uuid as the value
+					if (is_array($apps)) {
+						$x = 0;
+						foreach ($apps as $row) {
+							if (is_array($row['menu'])) {
+								foreach ($row['menu'] as $menu) {
+									$uuid_array[$menu['uuid']] = uuid();
+								}
+							}
+						}
+					}
+
+				//if the item uuid is not currently in the db then add it
+					$sql = "select * from v_menu_items ";
+					$sql .= "where menu_uuid = :menu_uuid ";
+					$parameters['menu_uuid'] = $this->menu_uuid;
+					$database = new database;
+					$menu_items = $database->select($sql, $parameters, 'all');
+
 				//use the app array to restore the default menu
 					if (is_array($apps)) {
 						$x = 0;
@@ -115,33 +138,47 @@ if (!class_exists('menu')) {
 										else {
 											$menu_item_title = $menu['title']['en-us'];
 										}
-										$menu_item_uuid = $menu['uuid'];
-										$menu_item_parent_uuid = $menu['parent_uuid'];
+										$uuid = $menu['uuid'];
+										$menu_item_uuid = $uuid_array[$menu['uuid']];
+										$menu_item_parent_uuid = $uuid_array[$menu['parent_uuid']];
 										$menu_item_category = $menu['category'];
 										$menu_item_icon = $menu['icon'];
 										$menu_item_path = $menu['path'];
 										$menu_item_order = $menu['order'];
 										$menu_item_description = $menu['desc'];
 
-									//menu found set the default
-										$menu_item_exists = true;
+									//check if the menu item exists and if it does set the row array
+										$menu_item_exists = false;
+										foreach ($menu_items as $item) {
+											if ($item['uuid'] == $menu['uuid']) {
+												$menu_item_exists = true;
+												$row = $item;
+											}
+										}
 
-									//if the item uuid is not currently in the db then add it
-										$sql = "select count(*) from v_menu_items ";
-										$sql .= "where menu_uuid = :menu_uuid ";
-										$sql .= "and menu_item_uuid = :menu_item_uuid ";
-										$parameters['menu_uuid'] = $this->menu_uuid;
-										$parameters['menu_item_uuid'] = $menu_item_uuid;
-										$database = new database;
-										$num_rows = $database->select($sql, $parameters, 'column');
-										if ($num_rows == 0) {
-											//menu found the menu
-												$menu_item_exists = false;
+									//item exists in the database
+										if ($menu_item_exists) {
+											//get parent_menu_item_protected
+											foreach ($menu_items as $item) {
+												if ($item['uuid'] == $menu['parent_uuid']) {
+													$parent_menu_item_protected = $item['menu_item_protected'];
+												}
+											}
 
+											//parent is not protected so the parent uuid needs to be updated
+											if (is_uuid($menu_item_parent_uuid) && $menu_item_parent_uuid != $row['menu_item_parent_uuid'] && $parent_menu_item_protected != 'true') {
+												$array['menu_items'][$x]['menu_item_uuid'] = $row['menu_item_uuid'];
+												$array['menu_items'][$x]['menu_item_parent_uuid'] = $menu_item_parent_uuid;
+												$x++;
+											}
+										}
+
+									//item does not exist in the database
+										if (!$menu_item_exists) {
 											if ($menu_item_uuid != $menu_item_parent_uuid) {
-												//build insert array
 													$array['menu_items'][$x]['menu_item_uuid'] = $menu_item_uuid;
 													$array['menu_items'][$x]['menu_uuid'] = $this->menu_uuid;
+													$array['menu_items'][$x]['uuid'] = $uuid;
 													$array['menu_items'][$x]['menu_item_title'] = $menu_item_title;
 													$array['menu_items'][$x]['menu_item_link'] = $menu_item_path;
 													$array['menu_items'][$x]['menu_item_category'] = $menu_item_category;
@@ -155,20 +192,20 @@ if (!class_exists('menu')) {
 													$array['menu_items'][$x]['menu_item_description'] = $menu_item_description;
 													$x++;
 											}
-
 										}
-										unset($sql, $parameters, $num_rows);
+										unset($field, $parameters, $num_rows);
 	
 									//set the menu languages
 										if (!$menu_item_exists && is_array($language->languages)) {
 											foreach ($language->languages as $menu_language) {
-												$menu_item_title = $menu["title"][$menu_language];
-												if (strlen($menu_item_title) == 0) {
-													$menu_item_title = $menu["title"]['en-us'];
-												}
-												$menu_language_uuid = uuid();
+												//set the menu item title
+													$menu_item_title = $menu["title"][$menu_language];
+													if (strlen($menu_item_title) == 0) {
+														$menu_item_title = $menu["title"]['en-us'];
+													}
+
 												//build insert array
-													$array['menu_languages'][$x]['menu_language_uuid'] = $menu_language_uuid;
+													$array['menu_languages'][$x]['menu_language_uuid'] = uuid();
 													$array['menu_languages'][$x]['menu_item_uuid'] = $menu_item_uuid;
 													$array['menu_languages'][$x]['menu_uuid'] = $this->menu_uuid;
 													$array['menu_languages'][$x]['menu_language'] = $menu_language;
@@ -176,7 +213,6 @@ if (!class_exists('menu')) {
 													$x++;
 											}
 										}
-
 								}
 							}
 						}
@@ -226,7 +262,7 @@ if (!class_exists('menu')) {
 											$sql .= "and menu_uuid = :menu_uuid ";
 											$sql .= "and group_name = :group_name ";
 											$sql .= "and group_uuid = :group_uuid ";
-											$parameters['menu_item_uuid'] = $sub_row['uuid'];
+											$parameters['menu_item_uuid'] = $uuid_array[$sub_row['uuid']];
 											$parameters['menu_uuid'] = $this->menu_uuid;
 											$parameters['group_name'] = $group;
 											$parameters['group_uuid'] = $group_uuids[$group];
@@ -236,7 +272,7 @@ if (!class_exists('menu')) {
 												//no menu item groups found, build insert array for defaults
 													$array['menu_item_groups'][$x]['menu_item_group_uuid'] = uuid();
 													$array['menu_item_groups'][$x]['menu_uuid'] = $this->menu_uuid;
-													$array['menu_item_groups'][$x]['menu_item_uuid'] = $sub_row['uuid'];
+													$array['menu_item_groups'][$x]['menu_item_uuid'] = $uuid_array[$sub_row['uuid']];
 													$array['menu_item_groups'][$x]['group_name'] = $group;
 													$array['menu_item_groups'][$x]['group_uuid'] = $group_uuids[$group];
 													$x++;
@@ -247,6 +283,7 @@ if (!class_exists('menu')) {
 								}
 							}
 						}
+
 						if (is_array($array) && @sizeof($array) != 0) {
 							//grant temporary permissions
 								$p = new permissions;
@@ -415,7 +452,7 @@ if (!class_exists('menu')) {
 					}
 
 				//get the menu from the database
-					$sql = "select i.menu_item_link, l.menu_item_title as menu_language_title, ".
+					$sql = "select i.menu_item_link, l.menu_item_title as menu_language_title, ";
 					$sql .= "i.menu_item_title, i.menu_item_protected, i.menu_item_category, ";
 					$sql .= "i.menu_item_icon, i.menu_item_uuid, i.menu_item_parent_uuid ";
 					$sql .= "from v_menu_items as i, v_menu_languages as l ";

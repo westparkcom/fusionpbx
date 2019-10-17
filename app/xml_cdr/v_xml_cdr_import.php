@@ -42,7 +42,7 @@
 
 //set debug
 	$debug = false; //true //false
-	if ($debug){
+	if ($debug) {
 		$time5 = microtime(true);
 		$insert_time=$insert_count=0;
 	}
@@ -71,11 +71,11 @@
 //define accept_b_leg function
 	function accept_b_leg($xml){
 		// if no filter set allow all for backward compatibility
-			if(empty($_SESSION['cdr']['b_leg'])){
+			if(empty($_SESSION['cdr']['b_leg'])) {
 				return true;
 			}
 		// filter out by call direction
-			if(in_array(@$xml->variables->call_direction, $_SESSION['cdr']['b_leg'])){
+			if(in_array(@$xml->variables->call_direction, $_SESSION['cdr']['b_leg'])) {
 				return true;
 			}
 		// Disable cdr write
@@ -265,7 +265,6 @@
 					$sql .= "where domain_name = :domain_name ";
 					$parameters['domain_name'] = $domain_name;
 				}
-				$database = new database;
 				$domain_uuid = $database->select($sql, $parameters, 'column');
 				unset($parameters);
 			}
@@ -312,9 +311,41 @@
 				$database->fields['xml'] = $xml_string;
 			}
 
-		//insert the $extension_uuid
+		//get the extension_uuid and then add it to the database fields array
 			if (strlen($xml->variables->extension_uuid) > 0) {
 				$database->fields['extension_uuid'] = urldecode($xml->variables->extension_uuid);
+			}
+			else {
+				if (strlen($xml->variables->dialed_user) > 0) {
+					$sql = "select extension_uuid from v_extensions ";
+					$sql .= "where domain_uuid = :domain_uuid ";
+					$sql .= "and (extension = :dialed_user or number_alias = :dialed_user) ";
+					$parameters['domain_uuid'] = $domain_uuid;
+					$parameters['dialed_user'] = $xml->variables->dialed_user;
+					$extension_uuid = $database->select($sql, $parameters, 'column');
+					$database->fields['extension_uuid'] = $extension_uuid;
+					unset($parameters);
+				}
+				if (strlen($xml->variables->referred_by_user) > 0) {
+					$sql = "select extension_uuid from v_extensions ";
+					$sql .= "where domain_uuid = :domain_uuid ";
+					$sql .= "and (extension = :referred_by_user or number_alias = :referred_by_user) ";
+					$parameters['domain_uuid'] = $domain_uuid;
+					$parameters['referred_by_user'] = $xml->variables->referred_by_user;
+					$extension_uuid = $database->select($sql, $parameters, 'column');
+					$database->fields['extension_uuid'] = $extension_uuid;
+					unset($parameters);
+				}
+				if (strlen($xml->variables->last_sent_callee_id_number) > 0) {
+					$sql = "select extension_uuid from v_extensions ";
+					$sql .= "where domain_uuid = :domain_uuid ";
+					$sql .= "and (extension = :callee_id_number or number_alias = :callee_id_number) ";
+					$parameters['domain_uuid'] = $domain_uuid;
+					$parameters['callee_id_number'] = $xml->variables->last_sent_callee_id_number;
+					$extension_uuid = $database->select($sql, $parameters, 'column');
+					$database->fields['extension_uuid'] = $extension_uuid;
+					unset($parameters);
+				}
 			}
 
 		//get the recording details
@@ -377,7 +408,8 @@
 					$record_path = $path;
 					$record_name = $bridge_uuid.'.wav';
 					$record_length = urldecode($xml->variables->duration);
-				} elseif (file_exists($path.'/'.$bridge_uuid.'.mp3')) {
+				}
+				elseif (file_exists($path.'/'.$bridge_uuid.'.mp3')) {
 					$record_path = $path;
 					$record_name = $bridge_uuid.'.mp3';
 					$record_length = urldecode($xml->variables->duration);
@@ -389,7 +421,8 @@
 					$record_path = $path;
 					$record_name = $uuid.'.wav';
 					$record_length = urldecode($xml->variables->duration);
-				} elseif (file_exists($path.'/'.$uuid.'.mp3')) {
+				}
+				elseif (file_exists($path.'/'.$uuid.'.mp3')) {
 					$record_path = $path;
 					$record_name = $uuid.'.mp3';
 					$record_length = urldecode($xml->variables->duration);
@@ -459,7 +492,7 @@
 				}
 				catch(PDOException $e) {
 					$tmp_dir = $_SESSION['switch']['log']['dir'].'/xml_cdr/failed/';
-					if(!file_exists($tmp_dir)) {
+					if (!file_exists($tmp_dir)) {
 						event_socket_mkdir($tmp_dir);
 					}
 					if ($_SESSION['cdr']['format']['text'] == "xml") {
@@ -482,7 +515,7 @@
 				if ($_SESSION['cdr']['storage']['text'] == "dir" && $error != "true") {
 					if (strlen($uuid) > 0) {
 						$tmp_dir = $_SESSION['switch']['log']['dir'].'/xml_cdr/archive/'.$start_year.'/'.$start_month.'/'.$start_day;
-						if(!file_exists($tmp_dir)) {
+						if (!file_exists($tmp_dir)) {
 							event_socket_mkdir($tmp_dir);
 						}
 						if ($_SESSION['cdr']['format']['text'] == "xml") {

@@ -330,8 +330,8 @@
 					case "api" : echo "API"; break;
 					case "cdr" : echo "CDR"; break;
 					case "ldap" : echo "LDAP"; break;
-					case "ivr menu" : echo "IVR Menu"; break;
-					default: echo ucwords(str_replace("_", " ", escape($row['default_setting_category'])));
+					case "ivr_menu" : echo "IVR Menu"; break;
+					default: echo escape(ucwords(str_replace("_", " ", $row['default_setting_category'])));
 				}
 				echo "</b>\n";
 
@@ -414,6 +414,9 @@
 			else if ($subcategory == 'password' || substr_count($subcategory, '_password') > 0 || $category == "login" && $subcategory == "password_reset_key" && $name == "text" || substr_count($subcategory, '_secret') > 0) {
 				echo "		".str_repeat('*', strlen($row['default_setting_value']));
 			}
+			else if ($category == 'theme' && $subcategory == 'button_icons' && $name == 'text') {
+				echo "		".$text['option-button_icons_'.$row['default_setting_value']]."\n";
+			}
 			else {
 				if ($category == "theme" && substr_count($subcategory, "_color") > 0 && ($name == "text" || $name == 'array')) {
 					echo "		".(img_spacer('15px', '15px', 'background: '.escape($row['default_setting_value']).'; margin-right: 4px; vertical-align: middle; border: 1px solid '.(color_adjust($row['default_setting_value'], -0.18)).'; padding: -1px;'));
@@ -434,7 +437,6 @@
 			echo "	</td>\n";
 			echo "	<td valign='top' class='row_stylebg' style='width: 40%; max-width: 50px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>".escape($row['default_setting_description'])."&nbsp;</td>\n";
 			echo "	<td class='list_control_icons' nowrap='nowrap'>";
-//this one works
 			if (permission_exists('default_setting_edit')) {
 				echo "<a href=\"javascript:document.location.href='default_setting_edit.php?id=".escape($row['default_setting_uuid'])."&search='+$('#default_setting_search').val();\" alt='".$text['button-edit']."'>$v_link_label_edit</a>";
 			}
