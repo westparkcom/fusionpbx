@@ -65,6 +65,7 @@
 			$voicemail_sms_to = $_POST["voicemail_sms_to"];
 			$voicemail_transcription_enabled = $_POST["voicemail_transcription_enabled"];
 			$voicemail_file = $_POST["voicemail_file"];
+			$voicemail_escalations = $_POST["voicemail_escalations"];
 			$voicemail_local_after_email = $_POST["voicemail_local_after_email"];
 			$voicemail_enabled = $_POST["voicemail_enabled"];
 			$voicemail_description = $_POST["voicemail_description"];
@@ -182,7 +183,36 @@
 					$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
 					$database->save($array);
 					unset($array);
-
+				//add voicemail escalations
+					if (permission_exists('voicemail_escalation_add') && sizeof($voicemail_escalations) > 0) {
+						foreach ($voicemail_escalations as $index => $voicemail_escalation) {
+							if ($voicemail_option['voicemail_escalation_phonenum'] == '') { unset($voicemail_escalations[$index]); }
+						}
+						foreach ($voicemail_escalations as $index => $voicemail_escalation) {
+							//build insert array
+								$voicemail_escalation_uid = uuid();
+								$array['voicemail_escalations'][$index]['voicemail_escalation_uuid'] = $voicemail_escalation_uuid;
+								$array['voicemail_escalations'][$index]['voicemail_uuid'] = $voicemail_uuid;
+								$array['voicemail_escalations'][$index]['domain_uuid'] = $domain_uuid;
+								$array['voicemail_escalations'][$index]['voicemail_escalation_phonenum'] = $voicemail_escalation['voicemail_escalation_phonenum'];
+								$array['voicemail_escalations'][$index]['voicemail_escalation_delay'] = $voicemail_escalation['voicemail_escalation_delay'];
+								$array['voicemail_escalations'][$index]['voicemail_escalation_order'] = $voicemail_escalation['voicemail_escalation_order'];
+								$array['voicemail_escalations'][$index]['voicemail_escalation_description'] = $voicemail_escalation['voicemail_escalation_description'];
+						}
+						if (is_array($array) && @sizeof($array) != 0) {
+							//grant temporary permissions
+								$p = new permissions;
+								$p->add('voicemail_escalation_add', 'temp');
+							//execute inserts
+								$database = new database;
+								$database->app_name = 'voicemails';
+								$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+								$database->save($array);
+								unset($array);
+							//revoke temporary permissions
+								$p->delete('voicemail_escalation_add', 'temp');
+						}
+					}
 				//add voicemail options
 					if (permission_exists('voicemail_option_add') && sizeof($voicemail_options) > 0) {
 						foreach ($voicemail_options as $index => $voicemail_option) {
@@ -542,6 +572,99 @@
 		echo "	</tr>";
 	}
 
+	if (permission_exists('voicemail_escalation_add') || permission_exists('voicemail_escalation_edit')) {
+		echo "	<tr>";
+		echo "		<td class='vncell' valign='top'>".$text['label-escalations']."</td>";
+		echo "		<td class='vtable' align='left'>";
+		echo "			<table width='59%' border='0' cellpadding='0' cellspacing='0'>\n";
+		echo "				<tr>\n";
+		echo "					<td class='vtable'>".$text['label-escalation']."</td>\n";
+		echo "					<td class='vtable'>".$text['label-destination']."</td>\n";
+		echo "					<td class='vtable'>".$text['label-order']."</td>\n";
+		echo "					<td class='vtable'>".$text['label-description']."</td>\n";
+		echo "					<td></td>\n";
+		echo "				</tr>\n";
+		if (is_uuid($voicemail_uuid)) {
+			$sql = "select * from v_voicemail_escalations ";
+			$sql .= "where domain_uuid = :domain_uuid ";
+			$sql .= "and voicemail_uuid = :voicemail_uuid ";
+			$sql .= "order by voicemail_escalation_phonenum, voicemail_escalation_order asc ";
+			$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+			$parameters['voicemail_uuid'] = $voicemail_uuid;
+			$database = new database;
+			$result = $database->select($sql, $parameters, 'all');
+			if (is_array($result) && @sizeof($result) != 0) {
+				foreach($result as $field) {
+					echo "				<tr>\n";
+					echo "					<td class='vtable'>\n";
+					echo "						".escape($field['voicemail_escalation_phonenum']);
+					echo "					</td>\n";
+					echo "					<td class='vtable'>\n";
+					echo "						".escape($field['$voicemail_escalation_delay'])."&nbsp;\n";
+					echo "					</td>\n";
+					echo "					<td class='vtable'>\n";
+					echo "						".escape($field['voicemail_escalation_order'])."&nbsp;\n";
+					echo "					</td>\n";
+					echo "					<td class='vtable'>\n";
+					echo "						".escape($field['voicemail_escalation_description'])."&nbsp;\n";
+					echo "					</td>\n";
+					echo "					<td class='list_control_icons'>";
+					echo 						"<a href='voicemail_escalation_edit.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-edit']."'>".$v_link_label_edit."</a>";
+					if (permission_exists('voicemail_escalation_delete')) {
+						echo 						"<a href='voicemail_escalation_delete.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-delete']."' onclick=\"return confirm('".$text['confirm-delete']."')\">".$v_link_label_delete."</a>";
+					}
+					echo "					</td>\n";
+					echo "				</tr>\n";
+				}
+			}
+		}
+		unset($sql, $parameters, $result, $field);
+
+		for ($c = 0; $c < 1; $c++) {
+			echo "				<tr>\n";
+			echo "<td class='vtable' align='left'>\n";
+			echo "  <input class='formfld' style='width:70px' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_phonenum]' maxlength='255' value='".$voicemail_escalation_phonenum."'>\n";
+			echo "</td>\n";
+			echo "<td class='vtable' align='left'>\n";
+			echo "  <input class='formfld' style='width:70px' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_delay]' maxlength='4' value='".$voicemail_escalation_delay."'>\n";
+			echo "</td>\n";
+			echo "<td class='vtable' align='left'>\n";
+			echo "	<select name='voicemail_escalations[".$c."][voicemail_escalation_order]' class='formfld' style='width:55px'>\n";
+			if (strlen(htmlspecialchars($voicemail_escalation_order))> 0) {
+				echo "	<option selected='yes' value='".htmlspecialchars($voicemail_escalation_order)."'>".htmlspecialchars($voicemail_escalation_order)."</option>\n";
+			}
+			$i = 0;
+			while ($i <= 999) {
+				if (strlen($i) == 1) {
+					echo "	<option value='00$i'>00$i</option>\n";
+				}
+				if (strlen($i) == 2) {
+					echo "	<option value='0$i'>0$i</option>\n";
+				}
+				if (strlen($i) == 3) {
+					echo "	<option value='$i'>$i</option>\n";
+				}
+				$i++;
+			}
+			echo "	</select>\n";
+			echo "</td>\n";
+			echo "<td class='vtable' align='left'>\n";
+			echo "	<input class='formfld' style='width:100px' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_description]' maxlength='255' value=\"".$voicemail_escalation_description."\">\n";
+			echo "</td>\n";
+
+			echo "					<td>\n";
+			echo "						<input type='button' class='btn' value=\"".$text['button-add']."\" onclick='submit_form();'>\n";
+			echo "					</td>\n";
+			echo "				</tr>\n";
+		}
+		echo "			</table>\n";
+
+		echo "			".$text['description-escalations']."\n";
+		echo "			<br />\n";
+		echo "		</td>";
+		echo "	</tr>";
+	}
+
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
 	echo "	".$text['label-voicemail_mail_to']."\n";
@@ -551,6 +674,12 @@
 	echo "<br />\n";
 	echo $text['description-voicemail_mail_to']."\n";
 	echo "</td>\n";
+	echo "</tr>\n";
+
+	// voicemail escalations
+	echo "<tr>\n";
+	echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
+	echo "	".$text['label-voicemail_escalations']."\n";
 	echo "</tr>\n";
 
 	if (permission_exists('sms_edit')) {
