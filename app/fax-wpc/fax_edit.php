@@ -389,7 +389,7 @@
 			$fax_prefix = $row["fax_prefix"];
 			$fax_name = $row["fax_name"];
 			$fax_email = $row["fax_email"];
-			$fax_encrypt = $row["fax_encrpyt"];
+			$fax_encrypt = $row["fax_encrypt"];
 			$fax_password = $row["fax_password"];
 			$fax_email_connection_type = $row["fax_email_connection_type"];
 			$fax_email_connection_host = $row["fax_email_connection_host"];
