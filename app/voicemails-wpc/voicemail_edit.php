@@ -65,7 +65,8 @@
 			$voicemail_sms_to = $_POST["voicemail_sms_to"];
 			$voicemail_transcription_enabled = $_POST["voicemail_transcription_enabled"];
 			$voicemail_file = $_POST["voicemail_file"];
-			$voicemail_escalations = $_POST["voicemail_escalations"];
+			$voicemail_encrypt = $_POST["voicemail_encrypt"];
+			$voicemail_encpass = $_POST["voicemail_encpass"];
 			$voicemail_local_after_email = $_POST["voicemail_local_after_email"];
 			$voicemail_enabled = $_POST["voicemail_enabled"];
 			$voicemail_description = $_POST["voicemail_description"];
@@ -173,6 +174,8 @@
 					$array['voicemails'][0]['voicemail_transcription_enabled'] = $voicemail_transcription_enabled;
 					$array['voicemails'][0]['voicemail_tutorial'] = $voicemail_tutorial;
 					$array['voicemails'][0]['voicemail_file'] = $voicemail_file;
+					$array['voicemails'][0]['voicemail_encrypt'] = $voicemail_encrypt;
+					$array['voicemails'][0]['voicemail_encpass'] = $voicemail_encpass;
 					if (permission_exists('voicemail_local_after_email')) {
 						$array['voicemails'][0]['voicemail_local_after_email'] = $voicemail_local_after_email;
 					}
@@ -299,6 +302,8 @@
 			$voicemail_transcription_enabled = $row["voicemail_transcription_enabled"];
 			$voicemail_tutorial = $row["voicemail_tutorial"];
 			$voicemail_file = $row["voicemail_file"];
+			$voicemail_encrypt = $row["voicemail_encrypt"];
+			$voicemail_encpass = $row["voicemail_encpass"];
 			$voicemail_local_after_email = $row["voicemail_local_after_email"];
 			$voicemail_enabled = $row["voicemail_enabled"];
 			$voicemail_description = $row["voicemail_description"];
@@ -369,6 +374,16 @@
 		echo "			return true;\n";
 		echo "		}\n";
 		echo "	}\n";
+		echo "function setPasswordReq(selectObj) {\n";
+		echo "  var value = selectObj.value;\n";
+		echo "  if (value == 'true') {\n";
+		echo "    document.getElementById('voicemail_password_cell').className = 'vncellreq';\n";
+		echo "    document.getElementById('voicemail_password_text').required = true;\n";
+		echo "  } else {\n";
+		echo "    document.getElementById('voicemail_password_cell').className = 'vncell';\n";
+		echo "    document.getElementById('voicemail_password_text').required = false;\n";
+		echo "  }\n";
+		echo "}\n";
 		echo "</script>\n";
 	}
 
@@ -676,10 +691,41 @@
 	echo "</td>\n";
 	echo "</tr>\n";
 
-	// voicemail escalations
+	// voicemail encryption
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
-	echo "	".$text['label-voicemail_escalations']."\n";
+	echo "	".$text['label-voicemail_encrypt']."\n";
+	echo "</td>\n";
+	echo "<td class='vtable' align='left'>\n";
+	echo "	<select name='voicemail_encrypt' class='formfld' onchange='setPasswordReq(this)'>\n";
+	echo "      <option>false</option>";
+	if ($voicemail_encrypt == "true") {
+		echo "        <option selected>true</option>";
+	} else {
+		echo "        <option>true</option>";
+	}
+	echo "<br />\n";
+	echo $text['description-voicemail_encrypt']."\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+
+	echo "<tr>\n";
+	if ($voicemail_encrypt == "true") {
+		echo "<td width='30%' class='vncellreq' id='voicemail_password_cell' valign='top' align='left' nowrap='nowrap'>\n";
+	} else {
+		echo "<td width='30%' class='vncell' id='voicemail_password_cell' valign='top' align='left' nowrap='nowrap'>\n";
+	}
+	echo "    " . $text['label-voicemail_encpass'];
+	echo "</td>";
+	echo "<td width='70%' class='vtable' align='left'>\n";
+	if ($voicemail_encrypt == "true") {
+		echo "  <input class='formfld' required='required' type='password' name='voicemail_encpass' id='voicemail_encpass_text' onmouseover=\"this.type='text';\" onfocus=\"this.type='text';\" onmouseout=\"if (!$(this).is(':focus')) { this.type='password'; }\" onblur=\"this.type='password';\" maxlength='50' value=\"".escape($voicemail_encpass)."\">\n";
+	} else {
+		echo "  <input class='formfld' type='password' name='voicemail_encpass' id='voicemail_encpass_text' onmouseover=\"this.type='text';\" onfocus=\"this.type='text';\" onmouseout=\"if (!$(this).is(':focus')) { this.type='password'; }\" onblur=\"this.type='password';\" maxlength='50' value=\"".escape($voicemail_encpass)."\">\n";
+	}
+	echo "<br />\n";
+	echo $text['description-voicemail_encpass']."\n";
+	echo "</td>\n";
 	echo "</tr>\n";
 
 	if (permission_exists('sms_edit')) {
