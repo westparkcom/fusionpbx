@@ -28,6 +28,8 @@
 if (!class_exists('button')) {
 	class button {
 
+		public static $collapse = 'hide-md-dn';
+
 		static function create($array) {
 			$button_icons = $_SESSION['theme']['button_icons']['text'] != '' ? $_SESSION['theme']['button_icons']['text'] : 'auto';
 			//button: open
@@ -46,7 +48,9 @@ if (!class_exists('button')) {
 				$button .= ">";
 			//icon
 				if ($array['icon'] && (
-					$button_icons != 'never' ||
+					$button_icons == 'only' ||
+					$button_icons == 'always' ||
+					$button_icons == 'auto' ||
 					!$array['label']
 					)) {
 					$icon_class = is_array($array['icon']) ? $array['icon']['text'] : 'fas fa-'.$array['icon'];
@@ -58,9 +62,16 @@ if (!class_exists('button')) {
 					!$array['icon'] ||
 					$array['class'] == 'link'
 					)) {
-					$hide_class = $array['icon'] && $button_icons != 'always' && $button_icons != 'never' ? 'hide-sm' : null;
+					if ($array['icon'] && $button_icons != 'always' && $button_icons != 'never' && $array['collapse'] !== false) {
+						if ($array['collapse'] != '') {
+							$collapse_class = $array['collapse'];
+						}
+						else if (self::$collapse !== false) {
+							$collapse_class = self::$collapse;
+						}
+					}
 					$pad_class = $array['icon'] ? 'pad' : null;
-					$button .= "<span class='button-label ".$hide_class." ".$pad_class."'>".$array['label']."</span>";
+					$button .= "<span class='button-label ".$collapse_class." ".$pad_class."'>".$array['label']."</span>";
 				}
 			//button: close
 				$button .= "</button>";
@@ -76,9 +87,47 @@ if (!class_exists('button')) {
 }
 
 /*
-//usage example (all possible options)
+//usage
 
-echo button::create(['type'=>'button','label'=>$label,'icon'=>'icon','name'=>'btn','id'=>'btn','value'=>'value','link'=>'url','target'=>'_blank','onclick'=>'action','class'=>'name','style'=>'css','title'=>'title']);
+	echo button::create(['type'=>'button','label'=>$text['button-label'],'icon'=>'icon','name'=>'btn','id'=>'btn','value'=>'value','link'=>'url','target'=>'_blank','onclick'=>'javascript','class'=>'name','style'=>'css','title'=>$text['button-label'],'collapse'=>'class']);
+
+	echo button::create([
+		'type'=>'button',
+		'label'=>$text['button-label'],
+		'icon'=>'icon',
+		'name'=>'btn',
+		'id'=>'btn',
+		'value'=>'value',
+		'link'=>'url',
+		'target'=>'_blank',
+		'onclick'=>'javascript',
+		'class'=>'name',
+		'style'=>'css',
+		'title'=>$text['button-label'],
+		'collapse'=>'class'
+		]);
+
+//options
+
+	type		'button' (default) | 'submit' | 'link'
+	label		button text
+	icon		name without vendor prefix (e.g. 'user' instead of 'fa-user')
+	value		submitted value (if type is also set to 'submit')
+	target		'_blank' | '_self' (default) | etc
+	onclick		javascript
+	class		css class[es]
+	style		css style[s]
+	title		tooltip text (if not set, defaults to value of label)
+	collapse	overide the default hide class ('hide-md-dn')
+
+//notes
+
+	1) all parameters are optional, but at least set a value for label or icon
+	2) overide the default hide class ('hide-md-dn') for all buttons that follow by using...
+
+		button::$collapse = '...';
+
+	3) setting either collapse (instance or default) to false (boolean) will cause the button label to always be visible
 
 */
 
