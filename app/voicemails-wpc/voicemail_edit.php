@@ -624,9 +624,9 @@
 					echo "						".escape($field['voicemail_escalation_description'])."&nbsp;\n";
 					echo "					</td>\n";
 					echo "					<td class='list_control_icons'>";
-					echo 						"<a href='voicemail_escalation_edit.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-edit']."'>".$v_link_label_edit."</a>";
+					echo 						"<a href='voicemail_escalations_edit.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-edit']."'>".$v_link_label_edit."</a>";
 					if (permission_exists('voicemail_escalation_delete')) {
-						echo 						"<a href='voicemail_escalation_delete.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-delete']."' onclick=\"return confirm('".$text['confirm-delete']."')\">".$v_link_label_delete."</a>";
+						echo 						"<a href='voicemail_escalations_delete.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-delete']."' onclick=\"return confirm('".$text['confirm-delete']."')\">".$v_link_label_delete."</a>";
 					}
 					echo "					</td>\n";
 					echo "				</tr>\n";

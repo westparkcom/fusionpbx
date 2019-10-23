@@ -272,6 +272,10 @@
 				$array['voicemail_options'][0]['domain_uuid'] = $this->domain_uuid;
 				$array['voicemail_options'][0]['voicemail_uuid'] = $this->voicemail_uuid;
 
+			//build voicemail escalations delete array
+				$array['voicemail_escalations'][0]['domain_uuid'] = $this->domain_uuid;
+				$array['voicemail_escalations'][0]['voicemail_uuid'] = $this->voicemail_uuid;
+
 			//build voicemail delete array
 				$array['voicemails'][0]['domain_uuid'] = $this->domain_uuid;
 				$array['voicemails'][0]['voicemail_uuid'] = $this->voicemail_uuid;
@@ -283,6 +287,7 @@
 					$p->add('voicemail_greeting_delete', 'temp');
 				}
 				$p->add('voicemail_option_delete', 'temp');
+				$p->add('voicemail_escalation_delete', 'temp');
 				$p->add('voicemail_delete', 'temp');
 
 			//execute delete
@@ -298,6 +303,7 @@
 					$p->delete('voicemail_greeting_delete', 'temp');
 				}
 				$p->delete('voicemail_option_delete', 'temp');
+				$p->delete('voicemail_escalation_delete', 'temp');
 				$p->delete('voicemail_delete', 'temp');
 
 		}

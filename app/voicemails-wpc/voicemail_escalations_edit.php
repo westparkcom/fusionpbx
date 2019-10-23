@@ -127,9 +127,6 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 		}
 }
 
-//initialize the destinations object
-	$destination = new destinations;
-
 //pre-populate the form
 	if (count($_GET)>0 && $_POST["persistformvar"] != "true") {
 		$voicemail_option_uuid = $_GET["id"];
