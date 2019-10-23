@@ -602,6 +602,11 @@
 									send_sms(voicemail_id_copy, voicemail_message_uuid);
 								end
 							end
+						-- perform voicemail callout escalations
+							if (tonumber(message_length) > 2) then
+								local cmd = "luarun app.lua escalations " .. domain_uuid .. " " .. domain_name .. " " .. voicemail_uuid .. " " .. voicemail_message_uuid .. " " .. context;
+								api:executeString(cmd);
+							end
 					end --for
 
 			else
