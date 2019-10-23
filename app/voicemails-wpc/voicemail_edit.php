@@ -593,8 +593,8 @@
 		echo "		<td class='vtable' align='left'>";
 		echo "			<table width='59%' border='0' cellpadding='0' cellspacing='0'>\n";
 		echo "				<tr>\n";
-		echo "					<td class='vtable'>".$text['label-escalation']."</td>\n";
-		echo "					<td class='vtable'>".$text['label-destination']."</td>\n";
+		echo "					<td class='vtable'>".$text['label-phonenum']."</td>\n";
+		echo "					<td class='vtable'>".$text['label-delay']."</td>\n";
 		echo "					<td class='vtable'>".$text['label-order']."</td>\n";
 		echo "					<td class='vtable'>".$text['label-description']."</td>\n";
 		echo "					<td></td>\n";

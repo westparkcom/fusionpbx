@@ -1041,6 +1041,26 @@ $text['label-destination']['ru-ru'] = "Место назначения";
 $text['label-destination']['sv-se'] = "Destination";
 $text['label-destination']['uk-ua'] = "Номер";
 
+$text['label-phonenum']['en-us'] = "Phone Number";
+$text['label-phonenum']['ar-eg'] = "";
+$text['label-phonenum']['de-at'] = ""; //copied from de-de
+$text['label-phonenum']['de-ch'] = ""; //copied from de-de
+$text['label-phonenum']['de-de'] = "";
+$text['label-phonenum']['es-cl'] = "";
+$text['label-phonenum']['es-mx'] = ""; //copied from es-cl
+$text['label-phonenum']['fr-ca'] = ""; //copied from fr-fr
+$text['label-phonenum']['fr-fr'] = "";
+$text['label-phonenum']['he-il'] = "";
+$text['label-phonenum']['it-it'] = "";
+$text['label-phonenum']['nl-nl'] = "";
+$text['label-phonenum']['pl-pl'] = "";
+$text['label-phonenum']['pt-br'] = "";
+$text['label-phonenum']['pt-pt'] = "";
+$text['label-phonenum']['ro-ro'] = "";
+$text['label-phonenum']['ru-ru'] = "";
+$text['label-phonenum']['sv-se'] = "";
+$text['label-phonenum']['uk-ua'] = "";
+
 $text['label-delay']['en-us'] = "Predial delay";
 $text['label-delay']['ar-eg'] = "";
 $text['label-delay']['de-at'] = ""; //copied from de-de
