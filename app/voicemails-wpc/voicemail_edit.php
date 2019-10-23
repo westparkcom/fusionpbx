@@ -189,7 +189,7 @@
 				//add voicemail escalations
 					if (permission_exists('voicemail_escalation_add') && sizeof($voicemail_escalations) > 0) {
 						foreach ($voicemail_escalations as $index => $voicemail_escalation) {
-							if ($voicemail_option['voicemail_escalation_phonenum'] == '') { unset($voicemail_escalations[$index]); }
+							if ($voicemail_escalations['voicemail_escalation_phonenum'] == '') { unset($voicemail_escalations[$index]); }
 						}
 						foreach ($voicemail_escalations as $index => $voicemail_escalation) {
 							//build insert array
