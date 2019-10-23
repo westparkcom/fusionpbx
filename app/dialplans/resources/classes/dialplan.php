@@ -340,7 +340,6 @@ include "root.php";
 													if (strlen($row['@attributes']['break']) > 0) {
 														$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_break'] = $row['@attributes']['break'];
 													}
-													//$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_inline'] = 
 													$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_group'] = $group;
 													$y++;
 
@@ -404,17 +403,26 @@ include "root.php";
 															}
 														}
 													}
+													else {
+														$condition_self_closing_tag = true;
+													}
 
-													//increase the order number
+													//if not a self closing tag then increment the group
+													if (!$condition_self_closing_tag) {
+														$group++;
+													}
+
+													//increment the values
 													$order = $order + 5;
+
+													//increase the row number
+													$x++;
 												}
 											}
 
 										//update the session array
 											$_SESSION['upgrade']['app_defaults']['dialplans'][$domain['domain_name']][]['dialplan_name'] = $dialplan_name;
 
-										//increase the row number
-											$x++;
 									} //app_uuid exists
 							} //end foreach $xml_list
 
