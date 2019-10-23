@@ -48,6 +48,8 @@
 				voicemail_mail_to = row["voicemail_mail_to"];
 				voicemail_file = row["voicemail_file"];
 				voicemail_local_after_email = row["voicemail_local_after_email"];
+				voicemail_encrypt = row["voicemail_encrypt"];
+				voicemail_encpass = row["voicemail_encpass"];
 				voicemail_description = row["voicemail_description"];
 			end);
 
@@ -206,6 +208,17 @@
 				--prepare file
 					file = voicemail_dir.."/"..id.."/msg_"..uuid.."."..vm_message_ext;
 
+					tmpfile = voicemail_dir.."/"..id.."/msg_"..uuid.."."..vm_message_ext;
+					zipfile = voicemail_dir.."/"..id.."/msg_"..uuid..".zip";
+					if voicemail_encrypt == 'true' then
+						file = zipfile
+						local encpass = ("%q"):format(voicemail_encpass)
+						encpass = encpass:gsub("`", "\\`")
+						encpass = encpass:gsub("$", "\\$")
+						os.execute("/usr/bin/zip -j -P " .. encpass .. " " .. zipfile .. " " tmpfile)
+					else
+						file = tmpfile
+					end
 				--send the email
 					send_mail(headers,
 						voicemail_mail_to,
@@ -231,6 +244,12 @@
 					--delete voicemail recording file
 						if (file_exists(file)) then
 							os.remove(file);
+						end
+						if (file_exists(zipfile)) then
+							os.remove(zipfile);
+						end
+						if (file_exists(file)) then
+							os.remove(tmpfile);
 						end
 					--set message waiting indicator
 						message_waiting(id, domain_uuid);
