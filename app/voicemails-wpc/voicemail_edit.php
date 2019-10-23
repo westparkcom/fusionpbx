@@ -60,6 +60,7 @@
 			$voicemail_password = $_POST["voicemail_password"];
 			$greeting_id = $_POST["greeting_id"];
 			$voicemail_options = $_POST["voicemail_options"];
+			$voicemail_escalations = $_POST["voicemail_escalations"];
 			$voicemail_alternate_greet_id = $_POST["voicemail_alternate_greet_id"];
 			$voicemail_mail_to = $_POST["voicemail_mail_to"];
 			$voicemail_sms_to = $_POST["voicemail_sms_to"];
