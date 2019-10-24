@@ -194,7 +194,7 @@
 						}
 						foreach ($voicemail_escalations as $index => $voicemail_escalation) {
 							//build insert array
-								$voicemail_escalation_uid = uuid();
+								$voicemail_escalation_uuid = uuid();
 								$array['voicemail_escalations'][$index]['voicemail_escalation_uuid'] = $voicemail_escalation_uuid;
 								$array['voicemail_escalations'][$index]['voicemail_uuid'] = $voicemail_uuid;
 								$array['voicemail_escalations'][$index]['domain_uuid'] = $domain_uuid;
@@ -616,7 +616,7 @@
 					echo "						".escape($field['voicemail_escalation_phonenum']);
 					echo "					</td>\n";
 					echo "					<td class='vtable'>\n";
-					echo "						".escape($field['$voicemail_escalation_delay'])."&nbsp;\n";
+					echo "						".escape($field['voicemail_escalation_delay'])."&nbsp;\n";
 					echo "					</td>\n";
 					echo "					<td class='vtable'>\n";
 					echo "						".escape($field['voicemail_escalation_order'])."&nbsp;\n";
