@@ -379,7 +379,7 @@
 	}
 
 	// Set ZIP encryption auto-change
-	echo "<script>"
+	echo "<script>";
 	echo "function setPasswordReq(selectObj) {\n";
 	echo "  var value = selectObj.value;\n";
 	echo "  if (value == 'true') {\n";
