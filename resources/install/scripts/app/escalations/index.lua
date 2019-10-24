@@ -78,7 +78,7 @@ function runesc()
 
     -- Get escalations info
     escinfo = getescinfo()
-    for row in escinfo do
+    for key, row in pairs(escinfo) do
         if next(msginfo) == nil then -- message was deleted, cancel callouts
             freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was deleted.")
             return
