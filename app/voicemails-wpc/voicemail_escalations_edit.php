@@ -94,7 +94,6 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 				$array['voicemail_escalations'][0]['voicemail_escalation_uuid'] = $voicemail_escalation_uuid;
 				$array['voicemail_escalations'][0]['domain_uuid'] = $domain_uuid;
 				$array['voicemail_escalations'][0]['voicemail_escalation_phonenum'] = $voicemail_escalation_phonenum;
-				$array['voicemail_escalations'][0]['voicemail_escalation_action'] = $voicemail_escalation_action;
 				$array['voicemail_escalations'][0]['voicemail_escalation_delay'] = $voicemail_escalation_delay;
 				$array['voicemail_escalations'][0]['voicemail_escalation_order'] = $voicemail_escalation_order;
 				$array['voicemail_escalations'][0]['voicemail_escalation_description'] = $voicemail_escalation_description;
@@ -213,7 +212,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "	".$text['label-description']."\n";
 	echo "</td>\n";
 	echo "<td class='vtable' align='left'>\n";
-	echo "	<input class='formfld' type='text' name='voicemail_escalation_description' maxlength='255' value=\"".escape($voicemail_option_description)."\">\n";
+	echo "	<input class='formfld' type='text' name='voicemail_escalation_description' maxlength='255' value=\"".escape($voicemail_escalation_description)."\">\n";
 	echo "<br />\n";
 	echo $text['description-description']."\n";
 	echo "</td>\n";
