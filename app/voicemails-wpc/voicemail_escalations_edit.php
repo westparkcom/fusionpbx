@@ -41,7 +41,7 @@ else {
 //action add or update
 	if (is_uuid($_REQUEST["id"])) {
 		$action = "update";
-		$voicemail_option_uuid = $_REQUEST["id"];
+		$voicemail_escalation_uuid = $_REQUEST["id"];
 	}
 
 //get the menu id
@@ -56,16 +56,6 @@ else {
 		$voicemail_escalation_delay = $_POST["voicemail_escalation_delay"];
 		$voicemail_escalation_order = $_POST["voicemail_escalation_order"];
 		$voicemail_escalation_description = $_POST["voicemail_escalation_description"];
-
-		/*set the default voicemail_option_action
-			if (strlen($voicemail_option_action) == 0) {
-				$voicemail_option_action = "menu-exec-app";
-			}
-
-		//seperate the action and the param
-			$options_array = explode(":", $voicemail_option_param);
-			$voicemail_option_action = array_shift($options_array);
-			$voicemail_option_param = join(':', $options_array);*/
 	}
 
 if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
