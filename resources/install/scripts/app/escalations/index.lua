@@ -3,11 +3,11 @@ dbh = Database.new('system');
 api = freeswitch.API();
 require "resources.functions.settings";
 settings = settings(domain_uuid)
-context = argv[5]
-voicemail_message_uuid = argv[4]
-voicemail_uuid = argv[3]
-domain_name = argv[2]
-domain_uuid = argv[1]
+context = argv[6]
+voicemail_message_uuid = argv[5]
+voicemail_uuid = argv[4]
+domain_name = argv[3]
+domain_uuid = argv[2]
 
 function getvmbox()
     local vmdata = {}

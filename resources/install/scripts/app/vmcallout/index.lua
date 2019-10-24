@@ -1,7 +1,7 @@
 ttsvoice = 'Joanna'
 
 api = freeswitch.API();
-vmbox = argv[1]
+vmbox = argv[2]
 introPrompt = "This is the Westpark Communications messaging system. There is a new voicemail in mailbox " .. vmbox .. "."
 
 function saytext(textstr)
