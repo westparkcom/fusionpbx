@@ -2,7 +2,7 @@
 
 	//application details
 		$apps[$x]['name'] = "Voicemail";
-		$apps[$x]['uuid'] = "b523c2d2-64cd-46f1-9520-ca4b4098e044";
+		$apps[$x]['uuid'] = "c613c2e4-54bf-26a1-9321-de4c4097e054";
 		$apps[$x]['category'] = "";
 		$apps[$x]['subcategory'] = "";
 		$apps[$x]['version'] = "1.0";
@@ -44,7 +44,7 @@
 	//permission details
 		$y=0;
 		$apps[$x]['permissions'][$y]['name'] = "voicemail_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "0347f82a-62a0-49d0-bacd-511d080c46d5";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "2448a82b-42c3-48d1-bfc1-612a0c0446d3";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$y++;
@@ -66,7 +66,7 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "voicemail_message_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "0347f82a-62a0-49d0-bacd-511d080c46d5";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "2448a82b-42c3-48d1-bfc1-612a0c0446d3";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "user";

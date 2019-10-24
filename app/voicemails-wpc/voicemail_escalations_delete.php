@@ -54,7 +54,7 @@
 		//execute delete
 			$database = new database;
 			$database->app_name = 'voicemails';
-			$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+			$database->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
 			$database->delete($array);
 			unset($array);
 		//set message
