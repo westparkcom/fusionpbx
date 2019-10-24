@@ -176,7 +176,7 @@ if (!function_exists('fax_enqueue')) {
 
 		$database = new database;
 		$database->app_name = 'fax';
-		$database->app_uuid = '24108154-4ac3-1db6-1551-4731703a4440';
+		$database->app_uuid = '2f10e154-5ad3-12b3-e5a1-47a1713a4340';
 		$database->save($array);
 		$message = $database->message;
 		unset($array);

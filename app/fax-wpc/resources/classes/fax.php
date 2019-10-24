@@ -99,7 +99,7 @@
 						//execute delete
 							$database = new database;
 							$database->app_name = 'fax';
-							$database->app_uuid = '24108154-4ac3-1db6-1551-4731703a4440';
+							$database->app_uuid = '2f10e154-5ad3-12b3-e5a1-47a1713a4340';
 							$database->delete($array);
 							unset($array);
 
@@ -144,7 +144,7 @@
 					$dialplan_xml .= "</extension>\n";
 
 				//build the dialplan array
-					$dialplan["app_uuid"] = "24108154-4ac3-1db6-1551-4731703a4440";
+					$dialplan["app_uuid"] = "2f10e154-5ad3-12b3-e5a1-47a1713a4340";
 					$dialplan["domain_uuid"] = $this->domain_uuid;
 					$dialplan["dialplan_uuid"] = $this->dialplan_uuid;
 					$dialplan["dialplan_name"] = ($this->fax_name != '') ? $this->fax_name : format_phone($this->destination_number);
@@ -170,7 +170,7 @@
 				//save the dialplan
 					$database = new database;
 					$database->app_name = 'fax';
-					$database->app_uuid = '24108154-4ac3-1db6-1551-4731703a4440';
+					$database->app_uuid = '2f10e154-5ad3-12b3-e5a1-47a1713a4340';
 					$database->save($array);
 					//$message = $database->message;
 

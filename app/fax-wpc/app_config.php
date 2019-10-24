@@ -2,7 +2,7 @@
 
 	//application details
 		$apps[$x]['name'] = "Fax";
-		$apps[$x]['uuid'] = "24108154-4ac3-1db6-1551-4731703a4440";
+		$apps[$x]['uuid'] = "2f10e154-5ad3-12b3-e5a1-47a1713a4340";
 		$apps[$x]['category'] = "Switch";
 		$apps[$x]['subcategory'] = "";
 		$apps[$x]['version'] = "1.0";
@@ -44,7 +44,7 @@
 	//permission details
 		$y=0;
 		$apps[$x]['permissions'][$y]['name'] = "fax_extension_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "9c9642e4-2b9b-2785-18d0-6c0a4ede2b2f";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "4c86b2a3-4b5a-27b5-a410-5cba3efe2b2f";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "user";
@@ -71,7 +71,7 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "fax_inbox_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "9c9642e4-2b9b-2785-18d0-6c0a4ede2b2f";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "4c86b2a3-4b5a-27b5-a410-5cba3efe2b2f";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "user";
@@ -82,7 +82,7 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "user";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "fax_sent_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "9c9642e4-2b9b-2785-18d0-6c0a4ede2b2f";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "4c86b2a3-4b5a-27b5-a410-5cba3efe2b2f";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "user";
@@ -98,7 +98,7 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "user";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "fax_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "9c9642e4-2b9b-2785-18d0-6c0a4ede2b2f";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "4c86b2a3-4b5a-27b5-a410-5cba3efe2b2f";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "user";
@@ -116,7 +116,7 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "fax_user_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "9c9642e4-2b9b-2785-18d0-6c0a4ede2b2f";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "4c86b2a3-4b5a-27b5-a410-5cba3efe2b2f";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";;
 		$y++;
@@ -133,7 +133,7 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "fax_log_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "9c9642e4-2b9b-2785-18d0-6c0a4ede2b2f";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "4c86b2a3-4b5a-27b5-a410-5cba3efe2b2f";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$y++;

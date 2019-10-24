@@ -37,7 +37,7 @@
 
 		public function __construct() {
 			//set the application specific uuid
-				$this->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+				$this->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
 
 			//set the domain_uuid if not provided
 				if (strlen($this->domain_uuid) == 0) {
@@ -293,7 +293,7 @@
 			//execute delete
 				$database = new database;
 				$database->app_name = 'voicemails';
-				$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+				$database->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
 				$database->delete($array);
 				unset($array);
 
@@ -383,7 +383,7 @@
 			//execute delete
 				$database = new database;
 				$database->app_name = 'voicemails';
-				$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+				$database->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
 				$database->delete($array);
 				unset($array);
 
@@ -423,7 +423,7 @@
 			//execute update
 				$database = new database;
 				$database->app_name = 'voicemails';
-				$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+				$database->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
 				$database->save($array);
 				unset($array);
 
@@ -455,7 +455,7 @@
 			//execute update
 				$database = new database;
 				$database->app_name = 'voicemails';
-				$database->app_uuid = 'b523c2d2-64cd-46f1-9520-ca4b4098e044';
+				$database->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
 				$database->save($array);
 				unset($array);
 
