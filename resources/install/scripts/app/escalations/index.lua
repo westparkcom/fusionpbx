@@ -57,6 +57,7 @@ function getescinfo()
             }
         )
     end)
+    return escdata
 end
 
 function originatecall(phonenum)
