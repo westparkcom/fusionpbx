@@ -46,18 +46,16 @@ function getescinfo()
         voicemail_uuid = voicemail_uuid,
         voicemail_message_uuid = voicemail_message_uuid
     }
-    dbh:query(sql, params, function(rows)
-        for row in rows do
-            table.insert(
-                escdata,
-                {
-                    voicemail_escalation_order = row['voicemail_escalation_order'],
-                    voicemail_escalation_phonenum = row['voicemail_escalation_phonenum'],
-                    voicemail_escalation_delay = row['voicemail_escalation_delay']
+    dbh:query(sql, params, function(row)
+        table.insert(
+            escdata,
+            {
+                voicemail_escalation_order = row['voicemail_escalation_order'],
+                voicemail_escalation_phonenum = row['voicemail_escalation_phonenum'],
+                voicemail_escalation_delay = row['voicemail_escalation_delay']
 
-                }
-            )
-        end
+            }
+        )
     end)
 end
 
