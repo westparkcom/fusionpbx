@@ -215,7 +215,7 @@
 						local encpass = ("%q"):format(voicemail_encpass)
 						encpass = encpass:gsub("`", "\\`")
 						encpass = encpass:gsub("$", "\\$")
-						os.execute("/usr/bin/zip -j -P " .. encpass .. " " .. zipfile .. " " tmpfile)
+						os.execute("/usr/bin/zip -j -P " .. encpass .. " " .. zipfile .. " " .. tmpfile)
 					else
 						file = tmpfile
 					end
