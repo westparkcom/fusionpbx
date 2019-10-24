@@ -375,18 +375,22 @@
 		echo "			return true;\n";
 		echo "		}\n";
 		echo "	}\n";
-		echo "function setPasswordReq(selectObj) {\n";
-		echo "  var value = selectObj.value;\n";
-		echo "  if (value == 'true') {\n";
-		echo "    document.getElementById('voicemail_password_cell').className = 'vncellreq';\n";
-		echo "    document.getElementById('voicemail_password_text').required = true;\n";
-		echo "  } else {\n";
-		echo "    document.getElementById('voicemail_password_cell').className = 'vncell';\n";
-		echo "    document.getElementById('voicemail_password_text').required = false;\n";
-		echo "  }\n";
-		echo "}\n";
 		echo "</script>\n";
 	}
+
+	// Set ZIP encryption auto-change
+	echo "<script>"
+	echo "function setPasswordReq(selectObj) {\n";
+	echo "  var value = selectObj.value;\n";
+	echo "  if (value == 'true') {\n";
+	echo "    document.getElementById('voicemail_password_cell').className = 'vncellreq';\n";
+	echo "    document.getElementById('voicemail_password_text').required = true;\n";
+	echo "  } else {\n";
+	echo "    document.getElementById('voicemail_password_cell').className = 'vncell';\n";
+	echo "    document.getElementById('voicemail_password_text').required = false;\n";
+	echo "  }\n";
+	echo "}\n";
+	echo "</script>\n";
 
 //set the location for the back button
 	if (permission_exists('voicemail_view')) {
