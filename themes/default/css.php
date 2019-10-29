@@ -855,6 +855,13 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		color: #999;
 		}
 
+	div.domains_list_item_active a {
+		color: <?php echo ($_SESSION['theme']['domain_active_text_color']['text'] != '') ? $_SESSION['theme']['domain_active_text_color']['text'] : '#004083'; ?>;
+	}
+	div.domains_list_item_inactive a {
+		color: <?php echo ($_SESSION['theme']['domain_inactive_text_color']['text'] != '') ? $_SESSION['theme']['domain_inactive_text_color']['text'] : '#004083'; ?>;
+	}
+
 	div.domains_list_item_active span.domain_active_list_item_description {
 		color: <?php echo ($_SESSION['theme']['domain_active_desc_text_color']['text'] != '') ? $_SESSION['theme']['domain_active_desc_text_color']['text'] : '#999'; ?>;
 		}
@@ -867,7 +874,7 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 	div.domains_list_item:hover span {
 		color: #5082ca;
 		}
-	
+
 	div.domains_list_item_active:hover a,
 	div.domains_list_item_active:hover span {
 		color: <?php echo ($_SESSION['theme']['domain_active_text_color_hover']['text']); ?>;
@@ -2188,10 +2195,20 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		box-shadow: <?php echo ($_SESSION['theme']['action_bar_shadow_scroll']['text'] != '') ? $_SESSION['theme']['action_bar_shadow_scroll']['text'] : '0 3px 3px 0 rgba(0,0,0,0.2)'; ?>;
 		}
 
+	div.action_bar > div.heading {
+		float: left;
+		}
+
+	div.action_bar > div.actions {
+		float: right;
+		white-space: nowrap;
+		}
+
 /* LIST ************************************************************************/
 
 	.list {
 		width: 100%;
+		empty-cells: show;
 		}
 
 	.list tr {
@@ -2205,13 +2222,17 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		}
 
 	.list-header > th {
-		padding: 4px 7px;
+		padding: <?php echo ($_SESSION['theme']['table_heading_padding']['text'] != '') ? $_SESSION['theme']['table_heading_padding']['text'] : '4px 7px'; ?>;
 		text-align: left;
 		color: <?php echo ($_SESSION['theme']['table_heading_text_color']['text'] != '') ? $_SESSION['theme']['table_heading_text_color']['text'] : '#3164ad'; ?>;
 		font-size: <?php echo ($_SESSION['theme']['table_heading_text_size']['text'] != '') ? $_SESSION['theme']['table_heading_text_size']['text'] : '12px'; ?>;
 		font-family: <?php echo ($_SESSION['theme']['table_heading_text_font']['text'] != '') ? $_SESSION['theme']['table_heading_text_font']['text'] : 'arial'; ?>;
 		background: <?php echo ($_SESSION['theme']['table_heading_background_color']['text'] != '') ? $_SESSION['theme']['table_heading_background_color']['text'] : 'none'; ?>;
 		border-bottom: 1px solid <?php echo ($_SESSION['theme']['table_heading_border_color']['text'] != '') ? $_SESSION['theme']['table_heading_border_color']['text'] : '#a4aebf'; ?>;
+		}
+
+	.list-header > th.shrink {
+		width: 1px;
 		}
 
 	.list-row:nth-child(odd) > :not(.action-button) {
@@ -2232,7 +2253,7 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		}
 
 	.list-row > :not(.checkbox) {
-		padding: <?php echo ($_SESSION['theme']['table_row_padding']['text'] != '') ? $_SESSION['theme']['table_row_padding']['text'] : '4px 7px 4px 7px'; ?>;
+		padding: <?php echo ($_SESSION['theme']['table_row_padding']['text'] != '') ? $_SESSION['theme']['table_row_padding']['text'] : '4px 7px'; ?>;
 		}
 
 	.list-row > td.description {
@@ -2280,6 +2301,11 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 	.list-header > .right,
 	.list-row > .right {
 		text-align: right !important;
+		}
+
+	.list-header > .middle,
+	.list-row > .middle {
+		vertical-align: middle !important;
 		}
 
 	.list-header > .no-wrap,

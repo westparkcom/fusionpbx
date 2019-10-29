@@ -1,12 +1,12 @@
 <?php
 
 /**
- * bridges class
+ * call flows class
  *
  * @method null download
  */
-if (!class_exists('bridges')) {
-	class bridges {
+if (!class_exists('call_flows')) {
+	class call_flows {
 
 		/**
 		 * declare private variables
@@ -26,13 +26,13 @@ if (!class_exists('bridges')) {
 		public function __construct() {
 
 			//assign private variables
-				$this->app_name = 'bridges';
-				$this->app_uuid = 'a6a7c4c5-340a-43ce-bcbc-2ed9bab8659d';
-				$this->permission_prefix = 'bridge_';
-				$this->list_page = 'bridges.php';
-				$this->table = 'bridges';
-				$this->uuid_prefix = 'bridge_';
-				$this->toggle_field = 'bridge_enabled';
+				$this->app_name = 'call_flows';
+				$this->app_uuid = 'b1b70f85-6b42-429b-8c5a-60c8b02b7d14';
+				$this->permission_prefix = 'call_flow_';
+				$this->list_page = 'call_flows.php';
+				$this->table = 'call_flows';
+				$this->uuid_prefix = 'call_flow_';
+				$this->toggle_field = 'call_flow_status';
 				$this->toggle_values = ['true','false'];
 
 		}
@@ -207,7 +207,7 @@ if (!class_exists('bridges')) {
 
 										//overwrite
 											$array[$this->table][$x][$this->uuid_prefix.'uuid'] = uuid();
-											$array[$this->table][$x]['bridge_description'] = trim($row['bridge_description'].' ('.$text['label-copy'].')');
+											$array[$this->table][$x]['call_flow_description'] = trim($row['call_flow_description'].' ('.$text['label-copy'].')');
 
 									}
 								}

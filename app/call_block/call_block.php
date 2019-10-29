@@ -99,7 +99,7 @@
 	}
 
 //prepare to page the results
-	$sql = "select count(*) from v_call_block ";
+	$sql = "select count(*) from view_call_block ";
 	$sql .= "where domain_uuid = :domain_uuid ";
 	if (isset($sql_search)) {
 		$sql .= "and ".$sql_search;
@@ -118,7 +118,11 @@
 	$offset = $rows_per_page * $page;
 
 //get the list
-	$sql = str_replace('count(*)', '*', $sql);
+	$sql = "select * from view_call_block ";
+	$sql .= "where domain_uuid = :domain_uuid ";
+	if (isset($sql_search)) {
+		$sql .= "and ".$sql_search;
+	}
 	$sql .= order_by($order_by, $order, 'call_block_number');
 	$sql .= limit_offset($rows_per_page, $offset);
 	$database = new database;
@@ -134,7 +138,8 @@
 
 //show the content
 	echo "<div class='action_bar' id='action_bar'>\n";
-	echo "	<b style='float: left;'>".$text['title-call-block']." (".$num_rows.")</b>\n";
+	echo "	<div class='heading'><b>".$text['title-call-block']." (".$num_rows.")</b></div>\n";
+	echo "	<div class='actions'>\n";
 	if (permission_exists('call_block_add')) {
 		echo button::create(['type'=>'button','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add'],'link'=>'call_block_edit.php']);
 	}
@@ -147,14 +152,16 @@
 	if (permission_exists('call_block_delete') && $result) {
 		echo button::create(['type'=>'button','label'=>$text['button-delete'],'icon'=>$_SESSION['theme']['button_icon_delete'],'onclick'=>"if (confirm('".$text['confirm-delete']."')) { list_action_set('delete'); list_form_submit('form_list'); } else { this.blur(); return false; }"]);
 	}
-	echo "<form id='form_search' class='inline' method='get'>\n";
-	echo "<input type='text' class='txt list-search' name='search' id='search' value=\"".escape($search)."\" placeholder=\"".$text['label-search']."\" onkeydown='list_search_reset();'>";
+	echo 		"<form id='form_search' class='inline' method='get'>\n";
+	echo 		"<input type='text' class='txt list-search' name='search' id='search' value=\"".escape($search)."\" placeholder=\"".$text['label-search']."\" onkeydown='list_search_reset();'>";
 	echo button::create(['label'=>$text['button-search'],'icon'=>$_SESSION['theme']['button_icon_search'],'type'=>'submit','id'=>'btn_search','style'=>($search != '' ? 'display: none;' : null)]);
 	echo button::create(['label'=>$text['button-reset'],'icon'=>$_SESSION['theme']['button_icon_reset'],'type'=>'button','id'=>'btn_reset','link'=>'call_block.php','style'=>($search == '' ? 'display: none;' : null)]);
 	if ($paging_controls_mini != '') {
-		echo "<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
+		echo "	<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
 	}
-	echo "</form>\n";
+	echo "		</form>\n";
+	echo "	</div>\n";
+	echo "	<div style='clear: both;'></div>\n";
 	echo "</div>\n";
 
 	echo $text['description-call-block']."\n";
@@ -171,6 +178,7 @@
 		echo "		<input type='checkbox' id='checkbox_all' name='checkbox_all' onclick='list_all_toggle();' ".($result ?: "style='visibility: hidden;'").">\n";
 		echo "	</th>\n";
 	}
+	echo th_order_by('extension', $text['label-extension'], $order_by, $order);
 	echo th_order_by('call_block_number', $text['label-number'], $order_by, $order);
 	echo th_order_by('call_block_name', $text['label-name'], $order_by, $order);
 	echo th_order_by('call_block_count', $text['label-count'], $order_by, $order, '', "class='center'");
@@ -196,6 +204,14 @@
 				echo "		<input type='hidden' name='call_blocks[".$x."][uuid]' value='".escape($row['call_block_uuid'])."' />\n";
 				echo "	</td>\n";
 			}
+			echo "	<td>";
+			if (strlen($row['extension']) == 0) {
+				echo $text['label-all'];
+			}
+			else {
+				echo "<a href='".$list_row_url."'>".escape($row['extension'])."</a>";
+			}
+			echo "	</td>\n";
 			echo "	<td>";
 			if (permission_exists('call_block_edit')) {
 				echo "<a href='".$list_row_url."'>".escape($row['call_block_number'])."</a>";

@@ -24,8 +24,9 @@
 	Mark J Crane <markjcrane@fusionpbx.com>
 	Luis Daniel Lucio Quiroz <dlucio@okay.com.mx>
 
-	Call Block is written by Gerrit Visser <gerrit308@gmail.com>
+	Original version of Call Block was written by Gerrit Visser <gerrit308@gmail.com>
 */
+
 //includes
 	require_once "root.php";
 	require_once "resources/require.php";
@@ -40,32 +41,6 @@
 	$language = new text;
 	$text = $language->get();
 
-//define the call_block_get_extensions function
-	function call_block_get_extensions($select_extension) {
-		global $text;
-
-		//list voicemail
-		$sql = "select extension, user_context, description from v_extensions ";
-		$sql .= "where domain_uuid = :domain_uuid ";
-		$sql .= "and enabled = 'true' ";
-		$sql .= "order by extension asc ";
-		$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
-		$database = new database;
-		$result = $database->select($sql, $parameters);
-
-		if (is_array($result) && sizeof($result) != 0) {
-			echo "<optgroup label='".$text['label-voicemail']."'>\n";
-			foreach ($result as &$row) {
-				$extension = $row["extension"];
-				$context = $row["user_context"];
-				$description = $row["description"];
-				$selected = $extension == $select_extension ? "selected='selected'" : null;
-				echo "<option value='Voicemail ".$context." ".$extension."' ".$selected.">".$extension." ".$description."</option>\n";
-			}
-			echo "</optgroup>\n";
-		}
-	}
-
 //action add or update
 	if (is_uuid($_REQUEST["id"])) {
 		$action = "update";
@@ -77,6 +52,7 @@
 
 //get http post variables and set them to php variables
 	if (count($_POST) > 0) {
+		$extension_uuid = $_POST["extension_uuid"];
 		$call_block_name = $_POST["call_block_name"];
 		$call_block_number = $_POST["call_block_number"];
 		$call_block_action = $_POST["call_block_action"];
@@ -85,8 +61,8 @@
 	}
 
 //handle the http post
-	if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
-	
+	if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
+
 		//delete the call block
 			if (permission_exists('call_block_delete')) {
 				if ($_POST['action'] == 'delete' && is_uuid($call_block_uuid)) {
@@ -129,10 +105,10 @@
 				require_once "resources/footer.php";
 				return;
 			}
-	
+
 		//add or update the database
 			if (is_array($_POST) && sizeof($_POST) != 0 && $_POST["persistformvar"] != "true") {
-	
+
 				//ensure call block is enabled in the dialplan
 					if ($action == "add" || $action == "update") {
 						$sql = "select dialplan_uuid from v_dialplans where true ";
@@ -159,10 +135,13 @@
 							$p->delete('dialplan_edit', 'temp');
 						}
 					}
-	
+
 				if ($action == "add") {
 					$array['call_block'][0]['call_block_uuid'] = uuid();
 					$array['call_block'][0]['domain_uuid'] = $_SESSION['domain_uuid'];
+					if (is_uuid($extension_uuid)) {
+						$array['call_block'][0]['extension_uuid'] = $extension_uuid;
+					}
 					$array['call_block'][0]['call_block_name'] = $call_block_name;
 					$array['call_block'][0]['call_block_number'] = $call_block_number;
 					$array['call_block'][0]['call_block_count'] = 0;
@@ -177,12 +156,12 @@
 					$database->save($array);
 					$response = $database->message;
 					unset($array);
-	
+
 					message::add($text['label-add-complete']);
 					header("Location: call_block.php");
 					return;
 				}
-	
+
 				if ($action == "update") {
 					$sql = "select c.call_block_number, d.domain_name ";
 					$sql .= "from v_call_block as c ";
@@ -196,15 +175,18 @@
 					if (is_array($result) && sizeof($result) != 0) {
 						//set the domain_name
 						$domain_name = $result[0]["domain_name"];
-	
+
 						//clear the cache
 						$cache = new cache;
 						$cache->delete("app:call_block:".$domain_name.":".$call_block_number);
 					}
 					unset($sql, $parameters);
-	
+
 					$array['call_block'][0]['call_block_uuid'] = $call_block_uuid;
 					$array['call_block'][0]['domain_uuid'] = $_SESSION['domain_uuid'];
+					if (is_uuid($extension_uuid)) {
+						$array['call_block'][0]['extension_uuid'] = $extension_uuid;
+					}
 					$array['call_block'][0]['call_block_name'] = $call_block_name;
 					$array['call_block'][0]['call_block_number'] = $call_block_number;
 					$array['call_block'][0]['call_block_action'] = $call_block_action;
@@ -218,14 +200,12 @@
 					$database->save($array);
 					$response = $database->message;
 					unset($array);
-	
+
 					message::add($text['label-update-complete']);
 					header("Location: call_block.php");
 					return;
 				}
-
 			}
-
 	}
 
 //pre-populate the form
@@ -239,6 +219,7 @@
 		$database = new database;
 		$row = $database->select($sql, $parameters, 'row');
 		if (is_array($row) && sizeof($row) != 0) {
+			$extension_uuid = $row["extension_uuid"];
 			$call_block_name = $row["call_block_name"];
 			$call_block_number = $row["call_block_number"];
 			$call_block_action = $row["call_block_action"];
@@ -248,6 +229,15 @@
 		unset($sql, $parameters, $row);
 	}
 
+//get the extensions
+	$sql = "select extension_uuid, extension, number_alias, user_context, description from v_extensions ";
+	$sql .= "where domain_uuid = :domain_uuid ";
+	$sql .= "and enabled = 'true' ";
+	$sql .= "order by extension asc ";
+	$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+	$database = new database;
+	$extensions = $database->select($sql, $parameters);
+
 //create token
 	$object = new token;
 	$token = $object->create($_SERVER['PHP_SELF']);
@@ -256,16 +246,6 @@
 	require_once "resources/header.php";
 
 //show the content
-	echo "<script type=\"text/javascript\" language=\"JavaScript\">\n";
-	echo "	function call_block_recent(cdr_uuid, cur_name) {\n";
-	echo "		var new_name = prompt('".$text['prompt-block_recent_name']."', cur_name);\n";
-	echo "		if (new_name != null) {\n";
-	echo "			block_name = (new_name != '') ? new_name : cur_name;\n";
-	echo "			document.location.href='call_block_cdr_add.php?cdr_id=' + cdr_uuid + '&name=' + escape(block_name)\n";
-	echo "		}\n";
-	echo "	}\n";
-	echo "</script>";
-
 	echo "<form method='post' name='frm' action=''>\n";
 	echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 	echo "<tr>\n";
@@ -344,10 +324,37 @@
 	else {
 		echo "	<option value='Hold'>".$text['label-hold']."</option>\n";
 	}
-	call_block_get_extensions($extension);
+	if (is_array($extensions) && sizeof($extensions) != 0) {
+		echo "	<optgroup label='".$text['label-voicemail']."'>\n";
+		foreach ($extensions as &$row) {
+			$selected = $extension_uuid == $row['extension_uuid'] ? "selected='selected'" : null;
+			echo "		<option value='Voicemail ".escape($row["user_context"])." ".escape($row["extension"])."' ".$selected.">".escape($row['extension'])." ".escape($row['description'])."</option>\n";
+		}
+		echo "	</optgroup>\n";
+	}
 	echo "	</select>\n";
 	echo "<br />\n";
 	echo $text['description-action']."\n";
+	echo "\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+
+	echo "<tr>\n";
+	echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
+	echo "	".$text['label-extension']."\n";
+	echo "</td>\n";
+	echo "<td class='vtable' align='left'>\n";
+	echo "	<select class='formfld' name='extension_uuid'>\n";
+	echo "	<option value=''>".$text['label-all']."</option>\n";
+	if (is_array($extensions) && sizeof($extensions) != 0) {
+		foreach ($extensions as $row) {
+			$selected = $extension_uuid == $row['extension_uuid'] ? "selected='selected'" : null;
+			echo "	<option value='".urlencode($row["extension_uuid"])."' ".$selected.">".escape($row['extension'])." ".escape($row['description'])."</option>\n";
+		}
+	}
+	echo "	</select>\n";
+	echo "<br />\n";
+	echo $text['description-enable']."\n";
 	echo "\n";
 	echo "</td>\n";
 	echo "</tr>\n";
@@ -392,7 +399,6 @@
 	echo "<br><br>";
 	echo "</form>";
 
-
 //get recent calls from the db (if not editing an existing call block record)
 	if (!is_uuid($_REQUEST["id"])) {
 		$sql = "select caller_id_number, caller_id_name, start_epoch, direction, hangup_cause, duration, billsec, xml_cdr_uuid ";
@@ -415,7 +421,7 @@
 		echo th_order_by('caller_id_number', $text['label-number'], $order_by, $order);
 		echo th_order_by('start_stamp', $text['label-called-on'], $order_by, $order);
 		echo th_order_by('duration', $text['label-duration'], $order_by, $order);
-		echo "<td>&nbsp;</td>\n";
+		//echo "<td>&nbsp;</td>\n";
 		echo "</tr>";
 		$c = 0;
 		$row_style["0"] = "row_style0";
@@ -423,14 +429,14 @@
 
 		if (is_array($result) && sizeof($result) != 0) {
 			foreach($result as $row) {
-				$tr_onclick = " onclick=\"call_block_recent('".escape($row['xml_cdr_uuid'])."','".urlencode(escape($row['caller_id_name']))."');\" ";
+				$tr_href = " href='call_block_cdr_add.php?id=".urlencode($row['xml_cdr_uuid'])."&name=".urlencode($row['caller_id_name'])."' ";
 				if (strlen($row['caller_id_number']) >= 7) {
 					if (defined('TIME_24HR') && TIME_24HR == 1) {
 						$tmp_start_epoch = date("j M Y H:i:s", $row['start_epoch']);
 					} else {
 						$tmp_start_epoch = date("j M Y h:i:sa", $row['start_epoch']);
 					}
-					echo "<tr>\n";
+					echo "<tr ".$tr_href.">\n";
 					if (
 						file_exists($_SERVER["DOCUMENT_ROOT"]."/themes/".$_SESSION['domain']['template']['name']."/images/icon_cdr_inbound_missed.png") &&
 						file_exists($_SERVER["DOCUMENT_ROOT"]."/themes/".$_SESSION['domain']['template']['name']."/images/icon_cdr_inbound_connected.png") &&
@@ -457,26 +463,26 @@
 					else {
 						echo "	<td class='".$row_style[$c]."'>&nbsp;</td>";
 					}
-					echo "	<td valign='top' class='".$row_style[$c]."' ".$tr_onclick.">";
+					echo "	<td valign='top' class='".$row_style[$c]."'>";
 					echo 	$row['caller_id_name'].' ';
 					echo "	</td>\n";
-					echo "	<td valign='top' class='".$row_style[$c]."' ".$tr_onclick.">";
+					echo "	<td valign='top' class='".$row_style[$c]."'>";
 					if (is_numeric($row['caller_id_number'])) {
-						echo 	format_phone($row['caller_id_number']).' ';
+						echo format_phone($row['caller_id_number']).' ';
 					}
 					else {
-						echo 	$row['caller_id_number'].' ';
+						echo $row['caller_id_number'].' ';
 					}
 					echo "	</td>\n";
-					echo "	<td valign='top' class='".$row_style[$c]."' ".$tr_onclick.">".$tmp_start_epoch."</td>\n";
+					echo "	<td valign='top' class='".$row_style[$c]."'>".$tmp_start_epoch."</td>\n";
 					$seconds = ($row['hangup_cause']=="ORIGINATOR_CANCEL") ? $row['duration'] : $row['billsec'];  //If they cancelled, show the ring time, not the bill time.
-					echo "	<td valign='top' class='".$row_style[$c]."' ".$tr_onclick.">".gmdate("G:i:s", $seconds)."</td>\n";
-					echo "	<td class='list_control_icons' ".((!(if_group("admin") || if_group("superadmin"))) ? "style='width: 25px;'" : null).">";
-					if (if_group("admin") || if_group("superadmin")) {
-						echo "	<a href='".PROJECT_PATH."/app/xml_cdr/xml_cdr_details.php?id=".escape($row['xml_cdr_uuid'])."' alt='".$text['button-view']."'>".$v_link_label_view."</a>";
-					}
-					echo 		"<a href='javascript:void(0);' onclick=\"call_block_recent('".escape($row['xml_cdr_uuid'])."','".urlencode(escape($row['caller_id_name']))."');\" alt='".$text['button-add']."'>".$v_link_label_add."</a>";
-					echo "  </td>";
+					echo "	<td valign='top' class='".$row_style[$c]."'>".gmdate("G:i:s", $seconds)."</td>\n";
+					//echo "	<td class='list_control_icons' ".((!(if_group("superadmin"))) ? "style='width: 25px;'" : null).">";
+					//if (if_group("superadmin")) {
+					//	echo "	<a href='".PROJECT_PATH."/app/xml_cdr/xml_cdr_details.php?id=".urlencode($row['xml_cdr_uuid'])."' alt='".$text['button-view']."'>".$v_link_label_view."</a>";
+					//}
+					//echo "	<a href='call_block_cdr_add.php?id=".urlencode($row['xml_cdr_uuid'])."&name=".urlencode($row['caller_id_name'])."' alt='".$text['button-add']."'>".$v_link_label_add."</a>";
+					//echo "	</td>";
 					echo "</tr>\n";
 					$c = $c == 1 ? 0 : 1;
 				}
