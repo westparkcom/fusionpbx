@@ -65,7 +65,7 @@ function originatecall(phonenum)
     if (settings['voicemail']['escalations_cidnum'] ~= nil) then
         escalations_cidnum = settings['voicemail']['escalations_cidnum']['text'];
     end
-    origstring ="{direction=outbound,origination_caller_id_number=" .. escalations_cidnum .. ",origination_caller_id_name=" .. escalations_cidnum .. ",ignore_early_media=true,call_timeout='60',hangup_after_bridge=true,context=" .. context .. "domain_name=" .. domain_name ..",domain_uuid=" .. domain_uuid .. "}loopback/" .. phonenum .. "/" .. context .. " &lua(app.lua vmcallout " .. vmdata['voicemail_id'] .. ")"
+    origstring ="originate {direction=outbound,origination_caller_id_number=" .. escalations_cidnum .. ",origination_caller_id_name=" .. escalations_cidnum .. ",ignore_early_media=true,call_timeout='60',hangup_after_bridge=true,context=" .. context .. ",domain_name=" .. domain_name ..",domain_uuid=" .. domain_uuid .. "}loopback/" .. phonenum .. "/" .. context .. " '&lua(app.lua vmcallout " .. vmboxinfo['voicemail_id'] .. ")'"
     api:executeString(origstring)
 end
 
@@ -73,12 +73,14 @@ function runesc()
     -- Get voicemail box info
     vmboxinfo = getvmbox()
 
-    -- Get voicemail message info
-    msginfo = getmsginfo()
-
     -- Get escalations info
     escinfo = getescinfo()
     for key, row in pairs(escinfo) do
+        freeswitch.consoleLog("INFO", "Sleeping for " .. row['voicemail_escalation_delay'] .. " minutes")
+        local totms = tonumber(row['voicemail_escalation_delay']) * 60 * 1000
+        freeswitch.msleep(totms)
+        -- Get voicemail message info
+        msginfo = getmsginfo()
         if next(msginfo) == nil then -- message was deleted, cancel callouts
             freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was deleted.")
             return
@@ -88,9 +90,6 @@ function runesc()
         end
         freeswitch.consoleLog("INFO", "Originating callout to " .. row['voicemail_escalation_phonenum'] .. " for mailbox " .. vmboxinfo['voicemail_id'])
         originatecall(row['voicemail_escalation_phonenum'])
-        freeswitch.consoleLog("INFO", "Sleeping for " .. row['voicemail_escalation_delay'] .. " minutes")
-        local totms = tonumber(row['voicemail_escalation_delay']) * 60 * 1000
-        freeswitch.msleep(totms)
     end
 end
 
