@@ -35,16 +35,20 @@ if (!class_exists('button')) {
 			//button: open
 				$button = "<button ";
 				$button .= "type='".($array['type'] ? $array['type'] : 'button')."' ";
-				$button .= $array['name'] ? "name=\"".$array['name']."\" " : null;
-				$button .= $array['value'] ? "value=\"".$array['value']."\" " : null;
-				$button .= $array['id'] ? "id=\"".$array['id']."\" " : null;
-				$button .= $array['label'] ? "alt=\"".$array['label']."\" " : ($array['title'] ? "alt=\"".$array['title']."\" " : null);
+				$button .= $array['name'] ? "name=".self::quote($array['name'])." " : null;
+				$button .= $array['value'] ? "value=".self::quote($array['value'])." " : null;
+				$button .= $array['id'] ? "id='".$array['id']."' " : null;
+				$button .= $array['label'] ? "alt=".self::quote($array['label'])." " : ($array['title'] ? "alt=".self::quote($array['title'])." " : null);
 				if ($button_icons == 'only' || $button_icons == 'auto' || $array['title']) {
-					$button .= "title=\"".($array['title'] ? $array['title'] : $array['label'])."\" ";
+					if ($array['title'] || $array['label']) {
+						$button .= "title=".($array['title'] ? self::quote($array['title']) : self::quote($array['label']))." ";
+					}
 				}
-				$button .= $array['onclick'] ? "onclick=\"".$array['onclick']."\" " : null;
+				$button .= $array['onclick'] ? "onclick=".self::quote($array['onclick'])." " : null;
+				$button .= $array['onmouseover'] ? "onmouseenter=".self::quote($array['onmouseover'])." " : null;
+ 				$button .= $array['onmouseout'] ? "onmouseleave=".self::quote($array['onmouseout'])." " : null;
 				$button .= "class='btn btn-".($array['class'] ? $array['class'] : 'default')." ".($array['disabled'] ? 'disabled' : null)."' ";
-				$button .= "style='margin-left: 2px; margin-right: 2px; ".($array['style'] ? $array['style'] : null)."' ";
+				$button .= $array['style'] ? "style=".self::quote($array['style'])." " : null;
 				$button .= $array['disabled'] ? "disabled='disabled' " : null;
 				$button .= ">";
 			//icon
@@ -80,13 +84,17 @@ if (!class_exists('button')) {
 				if ($array['link']) {
 					$anchor = "<a ";
 					$anchor .= "href='".$array['link']."' ";
-					$anchor .= "target=\"".($array['target'] ? $array['target'] : '_self')."\" ";
-					$anchor .= ($array['disabled'] ? "class='disabled' onclick='return false;'" : null)." ";
+					$anchor .= "target='".($array['target'] ? $array['target'] : '_self')."' ";
+					$anchor .= $array['disabled'] ? "class='disabled' onclick='return false;' " : null;
 					$anchor .= ">";
 					$button = $anchor.$button."</a>";
 				}
 			return $button;
 			unset($button);
+		}
+
+		private static function quote($value) {
+			return substr_count($value, "'") ? '"'.$value.'"' : "'".$value."'";
 		}
 
 	}
@@ -96,7 +104,7 @@ if (!class_exists('button')) {
 
 //usage
 
-	echo button::create(['type'=>'button','label'=>$text['button-label'],'icon'=>'icon','name'=>'btn','id'=>'btn','value'=>'value','link'=>'url','target'=>'_blank','onclick'=>'javascript','class'=>'name','style'=>'css','title'=>$text['button-label'],'collapse'=>'class','disabled'=>false]);
+	echo button::create(['type'=>'button','label'=>$text['button-label'],'icon'=>'icon','name'=>'btn','id'=>'btn','value'=>'value','link'=>'url','target'=>'_blank','onclick'=>'javascript','onmouseover'=>'javascript','onmouseout'=>'javascript','class'=>'name','style'=>'css','title'=>$text['button-label'],'collapse'=>'class','disabled'=>false]);
 
 	echo button::create([
 		'type'=>'button',
@@ -108,6 +116,8 @@ if (!class_exists('button')) {
 		'link'=>'url',
 		'target'=>'_blank',
 		'onclick'=>'javascript',
+		'onmouseover'=>'javascript',
+		'onmouseout'=>'javascript',
 		'class'=>'name',
 		'style'=>'css',
 		'title'=>$text['button-label'],
@@ -124,6 +134,8 @@ if (!class_exists('button')) {
 	value		submitted value (if type is also set to 'submit')
 	target		'_blank' | '_self' (default) | etc
 	onclick		javascript
+	onmouseover	javascript (actually uses onmouseenter so doesn't bubble to child elements)
+	onmouseout	javascript (actually uses onmouseleave so doesn't bubble to child elements)
 	class		css class[es]
 	style		css style[s]
 	title		tooltip text (if not set, defaults to value of label)
