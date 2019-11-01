@@ -1,0 +1,17 @@
+[MySQL]
+hostname=127.0.0.1
+username=logger
+password=PASSWORD
+dbname=logger
+table=CallLoggerStats
+
+[Notification]
+enabled=true
+fromaddr=name@example.com
+toaddr=notifications@example.com
+smtpserver=127.0.0.1
+smtpport=25
+smtptls=true
+smtpauth=true
+smtpuser=name@example.com
+smtppass=PASSWORD
