@@ -48,10 +48,7 @@
 		caller_id_number = session:getVariable("caller_id_number");
 		context = session:getVariable("context");
 		call_block = session:getVariable("call_block");
-		user_exists = session:getVariable("user_exists");
-		if (user_exists == 'true') then
-			extension_uuid = session:getVariable("extension_uuid");
-		end
+		extension_uuid = session:getVariable("extension_uuid");
 	end
 
 --set default variables
@@ -101,10 +98,12 @@
 				sql = sql .. "	or (call_block_name is null and call_block_number = :call_block_number) ";
 				sql = sql .. "	or (call_block_name = :call_block_name and call_block_number is null) ";
 				sql = sql .. ") ";
-				if (user_exists == 'true' and extension_uuid ~= nil) then
+				if (extension_uuid == nil) then
+					sql = sql .. "and extension_uuid is null ";
+				else
 					sql = sql .. "and (extension_uuid is null or extension_uuid = :extension_uuid) ";
 				end
-				if (user_exists == 'true' and extension_uuid ~= nil) then
+				if (extension_uuid ~= nil) then
 					params = {domain_uuid = domain_uuid, call_block_name = caller_id_name, call_block_number = caller_id_number, extension_uuid = extension_uuid};
 				else
 					params = {domain_uuid = domain_uuid, call_block_name = caller_id_name, call_block_number = caller_id_number};
@@ -126,7 +125,7 @@
 
 			--set call block default to false
 				call_block = false;
-				if (call_block_action ~= nil) then
+				if (call_block_app ~= nil) then
 					call_block = true;
 					if (session:ready()) then
 						session:execute('set', 'call_block=true');
