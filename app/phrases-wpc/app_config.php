@@ -2,7 +2,7 @@
 
 	//application details
 		$apps[$x]['name'] = "Phrases";
-		$apps[$x]['uuid'] = "5c6f597c-9b78-11e4-89d3-123b93f75cba";
+		$apps[$x]['uuid'] = "5b6f597c-9b78-12e4-89d3-123c93f85cbd";
 		$apps[$x]['category'] = "Switch";;
 		$apps[$x]['subcategory'] = "";
 		$apps[$x]['version'] = "0.1";
@@ -45,7 +45,7 @@
 	//permission details
 		$y=0;
 		$apps[$x]['permissions'][$y]['name'] = "phrase_view";
-		$apps[$x]['permissions'][$y]['menu']['uuid'] = "a5caa6dc-a6d7-41c3-a484-e556ffd0d2ff";
+		$apps[$x]['permissions'][$y]['menu']['uuid'] = "a5cac6dc-a5d7-41c3-a484-c556fad0d2ef";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;

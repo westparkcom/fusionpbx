@@ -61,7 +61,7 @@
 		//execute delete
 			$database = new database;
 			$database->app_name = 'phrases';
-			$database->app_uuid = '5c6f597c-9b78-11e4-89d3-123b93f75cba';
+			$database->app_uuid = '5b6f597c-9b78-12e4-89d3-123c93f85cbd';
 			$database->delete($array);
 			unset($array);
 
