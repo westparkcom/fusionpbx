@@ -608,7 +608,7 @@
 			$sql = "select * from v_voicemail_escalations ";
 			$sql .= "where domain_uuid = :domain_uuid ";
 			$sql .= "and voicemail_uuid = :voicemail_uuid ";
-			$sql .= "order by voicemail_escalation_phonenum, voicemail_escalation_order asc ";
+			$sql .= "order by voicemail_escalation_order asc ";
 			$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
 			$parameters['voicemail_uuid'] = $voicemail_uuid;
 			$database = new database;
