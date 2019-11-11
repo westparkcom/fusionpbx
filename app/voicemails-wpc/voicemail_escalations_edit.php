@@ -72,9 +72,6 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 		}
 
 	//check for all required data
-		error_log("Len of phonenum: " . strlen($voicemail_escalation_phonenum . "\n");
-		error_log("Len of order: " . strlen($voicemail_escalation_order . "\n");
-		error_log("Len of delay: " . strlen($voicemail_escalation_delay . "\n");
 		if (strlen($voicemail_escalation_phonenum) == 0) { $msg .= $text['message-required'].$text['label-option']."<br>\n"; }
 		if (strlen($voicemail_escalation_delay) == 0) { $msg .= $text['message-required'].$text['label-option']."<br>\n"; }
 		if (strlen($voicemail_escalation_order) == 0) { $msg .= $text['message-required'].$text['label-order']."<br>\n"; }
