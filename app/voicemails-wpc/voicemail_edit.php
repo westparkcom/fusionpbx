@@ -646,7 +646,7 @@
 			echo "  <input class='formfld' style='width:70px' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_phonenum]' maxlength='255' value='".$voicemail_escalation_phonenum."'>\n";
 			echo "</td>\n";
 			echo "<td class='vtable' align='left'>\n";
-			echo "  <input class='formfld' style='width:70px' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_delay]' maxlength='4' value='".$voicemail_escalation_delay."'>\n";
+			echo "  <input class='formfld' style='width:70px' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_delay]' required='required' maxlength='4' value='".$voicemail_escalation_delay."'>\n";
 			echo "</td>\n";
 			echo "<td class='vtable' align='left'>\n";
 			echo "	<select name='voicemail_escalations[".$c."][voicemail_escalation_order]' class='formfld' style='width:55px'>\n";
