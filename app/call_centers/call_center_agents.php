@@ -128,6 +128,7 @@
 	echo "	<div class='heading'><b>".$text['header-call_center_agents']." (".$num_rows.")</b></div>\n";
 	echo "	<div class='actions'>\n";
 	echo button::create(['type'=>'button','label'=>$text['button-back'],'icon'=>$_SESSION['theme']['button_icon_back'],'link'=>'call_center_queues.php','style'=>'margin-right: 15px;']);
+	echo button::create(['type'=>'button','label'=>$text['button-status'],'icon'=>'user-clock','style'=>'margin-right: 15px;','link'=>'call_center_agent_status.php']);
 	if (permission_exists('call_center_agent_add')) {
 		echo button::create(['type'=>'button','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add'],'link'=>'call_center_agent_edit.php']);
 	}
@@ -142,9 +143,8 @@
 	echo button::create(['label'=>$text['button-search'],'icon'=>$_SESSION['theme']['button_icon_search'],'type'=>'submit','id'=>'btn_search','style'=>($search != '' ? 'display: none;' : null)]);
 	echo button::create(['label'=>$text['button-reset'],'icon'=>$_SESSION['theme']['button_icon_reset'],'type'=>'button','id'=>'btn_reset','link'=>'call_center_agents.php','style'=>($search == '' ? 'display: none;' : null)]);
 	if ($paging_controls_mini != '') {
-		echo "	<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
+		echo 	"<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
 	}
-	echo button::create(['type'=>'button','label'=>$text['button-status'],'icon'=>'user-clock','style'=>'margin-left: 15px;','link'=>'call_center_agent_status.php']);
 	echo "		</form>\n";
 	echo "	</div>\n";
 	echo "	<div style='clear: both;'></div>\n";

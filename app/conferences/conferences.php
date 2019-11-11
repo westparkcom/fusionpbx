@@ -149,6 +149,9 @@
 	echo "<div class='action_bar' id='action_bar'>\n";
 	echo "	<div class='heading'><b>".$text['title-conferences']." (".$num_rows.")</b></div>\n";
 	echo "	<div class='actions'>\n";
+	if (permission_exists('conference_active_view')) {
+		echo button::create(['type'=>'button','label'=>$text['button-view_active'],'icon'=>'comments','style'=>'margin-right: 15px;','link'=>PROJECT_PATH.'/app/conferences_active/conferences_active.php']);
+	}
 	if (permission_exists('conference_add')) {
 		echo button::create(['type'=>'button','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add'],'link'=>'conference_edit.php']);
 	}
@@ -166,10 +169,7 @@
 	echo button::create(['label'=>$text['button-search'],'icon'=>$_SESSION['theme']['button_icon_search'],'type'=>'submit','id'=>'btn_search','style'=>($search != '' ? 'display: none;' : null)]);
 	echo button::create(['label'=>$text['button-reset'],'icon'=>$_SESSION['theme']['button_icon_reset'],'type'=>'button','id'=>'btn_reset','link'=>'conferences.php','style'=>($search == '' ? 'display: none;' : null)]);
 	if ($paging_controls_mini != '') {
-		echo "	<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
-	}
-	if (permission_exists('conference_active_view')) {
-		echo button::create(['type'=>'button','label'=>$text['button-view_active'],'icon'=>'comments','style'=>'margin-left: 15px;','link'=>PROJECT_PATH.'/app/conferences_active/conferences_active.php']);
+		echo 	"<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
 	}
 	echo "		</form>\n";
 	echo "	</div>\n";

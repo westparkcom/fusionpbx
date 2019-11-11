@@ -174,7 +174,7 @@
 	echo button::create(['label'=>$text['button-search'],'icon'=>$_SESSION['theme']['button_icon_search'],'type'=>'submit','id'=>'btn_search','style'=>($search != '' ? 'display: none;' : null)]);
 	echo button::create(['label'=>$text['button-reset'],'icon'=>$_SESSION['theme']['button_icon_reset'],'type'=>'button','id'=>'btn_reset','link'=>'bridges.php','style'=>($search == '' ? 'display: none;' : null)]);
 	if ($paging_controls_mini != '') {
-		echo "	<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
+		echo 	"<span style='margin-left: 15px;'>".$paging_controls_mini."</span>";
 	}
 	echo "		</form>\n";
 	echo "	</div>\n";
@@ -207,9 +207,9 @@
 	}
 	echo "</tr>\n";
 
-	if (is_array($bridges)) {
+	if (is_array($bridges) && @sizeof($bridges) != 0) {
 		$x = 0;
-		foreach($bridges as $row) {
+		foreach ($bridges as $row) {
 			if (permission_exists('bridge_edit')) {
 				$list_row_url = "bridge_edit.php?id=".urlencode($row['bridge_uuid']);
 			}
