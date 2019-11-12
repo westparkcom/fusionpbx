@@ -65,7 +65,7 @@ function originatecall(phonenum)
     if (settings['voicemail']['escalations_cidnum'] ~= nil) then
         escalations_cidnum = settings['voicemail']['escalations_cidnum']['text'];
     end
-    origstring ="bgapi originate {return_ring_ready=true,direction=outbound,origination_caller_id_number=" .. escalations_cidnum .. ",origination_caller_id_name=" .. escalations_cidnum .. ",ignore_early_media=true,call_timeout=60,hangup_after_bridge=true,context=" .. context .. ",domain_name=" .. domain_name ..",domain_uuid=" .. domain_uuid .. "}loopback/" .. phonenum .. "/" .. context .. " '&lua(app.lua vmcallout " .. vmboxinfo['voicemail_id'] .. ")'"
+    origstring ="bgapi originate {return_ring_ready=true,direction=outbound,outbound_caller_id_number=" .. escalations_cidnum .. ",outbound_caller_id_name=" .. escalations_cidnum .. ",ignore_early_media=true,call_timeout=60,hangup_after_bridge=true,context=" .. context .. ",domain_name=" .. domain_name ..",domain_uuid=" .. domain_uuid .. "}loopback/" .. phonenum .. "/" .. context .. " '&lua(app.lua vmcallout " .. vmboxinfo['voicemail_id'] .. ")'"
     api:executeString(origstring)
 end
 
