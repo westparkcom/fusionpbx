@@ -76,8 +76,12 @@ function runesc()
     -- Get escalations info
     escinfo = getescinfo()
     for key, row in pairs(escinfo) do
-        freeswitch.consoleLog("INFO", "Sleeping for " .. row['voicemail_escalation_delay'] .. " minutes")
-        local totms = tonumber(row['voicemail_escalation_delay']) * 60 * 1000
+        local voicemail_escalation_delay = 0
+        if row['voicemail_escalation_delay'] then
+            voicemail_escalation_delay = tonumber(row['voicemail_escalation_delay'])
+        end
+        freeswitch.consoleLog("INFO", "Sleeping for " .. tostring(voicemail_escalation_delay) .. " minutes")
+        local totms = voicemail_escalation_delay * 60 * 1000
         freeswitch.msleep(totms)
         -- Get voicemail message info
         msginfo = getmsginfo()
