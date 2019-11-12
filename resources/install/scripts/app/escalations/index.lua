@@ -33,7 +33,7 @@ function getmsginfo()
     }
     dbh:query(sql, params, function(rows)
         msgdata['created_epoch'] = rows['created_epoch']
-        msgdata['read_epoch'] = rows['read_epoch']
+        msgdata['message_status'] = rows['message_status']
     end)
     return msgdata
 end
@@ -88,11 +88,9 @@ function runesc()
         if next(msginfo) == nil then -- message was deleted, cancel callouts
             freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was deleted.")
             return
-        elseif msginfo['read_epoch'] ~= '' then
-            if tonumber(msginfo['read_epoch']) > 0 then -- message was read, cancel callouts
-                freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was marked read.")
-                return
-            end
+        elseif msginfo['message_status'] == 'saved' then -- message was read, cancel callouts
+            freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was marked read.")
+            return
         end
         freeswitch.consoleLog("INFO", "Originating callout to " .. row['voicemail_escalation_phonenum'] .. " for mailbox " .. vmboxinfo['voicemail_id'])
         originatecall(row['voicemail_escalation_phonenum'])
