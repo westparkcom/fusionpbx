@@ -61,14 +61,12 @@ function getescinfo()
 end
 
 function originatecall(phonenum)
-    local escalations_cidnum = '+15553211234'
+    local escalations_cidnum = '5553211234'
     if (settings['voicemail']['escalations_cidnum'] ~= nil) then
         escalations_cidnum = settings['voicemail']['escalations_cidnum']['text'];
     end
-    origstring ="originate {direction=outbound,origination_caller_id_number=" .. escalations_cidnum .. ",origination_caller_id_name=" .. escalations_cidnum .. ",ignore_early_media=true,call_timeout=60,hangup_after_bridge=true,context=" .. context .. ",domain_name=" .. domain_name ..",domain_uuid=" .. domain_uuid .. "}loopback/" .. phonenum .. "/" .. context .. " '&lua(app.lua vmcallout " .. vmboxinfo['voicemail_id'] .. ")'"
-    freeswitch.consoleLog("INFO", "Originating: `" .. origstring .. '`')
+    origstring ="bgapi originate {return_ring_ready=true,direction=outbound,origination_caller_id_number=" .. escalations_cidnum .. ",origination_caller_id_name=" .. escalations_cidnum .. ",ignore_early_media=true,call_timeout=60,hangup_after_bridge=true,context=" .. context .. ",domain_name=" .. domain_name ..",domain_uuid=" .. domain_uuid .. "}loopback/" .. phonenum .. "/" .. context .. " '&lua(app.lua vmcallout " .. vmboxinfo['voicemail_id'] .. ")'"
     api:executeString(origstring)
-    freeswitch.consoleLog("INFO", "Originated!!!")
 end
 
 function runesc()
