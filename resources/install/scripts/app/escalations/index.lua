@@ -84,9 +84,11 @@ function runesc()
         if next(msginfo) == nil then -- message was deleted, cancel callouts
             freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was deleted.")
             return
-        elseif msginfo['read_epoch'] ~= nil and tonumber(msginfo['read_epoch']) > 0 then -- message was read, cancel callouts
-            freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was marked read.")
-            return
+        elseif msginfo['read_epoch'] ~= '' then
+            if tonumber(msginfo['read_epoch']) > 0 then -- message was read, cancel callouts
+                freeswitch.consoleLog("INFO", "Message callout escalation for mailbox " .. vmboxinfo['voicemail_id'] .. " cancelled, message was marked read.")
+                return
+            end
         end
         freeswitch.consoleLog("INFO", "Originating callout to " .. row['voicemail_escalation_phonenum'] .. " for mailbox " .. vmboxinfo['voicemail_id'])
         originatecall(row['voicemail_escalation_phonenum'])
