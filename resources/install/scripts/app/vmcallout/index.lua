@@ -2,7 +2,7 @@ ttsvoice = 'Joanna'
 
 api = freeswitch.API();
 vmbox = argv[2]
-introPrompt = "This is the Westpark Communications messaging system. There is a new voicemail in mailbox " .. vmbox .. "."
+introPrompt = "This is the Westpark Communications messaging system. There is a new voicemail in mailbox " .. vmbox:gsub(".", "%1 "):sub(1,-2) .. "."
 
 function saytext(textstr)
     return api:executeString('python streamtext voice=' .. ttsvoice .. '|text=' .. textstr);
