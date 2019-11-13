@@ -26,7 +26,6 @@
 -----------------PUT THIS STUFF IN DEFAULT VARIABLE SECTION
 vm_prefix = '3'; --Voicemail
 ivr_prefix = '5'; --IVR
-tc_prefix = '7'; --time conditions
 ttsvoice = 'Matthew'; --text to speech voice
 -----------------------------------------------------------
 
@@ -136,15 +135,15 @@ ttsvoice = 'Matthew'; --text to speech voice
 	settings = settings(domain_uuid);
 	if (settings['recordings']['vm_prefix']['text'] ~= nil) then
 		vm_prefix = settings['recordings']['vm_prefix']['text']
+		freeswitch.consoleLog('INFO', "VM prefix override: `" .. vm_prefix .. "`")
 	end
 	if (settings['recordings']['ivr_prefix']['text'] ~= nil) then
 		ivr_prefix = settings['recordings']['ivr_prefix']['text']
-	end
-	if (settings['recordings']['tc_prefix']['text'] ~= nil) then
-		tc_prefix = settings['recordings']['tc_prefix']['text']
+		freeswitch.consoleLog('INFO', "IVR prefix override: `" .. ivr_prefix .. "`")
 	end
 	if (settings['recordings']['ttsvoice']['text'] ~= nil) then
 		ttsvoice = settings['recordings']['ttsvoice']['text']
+		freeswitch.consoleLog('INFO', "TTS voice override: `" .. ttsvoice .. "`")
 	end
 	storage_type = "";
 	storage_path = "";
