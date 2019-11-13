@@ -1,8 +1,14 @@
 ttsvoice = 'Joanna'
+require "resources.functions.settings";
+settings = settings(domain_uuid);
+company_name = ''
+if (settings['voicemail']['company_name']['text'] ~= nil) then
+    company_name = settings['voicemail']['company_name']['text']
+end
 
 api = freeswitch.API();
 vmbox = argv[2]
-introPrompt = "This is the Westpark Communications messaging system. There is a new voicemail in mailbox"
+introPrompt = "This is the " .. company_name .. " messaging system. There is a new voicemail in mailbox"
 
 function saytext(textstr)
     return api:executeString('python streamtext voice=' .. ttsvoice .. '|text=' .. textstr);
@@ -15,7 +21,7 @@ session:setVariable("voicemail_action", "check")
 session:setVariable("voicemail_profile", "default")
 
 
-session:execute('wait_for_silence', '200 15 10 5000')
+session:execute('wait_for_silence', '200 15 10 4000')
 session:execute('playback', introPromptWav)
 session:execute('sleep', '100')
 for c in string.gmatch(vmbox, ".") do

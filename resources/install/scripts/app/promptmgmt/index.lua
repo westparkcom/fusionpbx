@@ -134,7 +134,18 @@ ttsvoice = 'Matthew'; --text to speech voice
 --settings
 	require "resources.functions.settings";
 	settings = settings(domain_uuid);
-	
+	if (settings['recordings']['vm_prefix']['text'] ~= nil) then
+		vm_prefix = settings['recordings']['vm_prefix']['text']
+	end
+	if (settings['recordings']['ivr_prefix']['text'] ~= nil) then
+		ivr_prefix = settings['recordings']['ivr_prefix']['text']
+	end
+	if (settings['recordings']['tc_prefix']['text'] ~= nil) then
+		tc_prefix = settings['recordings']['tc_prefix']['text']
+	end
+	if (settings['recordings']['ttsvoice']['text'] ~= nil) then
+		ttsvoice = settings['recordings']['ttsvoice']['text']
+	end
 	storage_type = "";
 	storage_path = "";
 	mgmt_acct = settings['recordings']['admin_acct']['numeric'] or '0000'; -- The account number for universal prompt managers
