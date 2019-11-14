@@ -74,8 +74,10 @@ if (!class_exists('destinations')) {
 				$config_list = glob($_SERVER["DOCUMENT_ROOT"] . PROJECT_PATH . "/*/*/app_config.php");
 				$x = 0;
 				foreach ($config_list as &$config_path) {
+					if ($config_path != '/var/www/fusionpbx/app/voicemails/app_config.php' and $config_path != '/var/www/fusionpbx/app/fax/app_config.php' and $config_path != '/var/www/fusionpbx/app/phrases/app_config.php') {
 					include($config_path);
 					$x++;
+					}
 				}
 				$i = 0;
 				foreach ($apps as $x => &$app) {
