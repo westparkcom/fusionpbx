@@ -548,7 +548,7 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
             return
         end
     elseif vartocheck == "time-waiting" then
-        local acd_when_created = uuid_getvar ( callinfo['call_uuid'], 'acd_when_created' ) -- TODO FIXME: this might need to be variable_acd_when_created
+        local acd_when_created = getvar ( 'acd_when_created' ) -- TODO FIXME: this might need to be variable_acd_when_created
         local timewaiting_seconds = 0 -- default if unknown
         if acd_when_created ~= nil then
             timewaiting_seconds = epoch_from_timestamp ( acd_now() ) - epoch_from_timestamp ( acd_when_created )
@@ -642,7 +642,7 @@ function get_call_data(pilotnumber)
     local sql = "SELECT * FROM v_ibr_routes WHERE where domain_name=:domain_name AND ibr_pilot=:ibr_pilot LIMIT 1"
     local pilotdata = nil
     params = {
-        domain_name = uuid_getvar("domain_name"),
+        domain_name = getvar("domain_name"),
         ibr_pilot = pilotnumber
     }
     dbh:query(sql, params, function(row)
