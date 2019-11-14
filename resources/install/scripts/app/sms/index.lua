@@ -26,6 +26,7 @@ end
 Database = require "resources.functions.database";
 dbh = Database.new('system');
 require "resources.functions.settings";
+require "resources.functions.base64";
 
 local direction = argv[2] -- Seems this isn't used...
 local to_uri = split(argv[3], "@")
