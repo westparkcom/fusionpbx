@@ -264,7 +264,7 @@ end
 
 function playmoh(mohdata)
     -- Plays Music on Hold
-    local seconds = tonumber(mohdata[1])
+    local seconds = tonumber(mohdata[1]) or 0
     local tonestring = getvar("hold_music")
     local broadcast = "uuid_broadcast " .. callinfo["call_uuid"] .. " " .. tonestring .. " both"
     api:executeString(broadcast)
@@ -635,11 +635,11 @@ end
 
 function get_call_data(pilotnumber)
     -- Check to see if the pilot exists
-    local defaultroute = '[{"seqnum":10,"command":"answer"},{"seqnum":20,"command":"newgatecall","value":["1","1","0"]},{"seqnum":30,"command":"playpreanswer"},{"seqnum":40,"command":"playmoh"}]'
+    local defaultroute = '[{"seqnum":10,"command":"answer"},{"seqnum":20,"command":"newgatecall","value":["1","1","0"]},{"seqnum":30,"command":"playpreanswer"},{"seqnum":40,"command":"playmoh","value":["0"]}]'
     local Database = require "resources.functions.database";
     dbh = Database.new('system');
     
-    local sql = "SELECT * FROM v_ibr_routes WHERE where domain_name=:domain_name AND ibr_pilot=:ibr_pilot LIMIT 1"
+    local sql = "SELECT * FROM v_ibr_routes WHERE domain_name=:domain_name AND ibr_pilot=:ibr_pilot LIMIT 1"
     local pilotdata = nil
     params = {
         domain_name = getvar("domain_name"),
