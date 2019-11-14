@@ -830,13 +830,13 @@ end
 
 function run_call()
     -- Get the UUID 
-    if argv[1] == nil then
+    if argv[2] == nil then
         uuidlog("ERR", "No UUID specified. IBR system requires UUID!")
         return
     end
     -- Get call information
     callinfo = {}
-    callinfo["call_uuid"] = argv[1]
+    callinfo["call_uuid"] = argv[2]
     freeswitch.consoleLog("INFO", "UUID is `" .. callinfo["call_uuid"] .. "`")
     callinfo["ani"] = getvar("caller_id_number")
     callinfo["dnis"] = getvar("caller_destination")
