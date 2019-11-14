@@ -639,10 +639,10 @@ function get_call_data(pilotnumber)
     local Database = require "resources.functions.database";
     dbh = Database.new('system');
     
-    local sql = "SELECT * FROM v_ibr_pilots WHERE domain_name=:domain_name AND ibr_pilot=:ibr_pilot LIMIT 1"
+    local sql = "SELECT * FROM v_ibr_pilots WHERE domain_uuid=:domain_uuid AND ibr_pilot=:ibr_pilot LIMIT 1"
     local pilotdata = nil
     params = {
-        domain_name = getvar("domain_name"),
+        domain_uuid = getvar("domain_uuid"),
         ibr_pilot = pilotnumber
     }
     dbh:query(sql, params, function(row)
