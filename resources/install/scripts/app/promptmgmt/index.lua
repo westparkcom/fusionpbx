@@ -133,23 +133,29 @@ ttsvoice = 'Matthew'; --text to speech voice
 --settings
 	require "resources.functions.settings";
 	settings = settings(domain_uuid);
-	if (settings['recordings']['vm_prefix']['text'] ~= nil) then
-		vm_prefix = settings['recordings']['vm_prefix']['text']
-		freeswitch.consoleLog('INFO', "VM prefix override: `" .. vm_prefix .. "`")
-	end
-	if (settings['recordings']['ivr_prefix']['text'] ~= nil) then
-		ivr_prefix = settings['recordings']['ivr_prefix']['text']
-		freeswitch.consoleLog('INFO', "IVR prefix override: `" .. ivr_prefix .. "`")
-	end
-	if (settings['recordings']['ttsvoice']['text'] ~= nil) then
-		ttsvoice = settings['recordings']['ttsvoice']['text']
-		freeswitch.consoleLog('INFO', "TTS voice override: `" .. ttsvoice .. "`")
-	end
 	storage_type = "";
 	storage_path = "";
 	mgmt_acct = settings['recordings']['admin_acct']['numeric'] or '0000'; -- The account number for universal prompt managers
 -- Set all of the directories needed to store recordings
 	if (settings['recordings'] ~= nil) then
+		if (settings['recordings']['vm_prefix'] ~= nil) then
+			if (settings['recordings']['vm_prefix']['text'] ~= nil) then
+				vm_prefix = settings['recordings']['vm_prefix']['text']
+				freeswitch.consoleLog('INFO', "VM prefix override: `" .. vm_prefix .. "`")
+			end
+		end
+		if (settings['recordings']['ivr_prefix'] ~= nil) then
+			if (settings['recordings']['ivr_prefix']['text'] ~= nil) then
+				ivr_prefix = settings['recordings']['ivr_prefix']['text']
+				freeswitch.consoleLog('INFO', "IVR prefix override: `" .. ivr_prefix .. "`")
+			end
+		end
+		if (settings['recordings']['ttsvoice'] ~= nil) then
+			if (settings['recordings']['ttsvoice']['text'] ~= nil) then
+				ttsvoice = settings['recordings']['ttsvoice']['text']
+				freeswitch.consoleLog('INFO', "TTS voice override: `" .. ttsvoice .. "`")
+			end
+		end
 		if (settings['recordings']['storage_type'] ~= nil) then
 			if (settings['recordings']['storage_type']['text'] ~= nil) then
 				storage_type = settings['recordings']['storage_type']['text'];
