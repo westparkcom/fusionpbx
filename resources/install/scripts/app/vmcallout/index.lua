@@ -1,4 +1,6 @@
 ttsvoice = 'Joanna'
+Database = require "resources.functions.database";
+dbh = Database.new('system');
 require "resources.functions.settings";
 settings = settings(domain_uuid);
 company_name = ''
