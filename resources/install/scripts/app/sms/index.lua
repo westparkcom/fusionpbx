@@ -15,8 +15,6 @@ function send_msg(thinqacct, thinqcreds, smsto, smsfrom, smsmsge)
     end
 end
 
-end
-
 Database = require "resources.functions.database";
 dbh = Database.new('system');
 require "resources.functions.settings";
