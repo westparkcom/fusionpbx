@@ -67,4 +67,4 @@ else
 end
 local cred_text = sms_thinq_username .. ":" .. sms_thinq_token;
 local thinq_creds = base64.encode(cred_text);
-send_msg(sms_thinq_acct, thinq_creds, sms_to, sms_from, sms_msg)
+send_msg(sms_thinq_acct, thinq_creds, sms_to, sms_from, sms_body)
