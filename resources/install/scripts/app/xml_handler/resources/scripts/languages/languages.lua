@@ -50,6 +50,7 @@
 	local cache = require "resources.functions.cache"
 	local language_cache_key = "languages:" .. language..":" .. macro_name;
 	XML_STRING, err = cache.get(language_cache_key)
+	XML_STRING = nil -- Phrases do not reload when modified, this forces pull from DB
 
 --build the XML string from the database
 	if not XML_STRING then
