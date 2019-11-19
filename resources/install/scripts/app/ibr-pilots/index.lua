@@ -129,8 +129,12 @@ function acctprompt(phrase_type, acctcode)
                          .. " WHERE domain_uuid='" .. domain_uuid .. "'"
                          .. " AND phrase_name='default-" .. phrase_type .. "'";
         local default_phrase = dbh:first_value(default_sql);
-        uuidlog("notice", phrase_type .. " phrase not found for account " .. acctcode .. ", returning default phrase\n");
-        return default_phrase;
+        if phrase_type == 'NOANSWER' then 
+            uuidlog("notice", phrase_type .. " phrase not found for account " .. acctcode .. ", returning default phrase\n");
+            return default_phrase;
+        else
+            return 'nophrase'
+        end
     end
 end
 
@@ -147,6 +151,15 @@ function playemerg(value)
     -- If system emergency mode is set, play emergency greeting
     api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
     local phraseuuid = acctprompt("EMERG", callinfo["accountcode"])
+    api:executeString("uuid_broadcast " .. callinfo["call_uuid"] .. " phrase::" .. phraseuuid .. " both")
+    waitforplayfinish(phraseuuid)
+    return
+end
+
+function playprequeue(value)
+    -- If system emergency mode is set, play emergency greeting
+    api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
+    local phraseuuid = acctprompt("PREQUEUE", callinfo["accountcode"])
     api:executeString("uuid_broadcast " .. callinfo["call_uuid"] .. " phrase::" .. phraseuuid .. " both")
     waitforplayfinish(phraseuuid)
     return
@@ -751,7 +764,7 @@ function exec_command(funcname, value)
         "checkif",
         "transfer",
         "nullfunc",
-        "playback",
+        "playprequeue",
         "saytext"
     }
     if not contains(validcommands, funcname) then
@@ -792,7 +805,7 @@ function exec_command_init(funcname, value, execcmdiftrue, execcmdiffalse, execv
         "checkif",
         "transfer",
         "nullfunc",
-        "playback",
+        "playprequeue",
         "saytext"
     }
     if not contains(validcommands, funcname) then
