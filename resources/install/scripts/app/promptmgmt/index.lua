@@ -43,7 +43,8 @@ ttsvoice = 'Matthew'; --text to speech voice
 	
 	greetingTypes = {
 		IVR = 'IVR',
-		NOANSWER = 'pre-answer',
+		PREANSWER = 'pre-answer',
+		PREQUEUE = 'pre-queue',
 		WHISPER = 'whisper',
 		EMERG = 'emergency announcement'
 	};
@@ -53,7 +54,7 @@ ttsvoice = 'Matthew'; --text to speech voice
 		pleaseEnterAcct = "Please enter the account number you wish to manage.",
 		invalidAuth = "Your PIN number or account was incorrect. Goodbye.",
 		checkAdminAcct = "Please enter the administrative account code",
-		recordMainMenu = "To manage pre-answer prompts, press 1. To manage IVR prompts, press 2. To manage voicemail greetings, press 3. To manage whisper prompts, press 4. To manage emergency prompts, press 5. To manage account recordings, press 6.",
+		recordMainMenu = "To manage pre-answer prompts, press 1. To manage IVR prompts, press 2. To manage voicemail greetings, press 3. To manage whisper prompts, press 4. To manage pre-queue prompts, press 5. To manage emergency prompts, press 6. To manage account recordings, press 7.",
 		recordChoiceMainInvalid = "You have entered an invalid selection. Please try again.",
 		recordChoiceMainFinal = "You have entered an invalid selection too many times. Goodbye.",
 		noVMBoxFound = "There were no voicemail boxes found for this account.",
@@ -1072,16 +1073,18 @@ end
 			session:execute('sleep', '500');
 			local recchoice = session:playAndGetDigits(1, 1, 1, digit_timeout, "#", saytext(greetings['recordMainMenu']), "", "\\d+");
 			if recchoice == '1' then --PreAnswer Greetings
-				managePhrases('NOANSWER', accountnum);
+				managePhrases('PREANSWER', accountnum);
 			elseif recchoice == '2' then --IVR
 				managePhrases('IVR', accountnum);
 			elseif recchoice == '3' then -- VM
 				manageVoicemail(accountnum);
 			elseif recchoice == '4' then -- Whisper Prompts
 				managePhrases('WHISPER', accountnum);
-			elseif recchoice == '5' then -- Emergency Prompts
+			elseif recchoice == '5' then -- Pre-Queue Prompts
+				managePhrases('PREQUEUE', accountnum);
+			elseif recchoice == '6' then -- Emergency Prompts
 				managePhrases('EMERG', accountnum);
-			elseif recchoice == '6' then -- Recordings
+			elseif recchoice == '7' then -- Recordings
 				manageRecordings(accountnum);
 			else
 				if attemptnums == 3 then

@@ -129,7 +129,7 @@ function acctprompt(phrase_type, acctcode)
                          .. " WHERE domain_uuid='" .. domain_uuid .. "'"
                          .. " AND phrase_name='default-" .. phrase_type .. "'";
         local default_phrase = dbh:first_value(default_sql);
-        if phrase_type == 'NOANSWER' then 
+        if phrase_type == 'PREANSWER' then 
             uuidlog("notice", phrase_type .. " phrase not found for account " .. acctcode .. ", returning default phrase\n");
             return default_phrase;
         else
@@ -141,7 +141,7 @@ end
 function playpreanswer(value)
     -- Plays the preanswer greeting
     api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
-    local phraseuuid = acctprompt("NOANSWER", callinfo["accountcode"])
+    local phraseuuid = acctprompt("PREANSWER", callinfo["accountcode"])
     api:executeString("uuid_broadcast " .. callinfo["call_uuid"] .. " phrase::" .. phraseuuid .. " both")
     waitforplayfinish(phraseuuid)
     return
