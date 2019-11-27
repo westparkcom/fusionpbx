@@ -166,7 +166,7 @@ if (!class_exists('ivr_menu')) {
 
 								//clear the cache
 									if (is_array($ivr_menu_contexts) && @sizeof($ivr_menu_contexts) != 0) {
-										$ivr_menu_contexts = array_unique($ivr_menu_contexts, SORT_STRING);
+										$ivr_menu_contexts = array_unique($ivr_menu_contexts);
 										$cache = new cache;
 										foreach ($ivr_menu_contexts as $ivr_menu_context) {
 											$cache->delete("dialplan:".$dialplan_context);

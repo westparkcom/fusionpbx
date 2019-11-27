@@ -24,9 +24,9 @@
  Mark J Crane <markjcrane@fusionpbx.com>
 */
 
-//define the number translations class
-if (!class_exists('number_translations')) {
-	class number_translations {
+//define the phrases class
+if (!class_exists('phrases')) {
+	class phrases {
 
 		/**
 		 * declare private variables
@@ -46,13 +46,13 @@ if (!class_exists('number_translations')) {
 		public function __construct() {
 
 			//assign private variables
-				$this->app_name = 'number_translations';
-				$this->app_uuid = '6ad54de6-4909-11e7-a919-92ebcb67fe33';
-				$this->permission_prefix = 'number_translation_';
-				$this->list_page = 'number_translations.php';
-				$this->table = 'number_translations';
-				$this->uuid_prefix = 'number_translation_';
-				$this->toggle_field = 'number_translation_enabled';
+				$this->app_name = 'phrases';
+				$this->app_uuid = '5c6f597c-9b78-11e4-89d3-123b93f75cba';
+				$this->permission_prefix = 'phrase_';
+				$this->list_page = 'phrases.php';
+				$this->table = 'phrases';
+				$this->uuid_prefix = 'phrase_';
+				$this->toggle_field = 'phrase_enabled';
 				$this->toggle_values = ['true','false'];
 
 		}
@@ -67,86 +67,6 @@ if (!class_exists('number_translations')) {
 			}
 		}
 
-		/**
-		 * Check to see if the number translation already exists
-		 */
-		public function number_translation_exists($name) {
-			$sql = "select count(*) from v_number_translations ";
-			$sql .= "where number_translation_name = :number_translation_name ";
-			$parameters['number_translation_name'] = $name;
-			$database = new database;
-			return $database->select($sql, $parameters, 'column') != 0 ? true : false;
-			unset($sql, $parameters);
-		}
-
-		/**
-		 * Import the number translation rules from the resources directory
-		 */
-		public function import() {
-			//get the xml from the number templates
-				if (strlen($this->xml) > 0) {
-					//convert the xml string to an xml object
-						$xml = simplexml_load_string($this->xml);
-					//convert to json
-						$json = json_encode($xml);
-					//convert to an array
-						$number_translation = json_decode($json, true);
-				}
-				else if (strlen($this->json) > 0) {
-					//convert to an array
-						$number_translation = json_decode($this->json, true);
-				}
-				else {
-					throw new Exception("require either json or xml to import");
-				}
-			//check if the number_translation exists
-				if (!$this->number_translation_exists($number_translation['@attributes']['name'])) {
-					//begin insert array
-						$x = 0;
-						$array['number_translations'][$x]['number_translation_name'] = $number_translation['@attributes']['name'];
-						$array['number_translations'][$x]['number_translation_enabled'] = "true";
-						if (strlen($number_translation['@attributes']['enabled']) > 0) {
-							$array['number_translations'][$x]['number_translation_enabled'] = $number_translation['@attributes']['enabled'];
-						}
-						$array['number_translations'][$x]['number_translation_description'] = $number_translation['@attributes']['description'];
-					//loop through the condition array
-						$order = 5;
-						if (isset($number_translation['rule'])) {
-							foreach ($number_translation['rule'] as &$row) {
-								if (array_key_exists('@attributes', $row)) {
-									$row = $row['@attributes'];
-								}
-								$array['number_translations'][$x]['number_translation_details'][$order]['number_translation_detail_regex'] = $row['regex'];
-								$array['number_translations'][$x]['number_translation_details'][$order]['number_translation_detail_replace'] = $row['replace'];
-								$array['number_translations'][$x]['number_translation_details'][$order]['number_translation_detail_order'] = $order;
-								$order = $order + 5;
-							}
-						}
-					//grant temporary permissions
-						$p = new permissions;
-						$p->add('number_translation_add', 'temp');
-						$p->add('number_translation_detail_add', 'temp');
-					//execute insert
-						$database = new database;
-						$database->app_name = 'number_translations';
-						$database->app_uuid = '6ad54de6-4909-11e7-a919-92ebcb67fe33';
-						$database->save($array);
-						unset($array);
-						if ($this->display_type == "text") {
-							if ($database->message['code'] != '200') { 
-								echo "number_translation:".$number_translation['@attributes']['name'].":	failed: ".$database->message['message']."\n";
-							}
-							else {
-								echo "number_translation:".$number_translation['@attributes']['name'].":	added with ".(($order/5)-1)." entries\n";
-							}
-						}
-					//revoke temporary permissions
-						$p->delete('number_translation_add', 'temp');
-						$p->delete('number_translation_detail_add', 'temp');
-				}
-				unset ($this->xml, $this->json);
-		}
-		
 		/**
 		 * delete records
 		 */
@@ -168,11 +88,38 @@ if (!class_exists('number_translations')) {
 				//delete multiple records
 					if (is_array($records) && @sizeof($records) != 0) {
 
-						//build the delete array
-							foreach ($records as $x => $record) {
+						//filter out unchecked phrases, build where clause for below
+							foreach($records as $record) {
 								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
-									$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
-									$array['number_translation_details'][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
+									$record_uuids[] = $this->uuid_prefix."uuid = '".$record['uuid']."'";
+								}
+							}
+
+						//get phrase languages
+							if (is_array($record_uuids) && @sizeof($record_uuids) != 0) {
+								$sql = "select ".$this->uuid_prefix."uuid as uuid, phrase_language as lang from v_".$this->table." ";
+								$sql .= "where domain_uuid = :domain_uuid ";
+								$sql .= "and ( ".implode(' or ', $record_uuids)." ) ";
+								$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+								$database = new database;
+								$rows = $database->select($sql, $parameters, 'all');
+								if (is_array($rows) && @sizeof($rows) != 0) {
+									foreach ($rows as $row) {
+										$phrase_languages[$row['uuid']] = $row['lang'];
+									}
+								}
+								unset($sql, $parameters, $rows, $row);
+							}
+
+						//build the delete array
+							if (is_array($phrase_languages) && @sizeof($phrase_languages) != 0) {
+								$x = 0;
+								foreach ($phrase_languages as $phrase_uuid => $phrase_language) {
+									$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $phrase_uuid;
+									$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+									$array['phrase_details'][$x][$this->uuid_prefix.'uuid'] = $phrase_uuid;
+									$array['phrase_details'][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+									$x++;
 								}
 							}
 
@@ -181,7 +128,7 @@ if (!class_exists('number_translations')) {
 
 								//grant temporary permissions
 									$p = new permissions;
-									$p->add('number_translation_details_delete', 'temp');
+									$p->add('phrase_details_delete', 'temp');
 
 								//execute delete
 									$database = new database;
@@ -191,12 +138,19 @@ if (!class_exists('number_translations')) {
 									unset($array);
 
 								//revoke temporary permissions
-									$p->delete('number_translation_details_delete', 'temp');
+									$p->delete('phrase_details_delete', 'temp');
+
+								//clear the cache
+									$phrase_languages = array_unique($phrase_languages);
+									$cache = new cache;
+									foreach ($phrase_languages as $phrase_language) {
+										$cache->delete("languages:".$phrase_language);
+									}
 
 								//set message
 									message::add($text['message-delete']);
 							}
-							unset($records);
+							unset($records, $phrase_languages);
 					}
 			}
 		}
@@ -222,20 +176,23 @@ if (!class_exists('number_translations')) {
 				//toggle the checked records
 					if (is_array($records) && @sizeof($records) != 0) {
 
-						//get current toggle state
+						//get current toggle state and language
 							foreach($records as $x => $record) {
 								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
 									$record_uuids[] = $this->uuid_prefix."uuid = '".$record['uuid']."'";
 								}
 							}
 							if (is_array($record_uuids) && @sizeof($record_uuids) != 0) {
-								$sql = "select ".$this->uuid_prefix."uuid as uuid, ".$this->toggle_field." as toggle from v_".$this->table." ";
-								$sql .= "where ( ".implode(' or ', $record_uuids)." ) ";
+								$sql = "select ".$this->uuid_prefix."uuid as uuid, ".$this->toggle_field." as toggle, phrase_language as lang from v_".$this->table." ";
+								$sql .= "where domain_uuid = :domain_uuid ";
+								$sql .= "and ( ".implode(' or ', $record_uuids)." ) ";
+								$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
 								$database = new database;
 								$rows = $database->select($sql, $parameters, 'all');
 								if (is_array($rows) && @sizeof($rows) != 0) {
 									foreach ($rows as $row) {
 										$states[$row['uuid']] = $row['toggle'];
+										$phrase_languages[] = $row['lang'];
 									}
 								}
 								unset($sql, $parameters, $rows, $row);
@@ -258,6 +215,13 @@ if (!class_exists('number_translations')) {
 									$database->app_uuid = $this->app_uuid;
 									$database->save($array);
 									unset($array);
+
+								//clear the cache
+									$phrase_languages = array_unique($phrase_languages);
+									$cache = new cache;
+									foreach ($phrase_languages as $phrase_language) {
+										$cache->delete("languages:".$phrase_language);
+									}
 
 								//set message
 									message::add($text['message-toggle']);
@@ -301,7 +265,9 @@ if (!class_exists('number_translations')) {
 
 								//primary table
 									$sql = "select * from v_".$this->table." ";
-									$sql .= "where ".implode(' or ', $record_uuids)." ";
+									$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
+									$sql .= "and ( ".implode(' or ', $record_uuids)." ) ";
+									$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
 									$database = new database;
 									$rows = $database->select($sql, $parameters, 'all');
 									if (is_array($rows) && @sizeof($rows) != 0) {
@@ -314,22 +280,22 @@ if (!class_exists('number_translations')) {
 
 											//overwrite
 												$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $primary_uuid;
-												$array[$this->table][$x]['number_translation_description'] = trim($row['number_translation_description'].' ('.$text['label-copy'].')');
+												$array[$this->table][$x]['phrase_description'] = trim($row['phrase_description'].' ('.$text['label-copy'].')');
 
-											//nodes sub table
-												$sql_2 = "select * from v_number_translation_details where number_translation_uuid = :number_translation_uuid";
-												$parameters_2['number_translation_uuid'] = $row['number_translation_uuid'];
+											//details sub table
+												$sql_2 = "select * from v_phrase_details where phrase_uuid = :phrase_uuid";
+												$parameters_2['phrase_uuid'] = $row['phrase_uuid'];
 												$database = new database;
 												$rows_2 = $database->select($sql_2, $parameters_2, 'all');
 												if (is_array($rows_2) && @sizeof($rows_2) != 0) {
 													foreach ($rows_2 as $row_2) {
 
 														//copy data
-															$array['number_translation_details'][$y] = $row_2;
+															$array['phrase_details'][$y] = $row_2;
 
 														//overwrite
-															$array['number_translation_details'][$y]['number_translation_detail_uuid'] = uuid();
-															$array['number_translation_details'][$y]['number_translation_uuid'] = $primary_uuid;
+															$array['phrase_details'][$y]['phrase_detail_uuid'] = uuid();
+															$array['phrase_details'][$y]['phrase_uuid'] = $primary_uuid;
 
 														//increment
 															$y++;
@@ -337,6 +303,9 @@ if (!class_exists('number_translations')) {
 													}
 												}
 												unset($sql_2, $parameters_2, $rows_2, $row_2);
+
+											//create array of languages
+												$phrase_languages[] = $row['phrase_languages'];
 										}
 									}
 									unset($sql, $parameters, $rows, $row);
@@ -347,7 +316,7 @@ if (!class_exists('number_translations')) {
 
 								//grant temporary permissions
 									$p = new permissions;
-									$p->add('number_translation_detail_add', 'temp');
+									$p->add('phrase_detail_add', 'temp');
 
 								//save the array
 									$database = new database;
@@ -357,7 +326,14 @@ if (!class_exists('number_translations')) {
 									unset($array);
 
 								//revoke temporary permissions
-									$p->delete('number_translation_detail_add', 'temp');
+									$p->delete('phrase_detail_add', 'temp');
+
+								//clear the cache
+									$phrase_languages = array_unique($phrase_languages);
+									$cache = new cache;
+									foreach ($phrase_languages as $phrase_language) {
+										$cache->delete("languages:".$phrase_language);
+									}
 
 								//set message
 									message::add($text['message-copy']);
@@ -371,10 +347,5 @@ if (!class_exists('number_translations')) {
 
 	} //class
 }
-
-/*
-$obj = new number_translations;
-$obj->delete();
-*/
 
 ?>
