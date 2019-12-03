@@ -654,6 +654,19 @@ function nullfunc(value)
     return
 end
 
+function setvar(value)
+    if not value[1] then
+        freeswitch.consoleLog('WARN', 'Unabled to set channel variable: no variable name specified!!!')
+        return
+    end
+    if not value[2] then
+        freeswitch.consoleLog('WARN', 'Unabled to set channel variable `' .. value[1] .. ': no value specified!!!')
+        return
+    end
+    uuid_setvar(callinfo["call_uuid"], value[1], value[2])
+    return
+end
+
 function get_call_data(pilotnumber)
     -- Check to see if the pilot exists
     local defaultroute = '[{"seqnum":10,"command":"answer"},{"seqnum":20,"command":"newgatecall","value":["1","1","0"]},{"seqnum":30,"command":"playpreanswer"},{"seqnum":40,"command":"playmoh","value":["0"]}]'
