@@ -858,7 +858,7 @@ function run_call()
         uuidlog("ERR", "No IBR pilot specified! IBR system requires an IBR to execute!")
         return
     end
-    callinfo["accountcode"] = getvar("accountcode")
+    callinfo["accountcode"] = getvar("accountcode") or '0000'
     callinfo["callrecipe"] = get_call_data(callinfo["pilotnumber"])
     -- Set the default MoH
     uuid_setvar(callinfo["call_uuid"], "hold_music", "local_stream://" .. defaultmoh)
