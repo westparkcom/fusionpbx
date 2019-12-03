@@ -113,6 +113,10 @@ function acctprompt(phrase_type, acctcode)
                            .. " WHERE domain_uuid='" .. domain_uuid .. "'"
                            .. " AND phrase_name='disabled-EMERG'";
                 disabled_emerg = dbh:first_value(sql_noemerg);
+                if not disabled_emerg then
+                    freeswitch.consoleLog('ERR', 'disabled-EMERG phrase not found, please create it!!!')
+                    return 'nophrase'; -- this is bad, means you didn't set up the default phrases!!!
+                end
                 return disabled_emerg;
             else
                 uuidlog('notice', 'Emergency mode ACTIVE!\n');
@@ -129,6 +133,10 @@ function acctprompt(phrase_type, acctcode)
                          .. " WHERE domain_uuid='" .. domain_uuid .. "'"
                          .. " AND phrase_name='default-" .. phrase_type .. "'";
         local default_phrase = dbh:first_value(default_sql);
+        if not default_phrase then
+            freeswitch.consoleLog('ERR', 'default-' .. phrase_type .. ' phrase not found, please create it!!!')
+            return 'nophrase'; -- this is bad, means you didn't set up the default phrases!!!
+        end
         if phrase_type == 'PREANSWER' then 
             uuidlog("notice", phrase_type .. " phrase not found for account " .. acctcode .. ", returning default phrase\n");
             return default_phrase;
