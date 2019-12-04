@@ -786,7 +786,8 @@ function exec_command(funcname, value)
         "transfer",
         "nullfunc",
         "playprequeue",
-        "saytext"
+        "saytext",
+        "setvar"
     }
     if not contains(validcommands, funcname) then
         uuidlog("ERR", "Invalid command received: `" .. funcname .. "`")
@@ -827,7 +828,8 @@ function exec_command_init(funcname, value, execcmdiftrue, execcmdiffalse, execv
         "transfer",
         "nullfunc",
         "playprequeue",
-        "saytext"
+        "saytext",
+        "setvar"
     }
     if not contains(validcommands, funcname) then
         uuidlog("ERR", "Invalid command received: `" .. funcname .. "`")
