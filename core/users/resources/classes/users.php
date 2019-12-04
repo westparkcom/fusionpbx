@@ -1,60 +1,62 @@
 <?php
 /*
- FusionPBX
- Version: MPL 1.1
+	FusionPBX
+	Version: MPL 1.1
 
- The contents of this file are subject to the Mozilla Public License Version
- 1.1 (the "License"); you may not use this file except in compliance with
- the License. You may obtain a copy of the License at
- http://www.mozilla.org/MPL/
+	The contents of this file are subject to the Mozilla Public License Version
+	1.1 (the "License"); you may not use this file except in compliance with
+	the License. You may obtain a copy of the License at
+	http://www.mozilla.org/MPL/
 
- Software distributed under the License is distributed on an "AS IS" basis,
- WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- for the specific language governing rights and limitations under the
- License.
+	Software distributed under the License is distributed on an "AS IS" basis,
+	WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+	for the specific language governing rights and limitations under the
+	License.
 
- The Original Code is FusionPBX
+	The Original Code is FusionPBX
 
- The Initial Developer of the Original Code is
- Mark J Crane <markjcrane@fusionpbx.com>
- Portions created by the Initial Developer are Copyright (C) 2008-2019
- the Initial Developer. All Rights Reserved.
+	The Initial Developer of the Original Code is
+	Mark J Crane <markjcrane@fusionpbx.com>
+	Portions created by the Initial Developer are Copyright (C) 2019
+	the Initial Developer. All Rights Reserved.
 
- Contributor(s):
- Mark J Crane <markjcrane@fusionpbx.com>
+	Contributor(s):
+	Mark J Crane <markjcrane@fusionpbx.com>
 */
 
-//define the bridges class
-if (!class_exists('bridges')) {
-	class bridges {
+/**
+ * users class
+ *
+ * @method null delete
+ * @method null toggle
+ * @method null copy
+ */
+if (!class_exists('users')) {
+	class users {
 
 		/**
-		 * declare private variables
-		 */
+		* declare the variables
+		*/
 		private $app_name;
 		private $app_uuid;
-		private $permission_prefix;
-		private $list_page;
+		private $name;
 		private $table;
-		private $uuid_prefix;
 		private $toggle_field;
 		private $toggle_values;
+		private $location;
 
 		/**
 		 * called when the object is created
 		 */
 		public function __construct() {
-
-			//assign private variables
-				$this->app_name = 'bridges';
-				$this->app_uuid = 'a6a7c4c5-340a-43ce-bcbc-2ed9bab8659d';
-				$this->permission_prefix = 'bridge_';
-				$this->list_page = 'bridges.php';
-				$this->table = 'bridges';
-				$this->uuid_prefix = 'bridge_';
-				$this->toggle_field = 'bridge_enabled';
+			//assign the variables
+				$this->app_name = 'users';
+				$this->app_uuid = '112124b3-95c2-5352-7e9d-d14c0b88f207';
+				$this->name = 'user';
+				$this->table = 'users';
+				$this->toggle_field = 'user_enabled';
 				$this->toggle_values = ['true','false'];
-
+				$this->location = 'users.php';
 		}
 
 		/**
@@ -68,10 +70,10 @@ if (!class_exists('bridges')) {
 		}
 
 		/**
-		 * delete records
+		 * delete rows from the database
 		 */
 		public function delete($records) {
-			if (permission_exists($this->permission_prefix.'delete')) {
+			if (permission_exists($this->name.'_delete')) {
 
 				//add multi-lingual support
 					$language = new text;
@@ -81,24 +83,27 @@ if (!class_exists('bridges')) {
 					$token = new token;
 					if (!$token->validate($_SERVER['PHP_SELF'])) {
 						message::add($text['message-invalid_token'],'negative');
-						header('Location: '.$this->list_page);
+						header('Location: '.$this->location);
 						exit;
 					}
 
 				//delete multiple records
 					if (is_array($records) && @sizeof($records) != 0) {
-
 						//build the delete array
-							foreach ($records as $x => $record) {
-								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
-									$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
-									$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
-								}
+							$x = 0;
+							foreach ($records as $record) {
+								//add to the array
+									if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
+										$array[$this->table][$x][$this->name.'_uuid'] = $record['uuid'];
+										$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+									}
+
+								//increment the id
+									$x++;
 							}
 
 						//delete the checked rows
 							if (is_array($array) && @sizeof($array) != 0) {
-
 								//execute delete
 									$database = new database;
 									$database->app_name = $this->app_name;
@@ -115,10 +120,10 @@ if (!class_exists('bridges')) {
 		}
 
 		/**
-		 * toggle records
+		 * toggle a field between two values
 		 */
 		public function toggle($records) {
-			if (permission_exists($this->permission_prefix.'edit')) {
+			if (permission_exists($this->name.'_edit')) {
 
 				//add multi-lingual support
 					$language = new text;
@@ -128,23 +133,22 @@ if (!class_exists('bridges')) {
 					$token = new token;
 					if (!$token->validate($_SERVER['PHP_SELF'])) {
 						message::add($text['message-invalid_token'],'negative');
-						header('Location: '.$this->list_page);
+						header('Location: '.$this->location);
 						exit;
 					}
 
 				//toggle the checked records
 					if (is_array($records) && @sizeof($records) != 0) {
-
 						//get current toggle state
-							foreach ($records as $x => $record) {
+							foreach($records as $record) {
 								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
 									$uuids[] = "'".$record['uuid']."'";
 								}
 							}
 							if (is_array($uuids) && @sizeof($uuids) != 0) {
-								$sql = "select ".$this->uuid_prefix."uuid as uuid, ".$this->toggle_field." as toggle from v_".$this->table." ";
+								$sql = "select ".$this->name."_uuid as uuid, ".$this->toggle_field." as toggle from v_".$this->table." ";
 								$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
-								$sql .= "and ".$this->uuid_prefix."uuid in (".implode(', ', $uuids).") ";
+								$sql .= "and ".$this->name."_uuid in (".implode(', ', $uuids).") ";
 								$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
 								$database = new database;
 								$rows = $database->select($sql, $parameters, 'all');
@@ -158,15 +162,17 @@ if (!class_exists('bridges')) {
 
 						//build update array
 							$x = 0;
-							foreach ($states as $uuid => $state) {
-								$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $uuid;
-								$array[$this->table][$x][$this->toggle_field] = $state == $this->toggle_values[0] ? $this->toggle_values[1] : $this->toggle_values[0];
-								$x++;
+							foreach($states as $uuid => $state) {
+								//create the array
+									$array[$this->table][$x][$this->name.'_uuid'] = $uuid;
+									$array[$this->table][$x][$this->toggle_field] = $state == $this->toggle_values[0] ? $this->toggle_values[1] : $this->toggle_values[0];
+
+								//increment the id
+									$x++;
 							}
 
 						//save the changes
 							if (is_array($array) && @sizeof($array) != 0) {
-
 								//save the array
 									$database = new database;
 									$database->app_name = $this->app_name;
@@ -179,15 +185,14 @@ if (!class_exists('bridges')) {
 							}
 							unset($records, $states);
 					}
-
 			}
 		}
 
 		/**
-		 * copy records
+		 * copy rows from the database
 		 */
 		public function copy($records) {
-			if (permission_exists($this->permission_prefix.'add')) {
+			if (permission_exists($this->name.'_add')) {
 
 				//add multi-lingual support
 					$language = new text;
@@ -197,7 +202,7 @@ if (!class_exists('bridges')) {
 					$token = new token;
 					if (!$token->validate($_SERVER['PHP_SELF'])) {
 						message::add($text['message-invalid_token'],'negative');
-						header('Location: '.$this->list_page);
+						header('Location: '.$this->location);
 						exit;
 					}
 
@@ -205,30 +210,32 @@ if (!class_exists('bridges')) {
 					if (is_array($records) && @sizeof($records) != 0) {
 
 						//get checked records
-							foreach ($records as $x => $record) {
+							foreach($records as $record) {
 								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
 									$uuids[] = "'".$record['uuid']."'";
 								}
 							}
 
-						//create insert array from existing data
+						//create the array from existing data
 							if (is_array($uuids) && @sizeof($uuids) != 0) {
 								$sql = "select * from v_".$this->table." ";
 								$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
-								$sql .= "and ".$this->uuid_prefix."uuid in (".implode(', ', $uuids).") ";
+								$sql .= "and ".$this->name."_uuid in (".implode(', ', $uuids).") ";
 								$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
 								$database = new database;
 								$rows = $database->select($sql, $parameters, 'all');
 								if (is_array($rows) && @sizeof($rows) != 0) {
-									foreach ($rows as $x => $row) {
-
+									$x = 0;
+									foreach ($rows as $row) {
 										//copy data
 											$array[$this->table][$x] = $row;
 
-										//overwrite
-											$array[$this->table][$x][$this->uuid_prefix.'uuid'] = uuid();
-											$array[$this->table][$x]['bridge_description'] = trim($row['bridge_description'].' ('.$text['label-copy'].')');
+										//add copy to the description
+											$array[$this->table][$x][$this->name.'_uuid'] = uuid();
+											$array[$this->table][$x][$this->name.'_description'] = trim($row[$this->name.'_description']).' ('.$text['label-copy'].')';
 
+										//increment the id
+											$x++;
 									}
 								}
 								unset($sql, $parameters, $rows, $row);
@@ -236,7 +243,6 @@ if (!class_exists('bridges')) {
 
 						//save the changes and set the message
 							if (is_array($array) && @sizeof($array) != 0) {
-
 								//save the array
 									$database = new database;
 									$database->app_name = $this->app_name;
@@ -246,11 +252,9 @@ if (!class_exists('bridges')) {
 
 								//set message
 									message::add($text['message-copy']);
-
 							}
 							unset($records);
 					}
-
 			}
 		}
 
