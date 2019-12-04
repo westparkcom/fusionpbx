@@ -149,7 +149,7 @@ end
 function playpreanswer(value)
     -- Plays the preanswer greeting
     api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
-    local phraseuuid = acctprompt("PREANSWER", callinfo["accountcode"])
+    local phraseuuid = acctprompt("PREANSWER", getvar("accountcode"))
     api:executeString("uuid_broadcast " .. callinfo["call_uuid"] .. " phrase::" .. phraseuuid .. " both")
     waitforplayfinish(phraseuuid)
     return
@@ -158,7 +158,7 @@ end
 function playemerg(value)
     -- If system emergency mode is set, play emergency greeting
     api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
-    local phraseuuid = acctprompt("EMERG", callinfo["accountcode"])
+    local phraseuuid = acctprompt("EMERG", getvar("accountcode"))
     api:executeString("uuid_broadcast " .. callinfo["call_uuid"] .. " phrase::" .. phraseuuid .. " both")
     waitforplayfinish(phraseuuid)
     return
@@ -167,7 +167,7 @@ end
 function playprequeue(value)
     -- If system emergency mode is set, play emergency greeting
     api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
-    local phraseuuid = acctprompt("PREQUEUE", callinfo["accountcode"])
+    local phraseuuid = acctprompt("PREQUEUE", getvar("accountcode"))
     api:executeString("uuid_broadcast " .. callinfo["call_uuid"] .. " phrase::" .. phraseuuid .. " both")
     waitforplayfinish(phraseuuid)
     return
@@ -230,7 +230,7 @@ end
 
 function setwhisper(value)
     -- Sets the whisper phrase for the account
-    uuid_setvar(callinfo["call_uuid"], "acd_whisper", "phrase::" ..  acctprompt("WHISPER", callinfo["accountcode"]))
+    uuid_setvar(callinfo["call_uuid"], "acd_whisper", "phrase::" ..  acctprompt("WHISPER", getvar("accountcode")))
     return
 end
 
@@ -879,7 +879,11 @@ function run_call()
         uuidlog("ERR", "No IBR pilot specified! IBR system requires an IBR to execute!")
         return
     end
-    callinfo["accountcode"] = getvar("accountcode") or '0000'
+    callinfo["accountcode"] = getvar("accountcode")
+    if not callinfo["accountcode"] then
+        callinfo["accountcode"] = '0000'
+        uuid_setvar(callinfo['call_uuid'], 'accountcode', '0000')
+    end
     callinfo["callrecipe"] = get_call_data(callinfo["pilotnumber"])
     -- Set the default MoH
     uuid_setvar(callinfo["call_uuid"], "hold_music", "local_stream://" .. defaultmoh)
