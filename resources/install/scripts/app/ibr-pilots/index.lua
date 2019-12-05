@@ -630,18 +630,19 @@ end
 
 function sleep(sleepdata)
     -- Sleep for N seconds
+    local seconds = tonumber(sleepdata[1])
     local currepoch = currentepoch()
     local finished = false
     while not finished do
         if (seconds > 0 and timereached(currepoch, seconds)) then
-            mohfinished = true
+            finished = true
             return
         end
         local event = con:pop(1, 1000)
         if event then
             local evt_uuid = event:getHeader('Unique-ID')
             if ((event:getHeader('Event-Name') == 'CHANNEL_DESTROY') or (event:getHeader('Event-Name') == 'CHANNEL_BRIDGE') or (event:getHeader('Event-Name') == 'CHANNEL_HANGUP')) and (evt_uuid == callinfo["call_uuid"]) then
-                mofinished = true
+                finished = true
                 return
             end
         end
