@@ -774,21 +774,25 @@
 
 //remove previous fax details
 	$x=0;
+	$fax = False;
 	foreach($dialplan_details as $row) {
 		if ($row['dialplan_detail_data'] == "tone_detect_hits=1") {
 			unset($dialplan_details[$x]);
+			$fax = True;
 		}
  		if ($row['dialplan_detail_type'] == "tone_detect") {
 			unset($dialplan_details[$x]);
+			$fax = True;
 		}
- 		if ($row['dialplan_detail_type'] == "answer") {
+ 		if ($row['dialplan_detail_type'] == "answer" and $fax === True) {
 			unset($dialplan_details[$x]);
 		}
- 		if ($row['dialplan_detail_type'] == "sleep") {
+ 		if ($row['dialplan_detail_type'] == "sleep" and $fax === True) {
 			unset($dialplan_details[$x]);
 		}
 		if (substr($dialplan_detail_data,0,22) == "execute_on_tone_detect") {
 			unset($dialplan_details[$x]);
+			$fax = True;
 		}
  		if ($row['dialplan_detail_type'] == "record_session") {
 			unset($dialplan_details[$x]);
