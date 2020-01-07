@@ -137,7 +137,7 @@ function acctprompt(phrase_type, acctcode)
             freeswitch.consoleLog('ERR', 'default-' .. phrase_type .. ' phrase not found, please create it!!!')
             return 'nophrase'; -- this is bad, means you didn't set up the default phrases!!!
         end
-        if phrase_type == 'PREANSWER' then 
+        if phrase_type == 'PREANSWER' or phrase_type == 'WHISPER' then 
             uuidlog("notice", phrase_type .. " phrase not found for account " .. acctcode .. ", returning default phrase\n");
             return default_phrase;
         else
