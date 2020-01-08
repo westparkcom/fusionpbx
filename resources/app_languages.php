@@ -1442,6 +1442,26 @@ $text['button-remove']['sv-se'] = "Ta Bort";
 $text['button-remove']['uk-ua'] = "Видалити";
 $text['button-remove']['tr-tr'] = "Sil";
 
+$text['button-continue']['en-us'] = "Continue";
+$text['button-continue']['ar-eg'] = "";
+$text['button-continue']['de-at'] = "Fortfahren"; //copied from de-de
+$text['button-continue']['de-ch'] = "Fortfahren"; //copied from de-de
+$text['button-continue']['de-de'] = "Fortfahren";
+$text['button-continue']['es-cl'] = "Continuar";
+$text['button-continue']['es-mx'] = "Continuar"; //copied from es-cl
+$text['button-continue']['fr-ca'] = "Continue"; //copied from fr-fr
+$text['button-continue']['fr-fr'] = "Continue";
+$text['button-continue']['he-il'] = "המשך";
+$text['button-continue']['it-it'] = "";
+$text['button-continue']['nl-nl'] = "Kontinue";
+$text['button-continue']['pl-pl'] = "Kontynuuj";
+$text['button-continue']['pt-br'] = "Continuar"; //copied from pt-pt
+$text['button-continue']['pt-pt'] = "Continuar";
+$text['button-continue']['ro-ro'] = "";
+$text['button-continue']['ru-ru'] = "Продолжить";
+$text['button-continue']['sv-se'] = "Fortsätt";
+$text['button-continue']['uk-ua'] = "Продовжити";
+
 $text['label-installed']['en-us'] = "Installed";
 $text['label-installed']['ar-eg'] = "Installed";
 $text['label-installed']['de-at'] = "Installed";
@@ -4061,5 +4081,27 @@ $text['description-domain_name']['ro-ro'] = "";
 $text['description-domain_name']['ru-ru'] = "";
 $text['description-domain_name']['sv-se'] = "";
 $text['description-domain_name']['uk-ua'] = "";
+
+$text['title-login']['en-us'] = "Login";
+$text['title-login']['ar-eg'] = "دخول";
+$text['title-login']['de-at'] = "Anmelden"; //copied from de-de
+$text['title-login']['de-ch'] = "Anmelden"; //copied from de-de
+$text['title-login']['de-de'] = "Anmelden";
+$text['title-login']['el-gr'] = "Είσοδος";
+$text['title-login']['es-cl'] = "Ingresar";
+$text['title-login']['es-mx'] = "Ingresar"; //copied from es-cl
+$text['title-login']['fr-ca'] = "connexion"; //copied from fr-fr
+$text['title-login']['fr-fr'] = "connexion";
+$text['title-login']['he-il'] = "כניסה";
+$text['title-login']['it-it'] = "Login";
+$text['title-login']['nl-nl'] = "";
+$text['title-login']['pl-pl'] = "Użytkownik";
+$text['title-login']['pt-br'] = "Entrar"; //copied from pt-pt
+$text['title-login']['pt-pt'] = "Iniciar Sessão";
+$text['title-login']['ro-ro'] = "Autentificare";
+$text['title-login']['ru-ru'] = "Вход";
+$text['title-login']['sv-se'] = "Logga In";
+$text['title-login']['uk-ua'] = "Логін";
+$text['title-login']['tr-tr'] = "Giriş Yap";
 
 ?>
