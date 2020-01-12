@@ -161,10 +161,9 @@
 	if (is_array($result) && @sizeof($result) != 0) {
 		foreach ($result as &$row) {
 			$array_recordings[$row['recording_uuid']] = $row['recording_filename'];
-			//$array_base64_exists[$row['recording_uuid']] = ($row['recording_base64'] != '') ? true : false;
 			$array_base64_exists[$row['recording_uuid']] = $row['base64_exists'];
 			//if not base64, convert back to local files and remove base64 from db
-			if ($_SESSION['recordings']['storage_type']['text'] != 'base64' && $row['base64_exists'] != '') {
+			if ($_SESSION['recordings']['storage_type']['text'] != 'base64' && $row['base64_exists'] === true) {
 				if (!file_exists($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$row['recording_filename'])) {
 					$sql2 = "select recording_base64 ";
 					$sql2 .= "from v_recordings ";
