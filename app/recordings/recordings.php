@@ -152,7 +152,7 @@
 	}
 
 //get existing recordings
-	$sql = "select recording_uuid, recording_filename, case when recording_base64 = '' then false else true end as base64_exists";
+	$sql = "select recording_uuid, recording_filename, case when recording_base64 = '' then false else true end as base64_exists ";
 	$sql .= "from v_recordings ";
 	$sql .= "where domain_uuid = :domain_uuid ";
 	$parameters['domain_uuid'] = $domain_uuid;
@@ -166,10 +166,10 @@
 			//if not base64, convert back to local files and remove base64 from db
 			if ($_SESSION['recordings']['storage_type']['text'] != 'base64' && $row['base64_exists'] != '') {
 				if (!file_exists($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$row['recording_filename'])) {
-					$sql2 = "select recording_base64";
-					$sql2. = "from v_recordings";
-					$sql2. = "where domain_uuid = :domain_uuid";
-					$sql2. = "and recording_uuid = :recording_uuid";
+					$sql2 = "select recording_base64 ";
+					$sql2 .= "from v_recordings ";
+					$sql2 .= "where domain_uuid = :domain_uuid ";
+					$sql2 .= "and recording_uuid = :recording_uuid ";
 					$parameters2['recording_uuid'] = $row['recording_uuid'];
 					$parameters2['domain_uuid'] = $domain_uuid;
 					$database = new database;
