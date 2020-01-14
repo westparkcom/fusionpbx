@@ -773,22 +773,26 @@
 	unset($limit);
 
 //remove previous fax details
+	$fax = False;
 	$x = 0;
 	foreach($dialplan_details as $row) {
 		if ($row['dialplan_detail_data'] == "tone_detect_hits=1") {
 			unset($dialplan_details[$x]);
+			$fax = True;
 		}
  		if ($row['dialplan_detail_type'] == "tone_detect") {
 			unset($dialplan_details[$x]);
+			$fax = True;
 		}
- 		if ($row['dialplan_detail_type'] == "answer") {
+ 		if ($row['dialplan_detail_type'] == "answer" and $fax === True) {
 			unset($dialplan_details[$x]);
 		}
- 		if ($row['dialplan_detail_type'] == "sleep") {
+ 		if ($row['dialplan_detail_type'] == "sleep" and $fax === True) {
 			unset($dialplan_details[$x]);
 		}
 		if (substr($dialplan_detail_data,0,22) == "execute_on_tone_detect") {
 			unset($dialplan_details[$x]);
+			$fax = True;
 		}
  		if ($row['dialplan_detail_type'] == "record_session") {
 			unset($dialplan_details[$x]);
@@ -1012,7 +1016,11 @@
 		if (is_array($dialplan_details) && @sizeof($dialplan_details) != 0) {
 			foreach($dialplan_details as $row) {
 				if ($row["dialplan_detail_tag"] != "condition") {
-					if ($row["dialplan_detail_tag"] == "action" && $row["dialplan_detail_type"] == "set" && strpos($row["dialplan_detail_data"], "accountcode") == 0) { continue; } //exclude set:accountcode actions
+					if ($row["dialplan_detail_tag"] == "action" && $row["dialplan_detail_type"] == "set") {
+						if (strpos($row["dialplan_detail_data"], "accountcode") === 0) { continue; } //exclude set:accountcode actions
+						if (strpos($row["dialplan_detail_data"], "hangup_after_bridge") === 0) { continue; } //exclude set:hangup_after_bridge actions
+						if (strpos($row["dialplan_detail_data"], "continue_on_fail") === 0) { continue; } //exclude set:continue_on_fail actions
+					}
 					echo "				<tr>\n";
 					echo "					<td style='padding-top: 5px; padding-right: 3px; white-space: nowrap;'>\n";
 					if (strlen($row['dialplan_detail_uuid']) > 0) {
