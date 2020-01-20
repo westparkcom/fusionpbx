@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2019
+	Portions created by the Initial Developer are Copyright (C) 2008-2020
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -405,7 +405,7 @@
 	if ($action == 'update') {
 		echo button::create(['type'=>'button','label'=>$text['button-copy'],'icon'=>$_SESSION['theme']['button_icon_copy'],'style'=>'margin-left: 15px;','link'=>'dialplan_copy.php?id='.urlencode($dialplan_uuid),'onclick'=>"if (!confirm('".$text['confirm-copy']."')) { this.blur(); return false; }"]);
 		if (permission_exists('dialplan_xml')) {
-			echo button::create(['type'=>'button','label'=>$text['button-xml'],'icon'=>'code','link'=>'dialplan_xml.php?id='.urlencode($dialplan_uuid).(is_uuid($app_uuid) ? "?app_uuid=".urlencode($app_uuid) : null)]);
+			echo button::create(['type'=>'button','label'=>$text['button-xml'],'icon'=>'code','link'=>'dialplan_xml.php?id='.urlencode($dialplan_uuid).(is_uuid($app_uuid) ? "&app_uuid=".urlencode($app_uuid) : null)]);
 		}
 	}
 	echo button::create(['type'=>'submit','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'style'=>'margin-left: 15px;']);
@@ -567,7 +567,7 @@
 
 	echo "	<tr>\n";
 	echo "	<td class='vncellreq' valign='top' align='left' nowrap='nowrap'>\n";
-	//echo "		".$text['label-enabled']."\n";
+	echo "	".$text['label-enabled']."\n";
 	echo "	</td>\n";
 	echo "	<td class='vtable' align='left'>\n";
 	echo "	<select class='formfld' name='dialplan_enabled'>\n";
