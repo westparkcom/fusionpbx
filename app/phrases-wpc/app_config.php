@@ -69,7 +69,7 @@
 		$apps[$x]['permissions'][$y]['name'] = "phrase_domain";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
-		$apps[$x]['permissions'][$y]['name'] = "phrase_desinations";
+		$apps[$x]['permissions'][$y]['name'] = "phrases-wpc_desinations";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 
