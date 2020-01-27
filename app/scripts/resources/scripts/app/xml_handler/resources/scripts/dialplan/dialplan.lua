@@ -61,6 +61,7 @@
 			log.notice("error get element from cache: " .. err);
 		end
 	end
+	XML_STRING = nil -- Dialplans do not reload when modified, this forces pull from DB
 
 --set the cache
 	if (not XML_STRING) then
