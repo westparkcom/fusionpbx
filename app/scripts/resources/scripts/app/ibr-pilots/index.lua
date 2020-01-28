@@ -246,7 +246,7 @@ function newgatecall(gatedata)
     -- Puts call into queue
     -- Set a universal start time, used for estimating hold
     starttime = currentepoch()
-    local caller_destination = getvar("sip_to_user") -- changed in order to compensate caller_destination
+    local caller_destination = callinfo["dnis"] -- changed in order to compensate caller_destination
     local gatelist = gatedata[1]
     local priority = gatedata[2]
     local timeadvance = gatedata[3] or "0"
@@ -876,7 +876,11 @@ function run_call()
     callinfo["call_uuid"] = argv[2]
     freeswitch.consoleLog("INFO", "UUID is `" .. callinfo["call_uuid"] .. "`")
     callinfo["ani"] = getvar("caller_id_number")
-    callinfo["dnis"] = getvar("sip_to_user") -- Changed in order to compensate caller_destination
+    callinfo["didoverride"] = getvar("did_override")
+    if callinfo["didoverride"] == nil then
+        callinfo["dnis"] = getvar("sip_to_user") -- Changed in order to compensate caller_destination
+    else:
+        callinfo["dnis"] = callinfo["didoverride"]
     callinfo["pilotnumber"] = getvar("pilotnumber")
     if callinfo["pilotnumber"] == nil or callinfo["pilotnumber"] == "" then
         uuidlog("ERR", "No IBR pilot specified! IBR system requires an IBR to execute!")
