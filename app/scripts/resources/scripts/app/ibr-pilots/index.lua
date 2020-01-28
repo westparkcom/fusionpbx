@@ -879,7 +879,7 @@ function run_call()
     callinfo["didoverride"] = getvar("did_override")
     if callinfo["didoverride"] == nil then
         callinfo["dnis"] = getvar("sip_to_user") -- Changed in order to compensate caller_destination
-    else:
+    else
         callinfo["dnis"] = callinfo["didoverride"] -- Override DID from dialplan
     end
     callinfo["pilotnumber"] = getvar("pilotnumber")
