@@ -39,6 +39,7 @@ if (!class_exists('fax')) {
 		public $fax_extension;
 		public $fax_forward_number;
 		public $destination_number;
+		public $box;
 		private $forward_prefix;
 
 		/**
@@ -60,11 +61,7 @@ if (!class_exists('fax')) {
 
 			//assign private variables
 				$this->app_name = 'fax';
-				$this->app_uuid = '24108154-4ac3-1db6-1551-4731703a4440';
-				$this->permission_prefix = 'fax_extension_';
-				$this->list_page = 'fax.php';
-				$this->table = 'fax';
-				$this->uuid_prefix = 'fax_';
+				$this->app_uuid = '2f10e154-5ad3-12b3-e5a1-47a1713a4340';
 
 		}
 
@@ -115,7 +112,7 @@ if (!class_exists('fax')) {
 					//execute delete
 						$database = new database;
 						$database->app_name = 'fax';
-						$database->app_uuid = '24108154-4ac3-1db6-1551-4731703a4440';
+						$database->app_uuid = '2f10e154-5ad3-12b3-e5a1-47a1713a4340';
 						$database->delete($array);
 						unset($array);
 
@@ -160,7 +157,7 @@ if (!class_exists('fax')) {
 				$dialplan_xml .= "</extension>\n";
 
 			//build the dialplan array
-				$dialplan["app_uuid"] = "24108154-4ac3-1db6-1551-4731703a4440";
+				$dialplan["app_uuid"] = "2f10e154-5ad3-12b3-e5a1-47a1713a4340";
 				$dialplan["domain_uuid"] = $this->domain_uuid;
 				$dialplan["dialplan_uuid"] = $this->dialplan_uuid;
 				$dialplan["dialplan_name"] = ($this->fax_name != '') ? $this->fax_name : format_phone($this->destination_number);
@@ -186,7 +183,7 @@ if (!class_exists('fax')) {
 			//save the dialplan
 				$database = new database;
 				$database->app_name = 'fax';
-				$database->app_uuid = '24108154-4ac3-1db6-1551-4731703a4440';
+				$database->app_uuid = '2f10e154-5ad3-12b3-e5a1-47a1713a4340';
 				$database->save($array);
 				//$message = $database->message;
 
@@ -212,6 +209,13 @@ if (!class_exists('fax')) {
 		* delete records
 		*/
 		public function delete($records) {
+
+			//set private variables
+				$this->permission_prefix = 'fax_extension_';
+				$this->list_page = 'fax.php';
+				$this->table = 'fax';
+				$this->uuid_prefix = 'fax_';
+
 			if (permission_exists($this->permission_prefix.'delete')) {
 
 				//add multi-lingual support
@@ -305,10 +309,169 @@ if (!class_exists('fax')) {
 			}
 		}
 
+		public function delete_files($records) {
+
+			//set private variables
+				$this->permission_prefix = 'fax_file_';
+				$this->list_page = 'fax_files.php?id='.urlencode($this->fax_uuid).'&box='.urlencode($this->box);
+				$this->table = 'fax_files';
+				$this->uuid_prefix = 'fax_file_';
+
+			if (permission_exists($this->permission_prefix.'delete')) {
+
+				//add multi-lingual support
+					$language = new text;
+					$text = $language->get();
+
+				//validate the token
+					$token = new token;
+					if (!$token->validate($_SERVER['PHP_SELF'])) {
+						message::add($text['message-invalid_token'],'negative');
+						header('Location: '.$this->list_page);
+						exit;
+					}
+
+				//delete multiple records
+					if (is_array($records) && @sizeof($records) != 0) {
+
+						//filter out unchecked fax files, build where clause for below
+							foreach ($records as $x => $record) {
+								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
+									$uuids[] = "'".$record['uuid']."'";
+								}
+							}
+
+						//get necessary fax file details
+							if (is_array($uuids) && @sizeof($uuids) != 0) {
+								$sql = "select ".$this->uuid_prefix."uuid as uuid, fax_mode, fax_file_path, fax_file_type from v_".$this->table." ";
+								$sql .= "where domain_uuid = :domain_uuid ";
+								$sql .= "and ".$this->uuid_prefix."uuid in (".implode(', ', $uuids).") ";
+								$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+								$database = new database;
+								$rows = $database->select($sql, $parameters, 'all');
+								if (is_array($rows) && @sizeof($rows) != 0) {
+									foreach ($rows as $row) {
+										if ($row['fax_mode'] == 'rx') { $fax_files[$row['uuid']]['folder'] = 'inbox'; }
+										if ($row['fax_mode'] == 'tx') { $fax_files[$row['uuid']]['folder'] = 'sent'; }
+										$fax_files[$row['uuid']]['path'] = $row['fax_file_path'];
+										$fax_files[$row['uuid']]['type'] = $row['fax_file_type'];
+									}
+								}
+								unset($sql, $parameters, $rows, $row);
+							}
+
+						//delete fax file(s)
+							if (is_array($fax_files) && @sizeof($fax_files) != 0) {
+								foreach ($fax_files as $fax_file_uuid => $fax_file) {
+									if (substr_count($fax_file['path'], '/temp/') > 0) {
+										$fax_file['path'] = str_replace('/temp/', '/'.$fax_file['type'].'/', $fax_file['path']);
+									}
+									if (file_exists($fax_file['path'])) {
+										@unlink($fax_file['path']);
+									}
+									if ($fax_file['type'] == 'tif') {
+										$fax_file['path'] = str_replace('.tif', '.pdf', $fax_file['path']);
+										if (file_exists($fax_file['path'])) {
+											@unlink($fax_file['path']);
+										}
+									}
+									else if ($fax_file['type'] == 'pdf') {
+										$fax_file['path'] = str_replace('.pdf', '.tif', $fax_file['path']);
+										if (file_exists($fax_file['path'])) {
+											@unlink($fax_file['path']);
+										}
+									}
+								}
+							}
+
+						//build the delete array
+							$x = 0;
+							foreach ($fax_files as $fax_file_uuid => $fax_file) {
+								$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $fax_file_uuid;
+								$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+								$x++;
+							}
+
+						//delete the checked rows
+							if (is_array($array) && @sizeof($array) != 0) {
+
+								//execute delete
+									$database = new database;
+									$database->app_name = $this->app_name;
+									$database->app_uuid = $this->app_uuid;
+									$database->delete($array);
+									unset($array);
+
+								//set message
+									message::add($text['message-delete']);
+							}
+							unset($records);
+					}
+			}
+		}
+
+		public function delete_logs($records) {
+
+			//set private variables
+				$this->permission_prefix = 'fax_log_';
+				$this->list_page = 'fax_logs.php?id='.urlencode($this->fax_uuid);
+				$this->table = 'fax_logs';
+				$this->uuid_prefix = 'fax_log_';
+
+			if (permission_exists($this->permission_prefix.'delete')) {
+
+				//add multi-lingual support
+					$language = new text;
+					$text = $language->get();
+
+				//validate the token
+					$token = new token;
+					if (!$token->validate($_SERVER['PHP_SELF'])) {
+						message::add($text['message-invalid_token'],'negative');
+						header('Location: '.$this->list_page);
+						exit;
+					}
+
+				//delete multiple records
+					if (is_array($records) && @sizeof($records) != 0) {
+
+						//filter out unchecked fax logs, build the delete array
+							foreach ($records as $x => $record) {
+								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
+									$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
+									$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+								}
+							}
+
+						//delete the checked rows
+							if (is_array($array) && @sizeof($array) != 0) {
+
+								//execute delete
+									$database = new database;
+									$database->app_name = $this->app_name;
+									$database->app_uuid = $this->app_uuid;
+									$database->delete($array);
+									unset($array);
+
+								//set message
+									message::add($text['message-delete']);
+							}
+							unset($records);
+					}
+			}
+		}
+
 		/**
 		* copy records
 		*/
 		public function copy($records) {
+
+			//set private variables
+				$this->permission_prefix = 'fax_extension_';
+				$this->list_page = 'fax.php';
+				$this->table = 'fax';
+				$this->uuid_prefix = 'fax_';
+
 			if (permission_exists($this->permission_prefix.'copy')) {
 
 				//add multi-lingual support
