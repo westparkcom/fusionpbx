@@ -438,6 +438,15 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
         "!="
     }
 
+    -- Check if valtocheck is a variable reference
+    if string.find(valtocheck, "%${.+}") then
+        local newvaltocheck = getvar(string.match(valtocheck, "%${(.+)}"))
+        if not newvaltocheck then
+            uuidlog("ERR", "Variable `" .. valtocheck .. "` does not exist, will continue with logic but expect malfunction!")
+        else
+            valtocheck = newvaltocheck
+        end
+    end
     -- validate the vartocheck
     local varname = nil
     -- if true then we're checking a channel variable
