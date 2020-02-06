@@ -20,6 +20,9 @@ con:bind ('CUSTOM', "conference::maintenance")
 -- Script stop flag. Gets set to true if we detect a bridge
 scriptstop = false
 
+-- Limit pool default
+poolval = 'pool0'
+
 -- load up itas acd api:
 require 'itas/acd_api'
 acd_init ( 'itas/' )
@@ -389,6 +392,13 @@ function hangup(hangupdata)
     return
 end
 
+function limitpool(pooldata)
+    -- Sets the limit pool for this call
+    poolval = pooldata[1]
+    api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-pool " .. tostring(pool) .. " -1")
+    return
+end
+
 function compare_op ( lhs, op, rhs )
     if     op == ">" then  return lhs > rhs
     elseif op == "<" then  return lhs < rhs
@@ -555,15 +565,18 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
             end
             return
         end
-    elseif vartocheck == "num-calls-dnis" or vartocheck == "num-calls-ani" then
+    elseif vartocheck == "num-calls-dnis" or vartocheck == "num-calls-ani" or vartocheck == "num-calls-pool" then
         local limitval = ""
         local limittype = ""
         if vartocheck == "num-calls-dnis" then
             limittype = "dnis"
             limitval = callinfo["dnis"]
-        else
+        elseif vartocheck == "num-calls-ani" then
             limittype = "ani"
             limitval = callinfo["ani"]
+        else
+            limittype = "pool"
+            limitval = poolval
         end
         local curcalls = tonumber(api:executeString("limit_usage hash queuecall-" .. limittype .. " " .. limitval))
         valtocheck = tonumber(valtocheck)
@@ -797,7 +810,8 @@ function exec_command(funcname, value)
         "nullfunc",
         "playprequeue",
         "saytext",
-        "setvar"
+        "setvar",
+        "limitpool"
     }
     if not contains(validcommands, funcname) then
         uuidlog("ERR", "Invalid command received: `" .. funcname .. "`")
@@ -839,7 +853,8 @@ function exec_command_init(funcname, value, execcmdiftrue, execcmdiffalse, execv
         "nullfunc",
         "playprequeue",
         "saytext",
-        "setvar"
+        "setvar",
+        "limitpool"
     }
     if not contains(validcommands, funcname) then
         uuidlog("ERR", "Invalid command received: `" .. funcname .. "`")
