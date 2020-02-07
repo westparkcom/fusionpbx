@@ -265,10 +265,10 @@
 	$object = new token;
 	$token = $object->create($_SERVER['PHP_SELF']);
 
-//show the header
-	require_once "resources/header.php";
+//include the header
 	if ($action == 'add') { $document['title'] = $text['title-add_phrase']; }
 	if ($action == 'update') { $document['title'] = $text['title-edit_phrase']; }
+	require_once "resources/header.php";
 
 //js to control action form input
 	echo "<script type='text/javascript'>\n";
@@ -336,10 +336,11 @@
 		echo "	}\n";
 	}
 	echo "  else if (selected_index == 3) {\n"; //execute
-                echo "          action_to_input();\n";
-		echo "          document.getElementById('phrase_detail_data').value=\"\${python streamtext voice=Joanna|text=}\";\n";
-                echo "  }\n";
-        echo "}\n";
+	echo "          action_to_input();\n";
+	echo "          document.getElementById('phrase_detail_data').value=\"\${python streamtext voice=Joanna|text=}\";\n";
+	echo "  }\n";
+	echo "}\n";
+
 	echo "function clear_action_options() {\n";
 	echo "	var len, groups, par;\n";
 	echo "	sel = document.getElementById('phrase_detail_data');\n";
@@ -355,7 +356,7 @@
 	echo "	}\n";
 	echo "}\n";
 
-	//if (if_group("superadmin")) {
+	if (if_group("superadmin")) {
 		echo "function action_to_input() {\n";
 		echo "	obj = document.getElementById('phrase_detail_data');\n";
 		echo "	tb = document.createElement('INPUT');\n";
@@ -394,26 +395,31 @@
 	echo "</script>\n";
 
 //show the content
-	echo "<form method='post' name='frm' action=''>\n";
+	echo "<form method='post' name='frm'>\n";
+
+	echo "<div class='action_bar' id='action_bar'>\n";
+	echo "	<div class='heading'>";
+	if ($action == "add") {
+		echo "<b>".$text['title-add_phrase']."</b>";
+	}
+	if ($action == "update") {
+		echo "<b>".$text['title-edit_phrase']."</b>";
+	}
+	echo "	</div>\n";
+	echo "	<div class='actions'>\n";
+	echo button::create(['type'=>'button','label'=>$text['button-back'],'icon'=>$_SESSION['theme']['button_icon_back'],'link'=>'phrases.php']);
+	echo button::create(['type'=>'submit','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'style'=>'margin-left: 15px;']);
+	echo "	</div>\n";
+	echo "	<div style='clear: both;'></div>\n";
+	echo "</div>\n";
+
 	echo "<table width='100%'  border='0' cellpadding='0' cellspacing='0'>\n";
 
 	echo "<tr>\n";
-	echo "	<td align='left' width='30%' nowrap valign='top'>";
-	if ($action == "add") { echo "<b>".$text['title-add_phrase']."</b>"; }
-	if ($action == "update") { echo "<b>".$text['title-edit_phrase']."</b>"; }
-	echo "	<br /><br />";
-	echo "	</td>\n";
-	echo "<td width='70%' align='right' valign='top'>";
-	echo "	<input type='button' class='btn' alt='".$text['button-back']."' onclick=\"window.location='phrases.php'\" value='".$text['button-back']."'>";
-	echo "	<input type='submit' name='submit' class='btn' value='".$text['button-save']."'>\n";
-	echo "</td>\n";
-	echo "</tr>\n";
-
-	echo "<tr>\n";
-	echo "<td class='vncellreq' valign='top' align='left' nowrap>\n";
+	echo "<td width='30%' class='vncellreq' valign='top' align='left' nowrap>\n";
 	echo "	".$text['label-name']."\n";
 	echo "</td>\n";
-	echo "<td class='vtable' align='left'>\n";
+	echo "<td width='70%' class='vtable' align='left'>\n";
 	echo "	<input class='formfld' type='text' name='phrase_name' maxlength='255' value=\"".escape($phrase_name)."\">\n";
 	echo "	<br />\n";
 	echo "	".$text['description-name']."\n";
@@ -434,11 +440,11 @@
 	echo "<tr>";
 	echo "<td class='vncell' valign='top'>".$text['label-structure']."</td>";
 	echo "<td class='vtable' align='left'>";
-	echo "	<table border='0' cellpadding='0' cellspacing='0'>\n";
+	echo "	<table cellpadding='0' cellspacing='0'>\n";
 	echo "		<tr>\n";
-	echo "			<td class='vtable'>".$text['label-function']."</td>\n";
-	echo "			<td class='vtable'>".$text['label-action']."</td>\n";
-	echo "			<td class='vtable' style='text-align: center;'>".$text['label-order']."</td>\n";
+	echo "			<td class='vtable'><strong>".$text['label-function']."</strong></td>\n";
+	echo "			<td class='vtable'><strong>".$text['label-action']."</strong></td>\n";
+	echo "			<td class='vtable' style='text-align: center;'><strong>".$text['label-order']."</strong></td>\n";
 	echo "			<td></td>\n";
 	echo "		</tr>\n";
 	if (is_array($phrase_details) && @sizeof($phrase_details) != 0) {
@@ -450,9 +456,9 @@
 				$phrase_detail_data = str_replace('}', '', $phrase_detail_data);
 			}
 			elseif ($field['phrase_detail_function'] == 'play-file' && substr($field['phrase_detail_data'], 0, 20) == '${python streamtext ') {
-                                $phrase_detail_function = $text['label-play'];
-                                $phrase_detail_data = str_replace('${python streamtext ', '', $field['phrase_detail_data']);
-                                $phrase_detail_data = str_replace('}', '', $phrase_detail_data);
+				$phrase_detail_function = $text['label-play'];
+				$phrase_detail_data = str_replace('${python streamtext ', '', $field['phrase_detail_data']);
+				$phrase_detail_data = str_replace('}', '', $phrase_detail_data);
 			}
 			elseif ($field['phrase_detail_function'] == 'execute' && substr($field['phrase_detail_data'], 0, 6) == 'sleep(') {
 				$phrase_detail_function = $text['label-pause'];
@@ -487,7 +493,7 @@
 	if (if_group("superadmin")) {
 		echo "			<option value='execute'>".$text['label-execute']."</option>\n";
 	}
-	echo "                  <option value='play-file'>".$text['label-say']."</option>\n";
+	echo "			<option value='play-file'>".$text['label-say']."</option>\n";
 	echo "		</select>\n";
 	echo "	</td>\n";
 	echo "	<td class='vtable' align='left' nowrap='nowrap'>\n";
@@ -506,7 +512,7 @@
 	echo "		</select>\n";
 	echo "	</td>\n";
 	echo "	<td>\n";
-	echo "		<input type='submit' class='btn' alt=\"".$text['button-add']."\" value=\"".$text['button-add']."\">\n";
+	echo button::create(['type'=>'submit','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add']]);
 	echo "	</td>\n";
 
 	echo "	</tr>\n";
@@ -566,19 +572,14 @@
 	echo "</td>\n";
 	echo "</tr>\n";
 
-	echo "<tr>\n";
-	echo "<td colspan='2' align='right'>\n";
+	echo "</table>";
+	echo "<br><br>";
+
 	if ($action == "update") {
 		echo "	<input type='hidden' name='phrase_uuid' value='".escape($phrase_uuid)."'>\n";
 	}
-	echo "	<input type='hidden' name='".$token['name']."' value='".$token['hash']."'>\n";
-	echo "	<br />";
-	echo "	<input type='submit' name='submit' class='btn' alt=\"".$text['button-save']."\" value='".$text['button-save']."'>\n";
-	echo "</td>\n";
-	echo "</tr>";
+	echo "<input type='hidden' name='".$token['name']."' value='".$token['hash']."'>\n";
 
-	echo "</table>";
-	echo "<br><br>";
 	echo "</form>";
 
 //include the footer
