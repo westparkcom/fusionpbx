@@ -50,9 +50,6 @@
 	$order = $_GET["order"];
 	$action = $_GET["action"];
 
-//initialize the destinations object
-	$destination = new destinations;
-
 //get the http post values and set them as php variables
 	if (count($_POST) > 0) {
 		$dialplan_name = $_POST["dialplan_name"];
@@ -369,10 +366,8 @@
 			$array['dialplans'][$x]['dialplan_details'][$y]['domain_uuid'] = $domain_uuid;
 			$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_uuid'] = $dialplan_uuid;
 			$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_tag'] = 'action';
-			if ($destination->valid($action_application_1.':'.$action_data_1)) {
-				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_type'] = $action_application_1;
-				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_data'] = $action_data_1;
-			}
+			$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_type'] = $action_application_1;
+			$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_data'] = $action_data_1;
 			$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_order'] = $y * 10;
 			$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_group'] = '0';
 
@@ -383,10 +378,8 @@
 				$array['dialplans'][$x]['dialplan_details'][$y]['domain_uuid'] = $domain_uuid;
 				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_uuid'] = $dialplan_uuid;
 				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_tag'] = 'action';
-				if ($destination->valid($action_application_2.':'.$action_data_2)) {
-					$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_type'] = $action_application_2;
-					$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_data'] = $action_data_2;
-				}
+				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_type'] = $action_application_2;
+				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_data'] = $action_data_2;
 				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_order'] = $y * 10;
 				$array['dialplans'][$x]['dialplan_details'][$y]['dialplan_detail_group'] = '0';
 			}
@@ -434,6 +427,9 @@
 			header("Location: ".PROJECT_PATH."/app/dialplans/dialplans.php?app_uuid=c03b422e-13a8-bd1b-e42b-b6b9b4d27ce4");
 			exit;
 	}
+
+//initialize the destinations object
+	$destination = new destinations;
 
 //create token
 	$object = new token;

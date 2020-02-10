@@ -43,9 +43,6 @@
 	$language = new text;
 	$text = $language->get();
 
-//initialize the destinations object
-	$destination = new destinations;
-
 //set the variables
 	if (count($_POST) > 0) {
 		$dialplan_name = $_POST["dialplan_name"];
@@ -158,10 +155,8 @@
 			$array['dialplan_details'][2]['dialplan_uuid'] = $dialplan_uuid;
 			$array['dialplan_details'][2]['dialplan_detail_uuid'] = $dialplan_detail_uuid;
 			$array['dialplan_details'][2]['dialplan_detail_tag'] = 'action';
-			if ($destination->valid($action_application_1.':'.$action_data_1)) {
-				$array['dialplan_details'][2]['dialplan_detail_type'] = $action_application_1;
-				$array['dialplan_details'][2]['dialplan_detail_data'] = $action_data_1;
-			}
+			$array['dialplan_details'][2]['dialplan_detail_type'] = $action_application_1;
+			$array['dialplan_details'][2]['dialplan_detail_data'] = $action_data_1;
 			$array['dialplan_details'][2]['dialplan_detail_order'] = '3';
 	
 		//add action 2
@@ -171,10 +166,8 @@
 				$array['dialplan_details'][3]['dialplan_uuid'] = $dialplan_uuid;
 				$array['dialplan_details'][3]['dialplan_detail_uuid'] = $dialplan_detail_uuid;
 				$array['dialplan_details'][3]['dialplan_detail_tag'] = 'action';
-				if ($destination->valid($action_application_2.':'.$action_data_2)) {
-					$array['dialplan_details'][3]['dialplan_detail_type'] = $action_application_2;
-					$array['dialplan_details'][3]['dialplan_detail_data'] = $action_data_2;
-				}
+				$array['dialplan_details'][3]['dialplan_detail_type'] = $action_application_2;
+				$array['dialplan_details'][3]['dialplan_detail_data'] = $action_data_2;
 				$array['dialplan_details'][3]['dialplan_detail_order'] = '4';
 			}
 	
@@ -197,6 +190,9 @@
 			header("Location: ".PROJECT_PATH."/app/dialplans/dialplans.php");
 			exit;
 	}
+
+//initialize the destinations object
+	$destination = new destinations;
 
 //javascript type on change
 	?><script type="text/javascript">

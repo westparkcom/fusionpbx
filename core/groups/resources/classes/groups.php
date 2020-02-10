@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2019-2020
+	Portions created by the Initial Developer are Copyright (C) 2019
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -89,30 +89,63 @@ if (!class_exists('groups')) {
 
 				//delete multiple records
 					if (is_array($records) && @sizeof($records) != 0) {
-						//build array of checked records
-							foreach ($records as $x => $record) {
-								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
-									$array[$this->table][$x][$this->name.'_uuid'] = $record['uuid'];
-									$array['group_permissions'][$x][$this->name.'_uuid'] = $record['uuid'];
-								}
+						//build the delete array
+							$x = 0;
+							foreach ($records as $record) {
+								//add to the array
+									if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
+										$array[$this->table][$x][$this->name.'_uuid'] = $record['uuid'];
+									}
+
+								//get the group permissions
+									$sql = "select group_permission_uuid ";
+									$sql .= "from v_group_permissions ";
+									$sql .= "where group_uuid = :group_uuid ";
+									$parameters['group_uuid'] = $record['uuid'];
+									$database = new database;
+									$result = $database->select($sql, $parameters, 'all');
+									if (is_array($result) && sizeof($result) != 0) {
+										foreach ($result as $index => $row) {
+											//build array
+												$array['group_permissions'][$index]['group_permission_uuid'] = $row['group_permission_uuid'];
+												$array['group_permissions'][$index]['group_uuid'] = $record['uuid'];
+										}
+										if (is_array($array) && sizeof($array) != 0) {
+											//delete the group permissions
+												$p = new permissions;
+												$p->add('group_permission_delete', 'temp');
+
+												$database = new database;
+												$database->app_name = 'groups';
+												$database->app_uuid = '2caf27b0-540a-43d5-bb9b-c9871a1e4f84';
+												$database->delete($array);
+												unset($array);
+
+												$p->delete('group_permission_delete', 'temp');
+										}
+									}
+									unset($sql, $parameters, $result, $row);
+
+								//delete the group
+									$array['groups'][0]['group_uuid'] = $group_uuid;
+									$database = new database;
+									$database->app_name = 'groups';
+									$database->app_uuid = '2caf27b0-540a-43d5-bb9b-c9871a1e4f84';
+									$database->delete($array);
+									unset($array);
+
+								//increment the id
+									$x++;
 							}
 
 						//delete the checked rows
 							if (is_array($array) && @sizeof($array) != 0) {
-
-								//grant temporary permissions
-									$p = new permissions;
-									$p->add('group_permission_delete', 'temp');
-
 								//execute delete
 									$database = new database;
 									$database->app_name = $this->app_name;
 									$database->app_uuid = $this->app_uuid;
 									$database->delete($array);
 									unset($array);
-
-								//revoke temporary permissions
-									$p->delete('group_permission_delete', 'temp');
 
 								//set message
 									message::add($text['message-delete']);
@@ -221,50 +254,27 @@ if (!class_exists('groups')) {
 
 						//create the array from existing data
 							if (is_array($uuids) && @sizeof($uuids) != 0) {
+								$sql = "select * from v_".$this->table." ";
+								$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
+								$sql .= "and ".$this->name."_uuid in (".implode(', ', $uuids).") ";
+								$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+								$database = new database;
+								$rows = $database->select($sql, $parameters, 'all');
+								if (is_array($rows) && @sizeof($rows) != 0) {
+									$x = 0;
+									foreach ($rows as $row) {
+										//copy data
+											$array[$this->table][$x] = $row;
 
-								//primary table
-									$sql = "select * from v_".$this->table." ";
-									$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
-									$sql .= "and ".$this->name."_uuid in (".implode(', ', $uuids).") ";
-									$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
-									$database = new database;
-									$rows = $database->select($sql, $parameters, 'all');
-									if (is_array($rows) && @sizeof($rows) != 0) {
-										$y = 0;
-										foreach ($rows as $x => $row) {
-											$primary_uuid = uuid();
+										//add copy to the description
+											$array[$this->table][$x][$this->name.'_uuid'] = uuid();
+											$array[$this->table][$x][$this->name.'_description'] = trim($row[$this->name.'_description']).' ('.$text['label-copy'].')';
 
-											//copy data
-												$array[$this->table][$x] = $row;
-
-											//overwrite
-												$array[$this->table][$x][$this->name.'_uuid'] = $primary_uuid;
-												$array[$this->table][$x][$this->name.'_description'] = trim($row[$this->name.'_description']).' ('.$text['label-copy'].')';
-
-											//permissions sub table
-												$sql_2 = "select * from v_group_permissions where group_uuid = :group_uuid";
-												$parameters_2['group_uuid'] = $row['group_uuid'];
-												$database = new database;
-												$rows_2 = $database->select($sql_2, $parameters_2, 'all');
-												if (is_array($rows_2) && @sizeof($rows_2) != 0) {
-													foreach ($rows_2 as $row_2) {
-
-														//copy data
-															$array['group_permissions'][$y] = $row_2;
-
-														//overwrite
-															$array['group_permissions'][$y]['group_permission_uuid'] = uuid();
-															$array['group_permissions'][$y]['group_uuid'] = $primary_uuid;
-
-														//increment
-															$y++;
-
-													}
-												}
-												unset($sql_2, $parameters_2, $rows_2, $row_2);
-										}
+										//increment the id
+											$x++;
 									}
-									unset($sql, $parameters, $rows, $row);
+								}
+								unset($sql, $parameters, $rows, $row);
 							}
 
 						//save the changes and set the message
@@ -303,7 +313,6 @@ if (!class_exists('groups')) {
 					$array['groups'][$x]['group_level'] = '80';
 					$array['groups'][$x]['group_description'] = 'Super Administrator Group';
 					$array['groups'][$x]['group_protected'] = 'false';
-					$group_uuids[$array['groups'][$x]['group_name']] = $array['groups'][$x]['group_uuid'];
 					$x++;
 					$array['groups'][$x]['group_uuid'] = uuid();
 					$array['groups'][$x]['domain_uuid'] = null;
@@ -311,7 +320,6 @@ if (!class_exists('groups')) {
 					$array['groups'][$x]['group_level'] = '50';
 					$array['groups'][$x]['group_description'] = 'Administrator Group';
 					$array['groups'][$x]['group_protected'] = 'false';
-					$group_uuids[$array['groups'][$x]['group_name']] = $array['groups'][$x]['group_uuid'];
 					$x++;
 					$array['groups'][$x]['group_uuid'] = uuid();
 					$array['groups'][$x]['domain_uuid'] = null;
@@ -319,7 +327,6 @@ if (!class_exists('groups')) {
 					$array['groups'][$x]['group_level'] = '30';
 					$array['groups'][$x]['group_description'] = 'User Group';
 					$array['groups'][$x]['group_protected'] = 'false';
-					$group_uuids[$array['groups'][$x]['group_name']] = $array['groups'][$x]['group_uuid'];
 					$x++;
 					$array['groups'][$x]['group_uuid'] = uuid();
 					$array['groups'][$x]['domain_uuid'] = null;
@@ -327,7 +334,6 @@ if (!class_exists('groups')) {
 					$array['groups'][$x]['group_level'] = '20';
 					$array['groups'][$x]['group_description'] = 'Call Center Agent Group';
 					$array['groups'][$x]['group_protected'] = 'false';
-					$group_uuids[$array['groups'][$x]['group_name']] = $array['groups'][$x]['group_uuid'];
 					$x++;
 					$array['groups'][$x]['group_uuid'] = uuid();
 					$array['groups'][$x]['domain_uuid'] = null;
@@ -335,7 +341,6 @@ if (!class_exists('groups')) {
 					$array['groups'][$x]['group_level'] = '10';
 					$array['groups'][$x]['group_description'] = 'Public Group';
 					$array['groups'][$x]['group_protected'] = 'false';
-					$group_uuids[$array['groups'][$x]['group_name']] = $array['groups'][$x]['group_uuid'];
 
 					//add the temporary permissions
 					$p = new permissions;
@@ -344,8 +349,8 @@ if (!class_exists('groups')) {
 
 					//save the data to the database
 					$database = new database;
-					$database->app_name = $this->app_name;
-					$database->app_uuid = $this->app_uuid;
+					$database->app_name = 'groups';
+					$database->app_uuid = '2caf27b0-540a-43d5-bb9b-c9871a1e4f84';
 					$database->save($array);
 					unset($array);
 
@@ -362,7 +367,7 @@ if (!class_exists('groups')) {
 				$num_rows = $database->select($sql, null, 'column');
 				if ($num_rows == 0) {
 					//build the apps array
-					$config_list = glob($_SERVER["DOCUMENT_ROOT"].PROJECT_PATH."/*/*/app_config.php");
+					$config_list = glob($_SERVER["DOCUMENT_ROOT"] . PROJECT_PATH . "/*/*/app_config.php");
 					$x = 0;
 					foreach ($config_list as &$config_path) {
 						include($config_path);
@@ -378,11 +383,9 @@ if (!class_exists('groups')) {
 								$array['group_permissions'][$x]['domain_uuid'] = null;
 								$array['group_permissions'][$x]['permission_name'] = $row['name'];
 								$array['group_permissions'][$x]['group_name'] = $group;
-								$array['group_permissions'][$x]['group_uuid'] = $group_uuids[$group];
 							}
 						}
 					}
-					unset($group_uuids);
 
 					//add the temporary permissions
 					$p = new permissions;
@@ -391,8 +394,8 @@ if (!class_exists('groups')) {
 
 					//save the data to the database
 					$database = new database;
-					$database->app_name = $this->app_name;
-					$database->app_uuid = $this->app_uuid;
+					$database->app_name = 'groups';
+					$database->app_uuid = '2caf27b0-540a-43d5-bb9b-c9871a1e4f84';
 					$database->save($array);
 					unset($array);
 
