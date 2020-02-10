@@ -573,9 +573,9 @@
 										$dialplan["dialplan_details"][$y]["domain_uuid"] = $domain_uuid;
 										$dialplan["dialplan_details"][$y]["dialplan_detail_tag"] = "action";
 										$dialplan["dialplan_details"][$y]["dialplan_detail_type"] = $dialplan_detail_type;
-										if ($destination->valid($dialplan_detail_type.':'.$dialplan_detail_data)) {
+										//if ($destination->valid($dialplan_detail_type.':'.$dialplan_detail_data)) {
 											$dialplan["dialplan_details"][$y]["dialplan_detail_data"] = $dialplan_detail_data;
-										}
+										//}
 										$dialplan["dialplan_details"][$y]["dialplan_detail_order"] = $dialplan_detail_order;
 										$dialplan_detail_order = $dialplan_detail_order + 10;
 
