@@ -356,7 +356,7 @@
 	echo "	}\n";
 	echo "}\n";
 
-	if (if_group("superadmin")) {
+	//if (if_group("superadmin")) {
 		echo "function action_to_input() {\n";
 		echo "	obj = document.getElementById('phrase_detail_data');\n";
 		echo "	tb = document.createElement('INPUT');\n";
