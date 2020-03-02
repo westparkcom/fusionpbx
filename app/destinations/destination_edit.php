@@ -307,9 +307,8 @@
 						if (strlen($fax_uuid) > 0) {
 							$dialplan["dialplan_xml"] .= "		<action application=\"set\" data=\"tone_detect_hits=1\" inline=\"true\"/>\n";
 							$dialplan["dialplan_xml"] .= "		<action application=\"set\" data=\"execute_on_tone_detect=transfer ".$fax_extension." XML \${domain_name}\" inline=\"true\"/>\n";
-							$dialplan["dialplan_xml"] .= "		<action application=\"tone_detect\" data=\"fax 1100 r +5000\"/>\n";
-							$dialplan["dialplan_xml"] .= "		<action application=\"answer\" data=\"\"/>\n";
-							$dialplan["dialplan_xml"] .= "		<action application=\"sleep\" data=\"3000\"/>\n";
+							$dialplan["dialplan_xml"] .= "		<action application=\"tone_detect\" data=\"fax 1100 r +3000\"/>\n";
+
 						}
 						if ($destination->valid($destination_app.':'.$destination_data)) {
 							$dialplan["dialplan_xml"] .= "		<action application=\"".$destination_app."\" data=\"".$destination_data."\"/>\n";
@@ -455,25 +454,6 @@
 
 								//increment the dialplan detail order
 									$dialplan_detail_order = $dialplan_detail_order + 10;
-
-								//answer
-									$dialplan["dialplan_details"][$y]["domain_uuid"] = $domain_uuid;
-									$dialplan["dialplan_details"][$y]["dialplan_detail_tag"] = "action";
-									$dialplan["dialplan_details"][$y]["dialplan_detail_type"] = "answer";
-									$dialplan["dialplan_details"][$y]["dialplan_detail_data"] = "";
-									$dialplan["dialplan_details"][$y]["dialplan_detail_order"] = $dialplan_detail_order;
-									$y++;
-
-								//increment the dialplan detail order
-									$dialplan_detail_order = $dialplan_detail_order + 10;
-
-								//execute on tone detect
-									$dialplan["dialplan_details"][$y]["domain_uuid"] = $domain_uuid;
-									$dialplan["dialplan_details"][$y]["dialplan_detail_tag"] = "action";
-									$dialplan["dialplan_details"][$y]["dialplan_detail_type"] = "sleep";
-									$dialplan["dialplan_details"][$y]["dialplan_detail_data"] = "3000";
-									$dialplan["dialplan_details"][$y]["dialplan_detail_order"] = $dialplan_detail_order;
-									$y++;
 
 								//increment the dialplan detail order
 									$dialplan_detail_order = $dialplan_detail_order + 10;
@@ -798,12 +778,12 @@
  		if ($row['dialplan_detail_type'] == "answer" and $fax === True) {
 			unset($dialplan_details[$x]);
 		}
- 		if ($row['dialplan_detail_type'] == "sleep" and $fax === True) {
-			unset($dialplan_details[$x]);
-		}
 		if (substr($dialplan_detail_data,0,22) == "execute_on_tone_detect") {
 			unset($dialplan_details[$x]);
 			$fax = True;
+		}
+		if ($row['dialplan_detail_type'] == "sleep" and $fax === True) {
+			unset($dialplan_details[$x]);
 		}
  		if ($row['dialplan_detail_type'] == "record_session") {
 			unset($dialplan_details[$x]);
@@ -1021,7 +1001,6 @@
 		echo "	".$text['label-detail_action']."\n";
 		echo "</td>\n";
 		echo "<td class='vtable' align='left'>\n";
-		echo "			<table width='52%' border='0' cellpadding='2' cellspacing='0'>\n";
 		$x = 0;
 		$order = 10;
 		if (is_array($dialplan_details) && @sizeof($dialplan_details) != 0) {
@@ -1043,21 +1022,13 @@
 					$label = explode("XML", $data);
 					$divider = ($row['dialplan_detail_type'] != '') ? ":" : null;
 					$detail_action = $row['dialplan_detail_type'].$divider.$row['dialplan_detail_data'];
-					echo $destination->select('dialplan', 'dialplan_details['.$x.'][dialplan_detail_data]', $detail_action);
-					echo "					</td>\n";
-					echo "					<td class='list_control_icons' style='width: 25px;'>";
-					if (strlen($row['destination_uuid']) > 0) {
-						echo "				<a href='destination_delete.php?id=".escape($row['destination_uuid'])."&destination_uuid=".escape($row['destination_uuid'])."&a=delete' alt='delete' onclick=\"return confirm('".$text['confirm-delete']."')\">".$v_link_label_delete."</a>\n";
-					}
-					echo "					</td>\n";
-					echo "				</tr>\n";
+					echo $destination->select('dialplan', 'dialplan_details['.$x.'][dialplan_detail_data]', $detail_action)."<br />\n";
 				}
 				$order = $order + 10;
 				$x++;
 			}
 		}
 		unset($dialplan_details, $row);
-		echo "			</table>\n";
 		echo "</td>\n";
 		echo "</tr>\n";
 	}

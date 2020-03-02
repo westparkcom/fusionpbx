@@ -1838,7 +1838,7 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 
 	table.op_ext {
 		width: 100%;
-		height: 60px;
+		height: 70px;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
 		border-radius: 5px;
@@ -2485,6 +2485,22 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		white-space: nowrap;
 		}
 
+/* EDIT ********************************************************************************/
+
+	td.edit_delete_checkbox_all {
+		text-align: center;
+		width: 50px;
+		}
+
+	td.edit_delete_checkbox_all input[type=checkbox] {
+		vertical-align: middle;
+		margin-top: -2px;
+		}
+
+	td.edit_delete_checkbox_all > span:nth-child(2) {
+		display: none;
+		}
+
 /* CURSORS ***********************************************************************/
 
 	.cursor-default { cursor: default; }
@@ -2605,9 +2621,7 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 
 	@media(min-width: 700px) {
 		.modal-window > div {
-			width: 40%;
-			min-width: 400px;
-			max-width: 500px;
+			width: 500px;
 			margin: 10% auto;
 			border-radius: 5px;
 			}
