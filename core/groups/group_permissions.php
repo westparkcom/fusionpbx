@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2018 - 2020
+	Portions created by the Initial Developer are Copyright (C) 2018-2020
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -142,6 +142,13 @@
 					$database->delete($array['delete']);
 				}
 			}
+
+		//set the message
+			message::add($text['message-update']);
+
+		//redirect
+			header('Location: group_permissions.php?group_uuid='.urlencode($group_uuid));
+			exit;
 	}
 
 //get order and order by
@@ -178,7 +185,7 @@
 	if (isset($sql_search)) {
 		$sql .= "where ".$sql_search;
 	}
-	$sql .= "order by application_name asc ";
+	$sql .= "order by application_name asc, permission_name asc ";
 	$database = new database;
 	$group_permissions = $database->select($sql, $parameters, 'all');
 	unset($sql, $parameters);
@@ -188,26 +195,26 @@
 	$token = $object->create($_SERVER['PHP_SELF']);
 
 //include the header
+	$document['title'] = $text['title-group_permissions'];
 	require_once "resources/header.php";
 
 //show the content
-	echo "<form id='form_list' method='post'>\n";
-	echo "<input type='hidden' name='".$token['name']."' value='".$token['hash']."'>\n";
-	echo "<input type='hidden' name='group_uuid' value='".escape($group_uuid)."'>\n";
-	echo "<input type='hidden' id='action' name='action' value=''>\n";
-	echo "<input type='hidden' name='search' value=\"".escape($search)."\">\n";
-
 	echo "<div class='action_bar' id='action_bar'>\n";
 	echo "	<div class='heading'><b>".$text['title-group_permissions']." (".escape($group_name).")</b></div>\n";
 	echo "	<div class='actions'>\n";
-	echo button::create(['type'=>'button','label'=>$text['button-back'],'icon'=>$_SESSION['theme']['button_icon_back'],'link'=>'groups.php']);
-	echo 		"<input type='text' class='txt list-search' name='search' id='search' value=\"".escape($search)."\" placeholder=\"".$text['label-search']."\">";
-	echo button::create(['label'=>$text['button-search'],'icon'=>$_SESSION['theme']['button_icon_search'],'type'=>'submit','id'=>'btn_search','style'=> null]);
-	if ($paging_controls_mini != '') {
-		echo 	"<span style='margin-left: 15px;'>".$paging_controls_mini."</span>\n";
+	echo button::create(['type'=>'button','label'=>$text['button-back'],'icon'=>$_SESSION['theme']['button_icon_back'],'id'=>'btn_back','collapse'=>'hide-sm-dn','link'=>'groups.php']);
+	if (permission_exists('group_member_view')) {
+		echo button::create(['type'=>'button','label'=>$text['button-members'],'icon'=>'users','style'=>'margin-left: 15px;','link'=>'groupmembers.php?group_uuid='.urlencode($group_uuid)]);
 	}
-
-	echo button::create(['type'=>'submit','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'name'=>'action','value'=>'save']);
+	echo 		"<form id='form_search' class='inline' method='get'>\n";
+	echo 		"<input type='hidden' name='group_uuid' value='".escape($group_uuid)."'>\n";
+	echo 		"<input type='text' class='txt list-search' name='search' id='search' value=\"".escape($search)."\" placeholder=\"".$text['label-search']."\" onkeydown='list_search_reset();'>";
+	echo button::create(['label'=>$text['button-search'],'icon'=>$_SESSION['theme']['button_icon_search'],'type'=>'submit','id'=>'btn_search','collapse'=>'hide-sm-dn','style'=>($search != '' ? 'display: none;' : null)]);
+	echo button::create(['label'=>$text['button-reset'],'icon'=>$_SESSION['theme']['button_icon_reset'],'type'=>'button','id'=>'btn_reset','collapse'=>'hide-sm-dn','link'=>'group_permissions.php?group_uuid='.urlencode($group_uuid),'style'=>($search == '' ? 'display: none;' : null)]);
+	if (permission_exists('group_permission_edit')) {
+		echo button::create(['type'=>'button','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'id'=>'btn_save','collapse'=>'hide-sm-dn','style'=>'margin-left: 15px;','onclick'=>"document.getElementById('form_list').submit();"]);
+	}
+	echo "		</form>\n";
 	echo "	</div>\n";
 	echo "	<div style='clear: both;'></div>\n";
 	echo "</div>\n";
@@ -215,19 +222,19 @@
 	echo $text['description-group_permissions']."\n";
 	echo "<br /><br />\n";
 
-	echo "<table class='list' border='0'>\n";
+	echo "<form id='form_list' method='post'>\n";
+	echo "<input type='hidden' name='".$token['name']."' value='".$token['hash']."'>\n";
+	echo "<input type='hidden' name='group_uuid' value='".escape($group_uuid)."'>\n";
+	echo "<input type='hidden' name='search' value=\"".escape($search)."\">\n";
+	echo "<table class='list' style='margin-bottom: 25px;'>\n";
 	if (is_array($group_permissions) && @sizeof($group_permissions) != 0) {
 		$x = 0;
 		foreach ($group_permissions as $row) {
 
 			$checked = ($row['permission_assigned'] === true) ? " checked=\"checked\"" : $checked = '';
+			$application_name = strtolower($row['application_name']);
+			$label_application_name = ucwords(str_replace(['_','-'], " ", $row['application_name']));
 
-			$application_name = $row['application_name'];
-			$application_name = strtolower($application_name);
-
-			$label_application_name = $row['application_name'];
-			$label_application_name = str_replace("_", " ", $label_application_name);
-			$label_application_name = str_replace("-", " ", $label_application_name);
 			$label_application_name = ucwords($label_application_name);
 
 			if ($previous_application_name !== $row['application_name']) {
@@ -258,8 +265,7 @@
 				echo "		<input type='hidden' name='group_permissions[$x][permission]' value='".escape($row['permission_name'])."' />\n";
 				echo "	</td>\n";
 			}
-			echo "	<td>".escape($row['permission_name'])."</td>\n";
-			//echo "	<td>".escape($row['group_name'])."</td>\n";
+			echo "	<td  class='no-wrap' onclick=\"if (document.getElementById('checkbox_".$x."').checked) { document.getElementById('checkbox_".$x."').checked = false; document.getElementById('checkbox_all_".$application_name."').checked = false; } else { document.getElementById('checkbox_".$x."').checked = true; }\">".escape($row['permission_name'])."</td>\n";
 			echo "</tr>\n";
 
 			//set the previous category
@@ -270,8 +276,6 @@
 	}
 
 	echo "</table>\n";
-	echo "<br />\n";
-	echo "<div align='center'>".$paging_controls."</div>\n";
 	echo "</form>\n";
 
 //include the footer
