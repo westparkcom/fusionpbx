@@ -731,7 +731,7 @@
 			echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_delay]' maxlength='255' value='".$voicemail_escalation_delay."'>\n";
 			echo "	</td>\n";
 			echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
-			echo "		<select name='voicemail_options[".$c."][voicemail_option_order]' class='formfld' style='width:55px'>\n";
+			echo "		<select name='voicemail_escalations[".$c."][voicemail_escalation_order]' class='formfld' style='width:55px'>\n";
 			if (strlen(htmlspecialchars($voicemail_escalation_order))> 0) {
 				echo "		<option selected='yes' value='".htmlspecialchars($voicemail_escalation_order)."'>".htmlspecialchars($voicemail_escalation_order)."</option>\n";
 			}
