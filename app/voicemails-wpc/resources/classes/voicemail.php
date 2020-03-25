@@ -327,6 +327,8 @@
 										$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
 										$array['voicemail_options'][$x]['voicemail_uuid'] = $voicemail_uuid;
 										$array['voicemail_options'][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+										$array['voicemail_escalations'][$x]['voicemail_uuid'] = $voicemail_uuid;
+										$array['voicemail_escalations'][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
 										$array['voicemail_messages'][$x]['voicemail_uuid'] = $voicemail_uuid;
 										$array['voicemail_messages'][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
 										$array['voicemail_destinations'][$x]['voicemail_uuid'] = $voicemail_uuid;
@@ -346,6 +348,7 @@
 									$p = new permissions;
 									$p->add('voicemail_delete', 'temp');
 									$p->add('voicemail_option_delete', 'temp');
+									$p->add('voicemail_escalation_delete', 'temp');
 									$p->add('voicemail_message_delete', 'temp');
 									$p->add('voicemail_destination_delete', 'temp');
 									$p->add('voicemail_greeting_delete', 'temp');
@@ -360,6 +363,7 @@
 								//revoke temporary permissions
 									$p->delete('voicemail_delete', 'temp');
 									$p->delete('voicemail_option_delete', 'temp');
+									$p->delete('voicemail_escalation_delete', 'temp');
 									$p->delete('voicemail_message_delete', 'temp');
 									$p->delete('voicemail_destination_delete', 'temp');
 									$p->delete('voicemail_greeting_delete', 'temp');
