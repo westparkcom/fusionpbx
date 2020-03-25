@@ -183,6 +183,7 @@
 						if (is_array($array) && @sizeof($array) != 0) {
 							//grant temporary permissions
 								$p->add('voicemail_escalation_add', 'temp');
+						}
 					}
 				//add voicemail options
 					if (permission_exists('voicemail_option_add') && sizeof($voicemail_options) > 0) {
