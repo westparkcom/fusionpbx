@@ -95,6 +95,7 @@
 			$voicemail_enabled = $_POST["voicemail_enabled"];
 			$voicemail_description = $_POST["voicemail_description"];
 			$voicemail_tutorial = $_POST["voicemail_tutorial"];
+			$voicemail_escalations_delete = $_POST["voicemail_escalations_delete"];
 			$voicemail_options_delete = $_POST["voicemail_options_delete"];
 			$voicemail_destinations_delete = $_POST["voicemail_destinations_delete"];
 		//remove the space
