@@ -9,6 +9,7 @@
 		$apps[$x]['license'] = "Mozilla Public License 1.1";
 		$apps[$x]['url'] = "http://www.fusionpbx.com";
 		$apps[$x]['description']['en-us'] = "Manage phrases primarily used with an IVR.";
+		$apps[$x]['description']['en-gb'] = "Manage phrases primarily used with an IVR.";
 		$apps[$x]['description']['ar-eg'] = "";
 		$apps[$x]['description']['de-at'] = "Phrasen verwalten. Diese werden hauptsächlich für Anrufzentralen (IVR) verwendet.";
 		$apps[$x]['description']['de-ch'] = "";
@@ -69,7 +70,7 @@
 		$apps[$x]['permissions'][$y]['name'] = "phrase_domain";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
-		$apps[$x]['permissions'][$y]['name'] = "phrases_destinations";
+		$apps[$x]['permissions'][$y]['name'] = "phrase_destinations";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 
