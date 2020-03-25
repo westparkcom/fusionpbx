@@ -182,17 +182,7 @@
 						}
 						if (is_array($array) && @sizeof($array) != 0) {
 							//grant temporary permissions
-								$p = new permissions;
 								$p->add('voicemail_escalation_add', 'temp');
-							//execute inserts
-								$database = new database;
-								$database->app_name = 'voicemails';
-								$database->app_uuid = 'c613c2e4-54bf-26a1-9321-de4c4097e054';
-								$database->save($array);
-								unset($array);
-							//revoke temporary permissions
-								$p->delete('voicemail_escalation_add', 'temp');
-						}
 					}
 				//add voicemail options
 					if (permission_exists('voicemail_option_add') && sizeof($voicemail_options) > 0) {
@@ -253,6 +243,7 @@
 				//revoke any temporary permissions granted
 					$p->delete('voicemail_option_add', 'temp');
 					$p->delete('voicemail_destination_add', 'temp');
+					$p->delete('voicemail_escalation_add', 'temp');
 
 				//remove checked voicemail options
 					if (
@@ -276,6 +267,17 @@
 						$obj = new voicemail;
 						$obj->voicemail_uuid = $voicemail_uuid;
 						$obj->voicemail_destinations_delete($voicemail_destinations_delete);
+					}
+				//remove checked voicemail escalations
+					if (
+						$action == 'update'
+						&& permission_exists('voicemail_escalation_delete')
+						&& is_array($voicemail_escalations_delete)
+						&& @sizeof($voicemail_escalations_delete) != 0
+						) {
+						$obj = new voicemail;
+						$obj->voicemail_uuid = $voicemail_uuid;
+						$obj->voicemail_escalations_delete($voicemail_escalations_delete);
 					}
 
 				//set message
@@ -381,6 +383,31 @@
 				unset($voicemail_option_param);
 			}
 			$show_option_delete = true;
+		}
+	}
+
+//get the voicemail escalations
+	if ($action == 'update' && is_uuid($voicemail_uuid)) {
+		$sql = "select * from v_voicemail_escalations ";
+		$sql .= "where domain_uuid = :domain_uuid ";
+		$sql .= "and voicemail_uuid = :voicemail_uuid ";
+		$sql .= "order by voicemail_escalation_order asc ";
+		$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+		$parameters['voicemail_uuid'] = $voicemail_uuid;
+		$database = new database;
+		$voicemail_escalations = $database->select($sql, $parameters, 'all');
+		unset($sql, $parameters);
+
+		$show_escalation_delete = false;
+		if (is_array($voicemail_escalations) && @sizeof($voicemail_escalations) != 0) {
+			foreach ($voicemail_escalations as $x => $field) {
+				$voicemail_escalations[$x]['voicemail_escalation_phonenum'] = $field['voicemail_escalation_phonenum'];
+				$voicemail_escalations[$x]['voicemail_escalation_delay'] = $field['voicemail_escalation_delay'];
+				$voicemail_escalations[$x]['voicemail_escalation_order'] = $field['voicemail_escalation_order'];
+				$voicemail_escalations[$x]['voicemail_escalation_description'] = $field['voicemail_escalation_description'];
+				$voicemail_escalations[$x]['voicemail_escalation_uuid'] = $field['voicemail_escalation_uuid'];
+			}
+			$show_escalation_delete = true;
 		}
 	}
 
@@ -666,44 +693,38 @@
 		echo "					<td class='vtable'>".$text['label-delay']."</td>\n";
 		echo "					<td class='vtable'>".$text['label-order']."</td>\n";
 		echo "					<td class='vtable'>".$text['label-description']."</td>\n";
-		echo "					<td></td>\n";
+		if ($show_escalation_delete && permission_exists('voicemail_escalation_delete')) {
+			echo "					<td class='vtable edit_delete_checkbox_all' onmouseover=\"swap_display('delete_label_escalations', 'delete_toggle_escalations');\" onmouseout=\"swap_display('delete_label_escalations', 'delete_toggle_escalations');\">\n";
+			echo "						<span id='delete_label_escalations'>".$text['label-delete']."</span>\n";
+			echo "						<span id='delete_toggle_escalations'><input type='checkbox' id='checkbox_all_escalations' name='checkbox_all' onclick=\"edit_all_toggle('escalations');\"></span>\n";
+			echo "					</td>\n";
+		}
 		echo "				</tr>\n";
-		if (is_uuid($voicemail_uuid)) {
-			$sql = "select * from v_voicemail_escalations ";
-			$sql .= "where domain_uuid = :domain_uuid ";
-			$sql .= "and voicemail_uuid = :voicemail_uuid ";
-			$sql .= "order by voicemail_escalation_order asc ";
-			$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
-			$parameters['voicemail_uuid'] = $voicemail_uuid;
-			$database = new database;
-			$result = $database->select($sql, $parameters, 'all');
-			if (is_array($result) && @sizeof($result) != 0) {
-				foreach($result as $field) {
-					echo "				<tr>\n";
-					echo "					<td class='vtable'>\n";
-					echo "						".escape($field['voicemail_escalation_phonenum']);
-					echo "					</td>\n";
-					echo "					<td class='vtable'>\n";
-					echo "						".escape($field['voicemail_escalation_delay'])."&nbsp;\n";
-					echo "					</td>\n";
-					echo "					<td class='vtable'>\n";
-					echo "						".escape($field['voicemail_escalation_order'])."&nbsp;\n";
-					echo "					</td>\n";
-					echo "					<td class='vtable'>\n";
-					echo "						".escape($field['voicemail_escalation_description'])."&nbsp;\n";
-					echo "					</td>\n";
-					echo "					<td class='list_control_icons'>";
-					echo 						"<a href='voicemail_escalations_edit.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-edit']."'>".$v_link_label_edit."</a>";
-					if (permission_exists('voicemail_escalation_delete')) {
-						echo 						"<a href='voicemail_escalations_delete.php?id=".escape($field['voicemail_escalation_uuid'])."&voicemail_uuid=".escape($field['voicemail_uuid'])."' alt='".$text['button-delete']."' onclick=\"return confirm('".$text['confirm-delete']."')\">".$v_link_label_delete."</a>";
+		if ($action == 'update' && is_array($voicemail_escalations) && @sizeof($voicemail_escalations) != 0) {
+			foreach ($voicemail_escalations as $x => $field) {
+				echo "				<tr>\n";
+				echo "					<td class='vtable'>" . escape($field['voicemail_escalation_phonenum']) . "</td>\n";
+				echo "					<td class='vtable'>" . escape($field['voicemail_escalation_delay']) . "</td>\n";
+				echo "					<td class='vtable'>" . escape($field['voicemail_escalation_order']) . "</td>\n";
+				echo "					<td class='vtable'>" . escape($field['voicemail_escalation_description']) . "</td>\n";
+				if ($show_escalation_delete && permission_exists('voicemail_escalation_delete')) {
+					echo "				<td class='vtable' style='text-align: center; padding-bottom: 3px;'>";
+					if (is_uuid($field['voicemail_option_uuid'])) {
+						echo "					<input type='checkbox' name='voicemail_escalations_delete[".$x."][checked]' value='true' class='chk_delete checkbox_escalations' onclick=\"edit_delete_action('escalations');\">\n";
+						echo "					<input type='hidden' name='voicemail_escalations_delete[".$x."][uuid]' value='".escape($field['voicemail_escalation_uuid'])."' />\n";
 					}
-					echo "					</td>\n";
-					echo "				</tr>\n";
+					echo "				</td>\n";
 				}
+				echo "				</tr>\n";
 			}
 		}
-		unset($sql, $parameters, $result, $field);
+		echo "			</table>\n";
+		echo "			".$text['description-escalations']."\n";
+		echo "			<br />\n";
+		echo "		</td>";
+		echo "	</tr>";
 	}
+
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
 	echo "	".$text['label-voicemail_mail_to']."\n";
