@@ -718,6 +718,41 @@
 				}
 				echo "				</tr>\n";
 			}
+			for ($c = 0; $c < 1; $c++) {
+				echo "<tr>\n";
+				echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
+				echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_phonenum]' maxlength='255' value='".$voicemail_escalation_phonenum."'>\n";
+				echo "	</td>\n";
+				echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
+				echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_delay]' maxlength='255' value='".$voicemail_escalation_delay."'>\n";
+				echo "	</td>\n";
+				echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
+				echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_phonenum]' maxlength='255' value='".$voicemail_escalation_phonenum."'>\n";
+				echo "	</td>\n";
+				echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
+				echo "		<select name='voicemail_options[".$c."][voicemail_option_order]' class='formfld' style='width:55px'>\n";
+				if (strlen(htmlspecialchars($voicemail_escalation_order))> 0) {
+					echo "		<option selected='yes' value='".htmlspecialchars($voicemail_escalation_order)."'>".htmlspecialchars($voicemail_escalation_order)."</option>\n";
+				}
+				$i = 0;
+				while ($i <= 999) {
+					if (strlen($i) == 1) {
+						echo "	<option value='00$i'>00$i</option>\n";
+					}
+					if (strlen($i) == 2) {
+						echo "	<option value='0$i'>0$i</option>\n";
+					}
+					if (strlen($i) == 3) {
+						echo "	<option value='$i'>$i</option>\n";
+					}
+					$i++;
+				}
+				echo "		</select>\n";
+				echo "	</td>\n";
+				echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
+				echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_description]' maxlength='255' value='".$voicemail_escalation_desciption."'>\n";
+				echo "	</td>\n";
+			}
 		}
 		echo "			</table>\n";
 		echo "			".$text['description-escalations']."\n";
