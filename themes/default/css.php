@@ -1,10 +1,12 @@
 <?php
-include "root.php";
+
+require_once "root.php";
 require_once "resources/require.php";
 
-header("Content-type: text/css; charset: UTF-8");
-
-$default_login = ($_REQUEST['login'] == 'default') ? true : false;
+ob_start('ob_gzhandler');
+header('Content-type: text/css; charset: UTF-8');
+header('Cache-Control: must-revalidate');
+header('Expires: '.gmdate('D, d M Y H:i:s',time()+3600).' GMT');
 
 //parse fonts (add surrounding single quotes to each font name)
 	if (is_array($_SESSION['theme']) && sizeof($_SESSION['theme']) > 0) {
@@ -34,7 +36,7 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 
 //determine which background image/color settings to use (login or standard)
 	$background_images_enabled = false;
-	if ($default_login) {
+	if (isset($_SESSION['username']) && $_SESSION['username'] != '') {
 		//try using login background images/colors
 		if (isset($_SESSION['theme']) && $_SESSION['theme']['login_background_image_enabled']['boolean'] == 'true' && is_array($_SESSION['theme']['login_background_image'])) {
 			$background_images_enabled = true;
@@ -1091,11 +1093,8 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		display: inline-block;
 		width: 100%;
 		<?php
-		if (
-			(strlen($_SESSION["username"]) > 0 || !$default_login)
-			&&
-			(isset($background_images) || $background_colors[0] != '' || $background_colors[1] != '')
-			) { ?>
+		if (isset($background_images) || $background_colors[0] != '' || $background_colors[1] != '') {
+			?>
 			background: <?php echo ($_SESSION['theme']['body_color']['text'] != '') ? $_SESSION['theme']['body_color']['text'] : "#ffffff"; ?>;
 			background-attachment: fixed;
 			<?php $br = format_border_radius($_SESSION['theme']['body_border_radius']['text'], '4px'); ?>
@@ -2669,3 +2668,13 @@ $default_login = ($_REQUEST['login'] == 'default') ? true : false;
 		text-align: left;
 		margin-bottom: 20px;
 		}
+
+
+<?php
+
+//output custom css
+	if ($_SESSION['theme']['custom_css_code']['text'] != '') {
+		echo $_SESSION['theme']['custom_css_code']['text'];
+	}
+
+?>
