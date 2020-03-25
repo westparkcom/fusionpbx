@@ -710,7 +710,7 @@
 				echo "					<td class='vtable'>" . escape($field['voicemail_escalation_description']) . "</td>\n";
 				if ($show_escalation_delete && permission_exists('voicemail_escalation_delete')) {
 					echo "				<td class='vtable' style='text-align: center; padding-bottom: 3px;'>";
-					if (is_uuid($field['voicemail_option_uuid'])) {
+					if (is_uuid($field['voicemail_escalation_uuid'])) {
 						echo "					<input type='checkbox' name='voicemail_escalations_delete[".$x."][checked]' value='true' class='chk_delete checkbox_escalations' onclick=\"edit_delete_action('escalations');\">\n";
 						echo "					<input type='hidden' name='voicemail_escalations_delete[".$x."][uuid]' value='".escape($field['voicemail_escalation_uuid'])."' />\n";
 					}
