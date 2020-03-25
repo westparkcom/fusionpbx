@@ -724,7 +724,7 @@
 		for ($c = 0; $c < 1; $c++) {
 			echo "<tr>\n";
 			echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
-			echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_phonenum]' maxlength='255' value='".$voicemail_escalation_phonenum."'>\n";
+			echo "		<input class='formfld' style='width: 100px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_phonenum]' maxlength='255' value='".$voicemail_escalation_phonenum."'>\n";
 			echo "	</td>\n";
 			echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
 			echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_delay]' maxlength='255' value='".$voicemail_escalation_delay."'>\n";
@@ -750,7 +750,7 @@
 			echo "		</select>\n";
 			echo "	</td>\n";
 			echo "	<td class='vtable' style='border-bottom: none;' align='left'>\n";
-			echo "		<input class='formfld' style='width: 50px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_description]' maxlength='255' value='".$voicemail_escalation_desciption."'>\n";
+			echo "		<input class='formfld' style='width: 100px; text-align: center;' type='text' name='voicemail_escalations[".$c."][voicemail_escalation_description]' maxlength='255' value='".$voicemail_escalation_desciption."'>\n";
 			echo "	</td>\n";
 		}
 		echo "			</table>\n";
