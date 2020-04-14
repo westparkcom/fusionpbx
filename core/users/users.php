@@ -122,7 +122,7 @@
 //prepare to page the results
 	$rows_per_page = ($_SESSION['domain']['paging']['numeric'] != '') ? $_SESSION['domain']['paging']['numeric'] : 50;
 	$param = $search ? "&search=".$search : null;
-	$param = ($_GET['show'] == 'all' && permission_exists('user_all')) ? "&show=all" : null;
+	$param .= ($_GET['show'] == 'all' && permission_exists('user_all')) ? "&show=all" : null;
 	$page = is_numeric($_GET['page']) ? $_GET['page'] : 0;
 	list($paging_controls, $rows_per_page) = paging($num_rows, $param, $rows_per_page);
 	list($paging_controls_mini, $rows_per_page) = paging($num_rows, $param, $rows_per_page, true);
@@ -175,13 +175,13 @@
 		echo button::create(['type'=>'button','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add'],'id'=>'btn_add','link'=>'user_edit.php']);
 	}
 	if (permission_exists('user_add') && $users) {
-		echo button::create(['type'=>'button','label'=>$text['button-copy'],'icon'=>$_SESSION['theme']['button_icon_copy'],'id'=>'btn_copy','onclick'=>"if (confirm('".$text['confirm-copy']."')) { list_action_set('copy'); list_form_submit('form_list'); } else { this.blur(); return false; }"]);
+		echo button::create(['type'=>'button','label'=>$text['button-copy'],'icon'=>$_SESSION['theme']['button_icon_copy'],'name'=>'btn_copy','onclick'=>"modal_open('modal-copy','btn_copy');"]);
 	}
 	if (permission_exists('user_edit') && $users) {
-		echo button::create(['type'=>'button','label'=>$text['button-toggle'],'icon'=>$_SESSION['theme']['button_icon_toggle'],'id'=>'btn_toggle','onclick'=>"if (confirm('".$text['confirm-toggle']."')) { list_action_set('toggle'); list_form_submit('form_list'); } else { this.blur(); return false; }"]);
+		echo button::create(['type'=>'button','label'=>$text['button-toggle'],'icon'=>$_SESSION['theme']['button_icon_toggle'],'name'=>'btn_toggle','onclick'=>"modal_open('modal-toggle','btn_toggle');"]);
 	}
 	if (permission_exists('user_delete') && $users) {
-		echo button::create(['type'=>'button','label'=>$text['button-delete'],'icon'=>$_SESSION['theme']['button_icon_delete'],'id'=>'btn_delete','onclick'=>"if (confirm('".$text['confirm-delete']."')) { list_action_set('delete'); list_form_submit('form_list'); } else { this.blur(); return false; }"]);
+		echo button::create(['type'=>'button','label'=>$text['button-delete'],'icon'=>$_SESSION['theme']['button_icon_delete'],'name'=>'btn_delete','onclick'=>"modal_open('modal-delete','btn_delete');"]);
 	}
 	echo 		"<form id='form_search' class='inline' method='get'>\n";
 	if (permission_exists('user_all')) {
@@ -203,6 +203,16 @@
 	echo "	<div style='clear: both;'></div>\n";
 	echo "</div>\n";
 
+	if (permission_exists('user_add') && $users) {
+		echo modal::create(['id'=>'modal-copy','type'=>'copy','actions'=>button::create(['type'=>'button','label'=>$text['button-continue'],'icon'=>'check','id'=>'btn_copy','style'=>'float: right; margin-left: 15px;','collapse'=>'never','onclick'=>"modal_close(); list_action_set('copy'); list_form_submit('form_list');"])]);
+	}
+	if (permission_exists('user_edit') && $users) {
+		echo modal::create(['id'=>'modal-toggle','type'=>'toggle','actions'=>button::create(['type'=>'button','label'=>$text['button-continue'],'icon'=>'check','id'=>'btn_toggle','style'=>'float: right; margin-left: 15px;','collapse'=>'never','onclick'=>"modal_close(); list_action_set('toggle'); list_form_submit('form_list');"])]);
+	}
+	if (permission_exists('user_delete') && $users) {
+		echo modal::create(['id'=>'modal-delete','type'=>'delete','actions'=>button::create(['type'=>'button','label'=>$text['button-continue'],'icon'=>'check','id'=>'btn_delete','style'=>'float: right; margin-left: 15px;','collapse'=>'never','onclick'=>"modal_close(); list_action_set('delete'); list_form_submit('form_list');"])]);
+	}
+
 	echo $text['description-users']."\n";
 	echo "<br /><br />\n";
 
@@ -218,16 +228,16 @@
 		echo "	</th>\n";
 	}
 	if ($_GET['show'] == 'all' && permission_exists('user_all')) {
-		echo th_order_by('domain_name', $text['label-domain'], $order_by, $order);
+		echo th_order_by('domain_name', $text['label-domain'], $order_by, $order, null, null, $param);
 	}
-	echo th_order_by('username', $text['label-username'], $order_by, $order);
-	echo th_order_by('groups', $text['label-groups'], $order_by, $order);
-	echo th_order_by('contact_organization', $text['label-organization'], $order_by, $order);
-	echo th_order_by('contact_name', $text['label-name'], $order_by, $order);
+	echo th_order_by('username', $text['label-username'], $order_by, $order, null, null, $param);
+	echo th_order_by('groups', $text['label-groups'], $order_by, $order, null, null, $param);
+	echo th_order_by('contact_organization', $text['label-organization'], $order_by, $order, null, null, $param);
+	echo th_order_by('contact_name', $text['label-name'], $order_by, $order, null, null, $param);
 	//echo th_order_by('contact_name_family', $text['label-contact_name_family'], $order_by, $order);
 	//echo th_order_by('user_status', $text['label-user_status'], $order_by, $order);
 	//echo th_order_by('add_date', $text['label-add_date'], $order_by, $order);
-	echo th_order_by('user_enabled', $text['label-user_enabled'], $order_by, $order, null, "class='center'");
+	echo th_order_by('user_enabled', $text['label-user_enabled'], $order_by, $order, null, "class='center'", $param);
 	if (permission_exists('user_edit') && $_SESSION['theme']['list_row_edit_button']['boolean'] == 'true') {
 		echo "	<td class='action-button'>&nbsp;</td>\n";
 	}

@@ -93,7 +93,7 @@
 //get the http post variables and set them to php variables
 	if (count($_POST)>0) {
 		$broadcast_name = $_POST["broadcast_name"];
-		$broadcast_description = $_POST["broadcast_description"];
+		$broadcast_start_time = $_POST["broadcast_start_time"];
 		$broadcast_timeout = $_POST["broadcast_timeout"];
 		$broadcast_concurrent_limit = $_POST["broadcast_concurrent_limit"];
 		$broadcast_caller_id_name = $_POST["broadcast_caller_id_name"];
@@ -102,6 +102,7 @@
 		$broadcast_phone_numbers = $_POST["broadcast_phone_numbers"];
 		$broadcast_avmd = $_POST["broadcast_avmd"];
 		$broadcast_destination_data = $_POST["broadcast_destination_data"];
+		$broadcast_description = $_POST["broadcast_description"];
 
 		if (if_group("superadmin")) {
 			$broadcast_accountcode = $_POST["broadcast_accountcode"];
@@ -222,7 +223,7 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 				//common array items
 					$array['call_broadcasts'][0]['domain_uuid'] = $domain_uuid;
 					$array['call_broadcasts'][0]['broadcast_name'] = $broadcast_name;
-					$array['call_broadcasts'][0]['broadcast_description'] = $broadcast_description;
+					$array['call_broadcasts'][0]['broadcast_start_time'] = $broadcast_start_time;
 					$array['call_broadcasts'][0]['broadcast_timeout'] = strlen($broadcast_timeout) != 0 ? $broadcast_timeout : null;
 					$array['call_broadcasts'][0]['broadcast_concurrent_limit'] = strlen($broadcast_concurrent_limit) != 0 ? $broadcast_concurrent_limit : null;
 					$array['call_broadcasts'][0]['broadcast_caller_id_name'] = $broadcast_caller_id_name;
@@ -232,6 +233,7 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 					$array['call_broadcasts'][0]['broadcast_avmd'] = $broadcast_avmd;
 					$array['call_broadcasts'][0]['broadcast_destination_data'] = $broadcast_destination_data;
 					$array['call_broadcasts'][0]['broadcast_accountcode'] = $broadcast_accountcode;
+					$array['call_broadcasts'][0]['broadcast_description'] = $broadcast_description;
 
 				//execute
 					$database = new database;
@@ -261,7 +263,7 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 		$row = $database->select($sql, $parameters, 'row');
 		if (is_array($row) && @sizeof($row) != 0) {
 			$broadcast_name = $row["broadcast_name"];
-			$broadcast_description = $row["broadcast_description"];
+			$broadcast_start_time = $row["broadcast_start_time"];
 			$broadcast_timeout = $row["broadcast_timeout"];
 			$broadcast_concurrent_limit = $row["broadcast_concurrent_limit"];
 			$broadcast_caller_id_name = $row["broadcast_caller_id_name"];
@@ -271,6 +273,7 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 			$broadcast_avmd = $row["broadcast_avmd"];
 			$broadcast_destination_data = $row["broadcast_destination_data"];
 			$broadcast_accountcode = $row["broadcast_accountcode"];
+			$broadcast_description = $row["broadcast_description"];
 		}
 		unset($sql, $parameters, $row);
 	}
@@ -294,13 +297,17 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 		echo button::create(['type'=>'button','label'=>$text['button-start'],'icon'=>$_SESSION['theme']['button_icon_start'],'style'=>'margin-left: 15px;','link'=>'call_broadcast_send.php?id='.urlencode($call_broadcast_uuid)]);
 		echo button::create(['type'=>'button','label'=>$text['button-stop'],'icon'=>$_SESSION['theme']['button_icon_stop'],'link'=>'call_broadcast_stop.php?id='.urlencode($call_broadcast_uuid)]);
 		if (permission_exists('call_broadcast_delete')) {
-			echo button::create(['type'=>'submit','label'=>$text['button-delete'],'icon'=>$_SESSION['theme']['button_icon_delete'],'id'=>'btn_delete','name'=>'action','value'=>'delete','style'=>'margin-left: 15px;','onclick'=>"if (!confirm('".$text['confirm-delete']."')) { this.blur(); return false; }"]);
+			echo button::create(['type'=>'button','label'=>$text['button-delete'],'icon'=>$_SESSION['theme']['button_icon_delete'],'name'=>'btn_delete','style'=>'margin-left: 15px;','onclick'=>"modal_open('modal-delete','btn_delete');"]);
 		}
 	}
 	echo button::create(['type'=>'submit','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'id'=>'btn_save','style'=>'margin-left: 15px;']);
 	echo "	</div>\n";
 	echo "	<div style='clear: both;'></div>\n";
 	echo "</div>\n";
+
+	if ($action == 'update' && permission_exists('call_broadcast_delete')) {
+		echo modal::create(['id'=>'modal-delete','type'=>'delete','actions'=>button::create(['type'=>'submit','label'=>$text['button-continue'],'icon'=>'check','id'=>'btn_delete','style'=>'float: right; margin-left: 15px;','collapse'=>'never','name'=>'action','value'=>'delete','onclick'=>"modal_close();"])]);
+	}
 
 	echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 
@@ -312,6 +319,17 @@ if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "	<input class='formfld' type='text' name='broadcast_name' maxlength='255' value=\"".escape($broadcast_name)."\" required='required'>\n";
 	echo "<br />\n";
 	echo "".$text['description-name']."\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+
+	echo "<tr>\n";
+	echo "<td class='vncell' valign='top' align='left' nowrap>\n";
+	echo "	".$text['label-start_time']."\n";
+	echo "</td>\n";
+	echo "<td class='vtable' align='left'>\n";
+	echo "	<input class='formfld' type='number' name='broadcast_start_time' value=\"".escape($broadcast_start_time)."\">\n";
+	echo "<br />\n";
+	echo "".$text['description-start_time']."\n";
 	echo "</td>\n";
 	echo "</tr>\n";
 

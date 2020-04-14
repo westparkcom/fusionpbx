@@ -42,9 +42,6 @@
 	$language = new text;
 	$text = $language->get();
 
-//initialize the destinations object
-	$destination = new destinations;
-
 //action add or update
 	if (is_uuid($_REQUEST["id"])) {
 		$action = "update";
@@ -121,6 +118,12 @@
 
 //process the http post
 	if (count($_POST) > 0 && strlen($_POST["persistformvar"]) == 0) {
+
+		//initialize the destinations object
+			$destination = new destinations;
+			if (permission_exists('destination_domain') && is_uuid($domain_uuid)) {
+				$destination->domain_uuid = $domain_uuid;
+			}
 
 		//get the uuid
 			if ($action == "update" && is_uuid($_POST["destination_uuid"])) {
@@ -701,9 +704,7 @@
 	 	if (is_uuid($_GET["id"])) {
 	 		$destination_uuid = $_GET["id"];
 			$sql = "select * from v_destinations ";
-			$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
-			$sql .= "and destination_uuid = :destination_uuid ";
-			$parameters['domain_uuid'] = $domain_uuid;
+			$sql .= "where destination_uuid = :destination_uuid ";
 			$parameters['destination_uuid'] = $destination_uuid;
 			$database = new database;
 			$row = $database->select($sql, $parameters, 'row');
@@ -797,6 +798,12 @@
 	if (strlen($destination_context) == 0) { $destination_context = 'public'; }
 	if ($destination_type =="outbound") { $destination_context = $_SESSION['domain_name']; }
 	//if ($destination_type =="local") { $destination_context = $_SESSION['domain_name']; }
+
+//initialize the destinations object
+	$destination = new destinations;
+	if (permission_exists('destination_domain') && is_uuid($domain_uuid)) {
+		$destination->domain_uuid = $domain_uuid;
+	}
 
 //create token
 	$object = new token;
@@ -1011,8 +1018,6 @@
 						if (strpos($row["dialplan_detail_data"], "hangup_after_bridge") === 0) { continue; } //exclude set:hangup_after_bridge actions
 						if (strpos($row["dialplan_detail_data"], "continue_on_fail") === 0) { continue; } //exclude set:continue_on_fail actions
 					}
-					echo "				<tr>\n";
-					echo "					<td style='padding-top: 5px; padding-right: 3px; white-space: nowrap;'>\n";
 					if (strlen($row['dialplan_detail_uuid']) > 0) {
 						echo "	<input name='dialplan_details[".$x."][dialplan_detail_uuid]' type='hidden' value=\"".escape($row['dialplan_detail_uuid'])."\">\n";
 					}

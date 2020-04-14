@@ -140,7 +140,7 @@ if (!class_exists('conference_centers')) {
 					$not_admin = 0;
 				}
 				$fields = "r.domain_uuid, r.conference_room_uuid, r.conference_center_uuid, r.meeting_uuid, r.conference_room_name, max_members, ";
-				$fields .= "wait_mod, announce, mute, sounds, created, created_by, r.enabled, r.description, record, ";
+				$fields .= "wait_mod, announce_name, announce_count, announce_recording, mute, sounds, created, created_by, r.enabled, r.description, record, ";
 				$fields .= "profile, moderator_pin, participant_pin";
 				if ($not_admin) {
 					$fields .= ", meeting_user_uuid, user_uuid";
@@ -194,7 +194,9 @@ if (!class_exists('conference_centers')) {
 							$result[$x]["conference_room_name"] = $row["conference_room_name"];
 							$result[$x]["max_members"] = $row["max_members"];
 							$result[$x]["wait_mod"] = $row["wait_mod"];
-							$result[$x]["announce"] = $row["announce"];
+							$result[$x]["announce_name"] = $row["announce_name"];
+							$result[$x]["announce_count"] = $row["announce_count"];
+							$result[$x]["announce_recording"] = $row["announce_recording"];
 							$result[$x]["mute"] = $row["mute"];
 							$result[$x]["record"] = $row["record"];
 							$result[$x]["sounds"] = $row["sounds"];
@@ -455,6 +457,72 @@ if (!class_exists('conference_centers')) {
 			}
 		}
 
+		public function delete_conference_sessions($records) {
+
+			//assign private variables
+				$this->permission_prefix = 'conference_session_';
+				$this->list_page = 'conference_sessions.php?id='.$this->meeting_uuid;
+				$this->table = 'conference_sessions';
+				$this->uuid_prefix = 'conference_session_';
+
+			if (permission_exists($this->permission_prefix.'delete')) {
+
+				//add multi-lingual support
+					$language = new text;
+					$text = $language->get();
+
+				//validate the token
+					$token = new token;
+					if (!$token->validate($_SERVER['PHP_SELF'])) {
+						message::add($text['message-invalid_token'],'negative');
+						header('Location: '.$this->list_page);
+						exit;
+					}
+
+				//delete multiple records
+					if (is_array($records) && @sizeof($records) != 0) {
+
+						//build the delete array
+							foreach ($records as $x => $record) {
+								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
+
+									//create array
+										$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
+										$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+										$array['conference_session_details'][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
+										$array['conference_session_details'][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
+								}
+							}
+
+						//delete the checked rows
+							if (is_array($array) && @sizeof($array) != 0) {
+
+								//grant temporary permissions
+									$p = new permissions;
+									$p->add('conference_session_detail_delete', 'temp');
+									$p->add('meeting_user_delete', 'temp');
+									$p->add('meeting_delete', 'temp');
+
+								//execute delete
+									$database = new database;
+									$database->app_name = $this->app_name;
+									$database->app_uuid = $this->app_uuid;
+									$database->delete($array);
+									unset($array);
+
+								//revoke temporary permissions
+									$p->delete('conference_session_detail_delete', 'temp');
+									$p->delete('meeting_user_delete', 'temp');
+									$p->delete('meeting_delete', 'temp');
+
+								//set message
+									message::add($text['message-delete']);
+							}
+							unset($records);
+					}
+			}
+		}
+
 		/**
 		 * toggle records
 		 */
@@ -581,7 +649,7 @@ if (!class_exists('conference_centers')) {
 					if (is_array($records) && @sizeof($records) != 0) {
 
 						//validate submitted toggle field
-							if (!in_array($this->toggle_field, ['record','wait_mod','announce','mute','sounds','enabled'])) {
+							if (!in_array($this->toggle_field, ['record','wait_mod','announce_name','announce_count','announce_recording','mute','sounds','enabled'])) {
 								header('Location: '.$this->list_page);
 								exit;
 							}
