@@ -278,9 +278,22 @@
 			$domain_name = urldecode($xml->variables->domain_name);
 			$domain_uuid = urldecode($xml->variables->domain_uuid);
 
-		//get the domain name from sip_req_host
+		//get the domain name
+			if (strlen($domain_name) == 0) {
+				$domain_name = urldecode($xml->variables->dialed_domain);
+			}
+			if (strlen($domain_name) == 0) {
+				$domain_name = urldecode($xml->variables->sip_invite_domain);
+			}
 			if (strlen($domain_name) == 0) {
 				$domain_name = urldecode($xml->variables->sip_req_host);
+			}
+			if (strlen($domain_name) == 0) {
+				$presence_id = urldecode($xml->variables->presence_id);
+				if (strlen($presence_id) > 0) {
+					$presence_array = explode($presence_id);
+					$domain_name = $presence_array[1];
+				}
 			}
 
 		//send the domain name to the cdr log
@@ -661,7 +674,8 @@
 	$x = 0;
 	while($file = readdir($dir_handle)) {
 		if ($file != '.' && $file != '..') {
-			if ( !is_dir($xml_cdr_dir . '/' . $file) ) {
+			//import the call detail files are less than 3 mb - 3 million bytes
+			if (!is_dir($xml_cdr_dir . '/' . $file) && filesize($xml_cdr_dir.'/'.$file) < 3000000) {
 				//get the leg of the call
 					if (substr($file, 0, 2) == "a_") {
 						$leg = "a";

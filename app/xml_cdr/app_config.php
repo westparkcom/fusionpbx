@@ -193,6 +193,9 @@
 		$apps[$x]['permissions'][$y]['name'] = "xml_cdr_b_leg";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
+		$apps[$x]['permissions'][$y]['name'] = "xml_cdr_lose_race";
+		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "xml_cdr_archive";
 		//$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
@@ -357,9 +360,9 @@
 		$apps[$x]['db'][$y]['fields'][$z]['type']['pgsql'] = "uuid";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['sqlite'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['mysql'] = "char(36)";
-		$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
-		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_extensions";
-		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "extension_uuid";
+		//$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
+		//$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_extensions";
+		//$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "extension_uuid";
 		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "";
 		$z++;
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "v_id";
