@@ -320,15 +320,18 @@
 							}
 							else {
 
+								//get the password length and strength
+									$password_length = $_SESSION["extension"]["password_length"]["numeric"];
+									$password_strength = $_SESSION["extension"]["password_strength"]["numeric"];
+
 								//extension does not exist add it
 									if ($action == "add" || $range > 1) {
 										$extension_uuid = uuid();
 										$voicemail_uuid = uuid();
-										$password = generate_password();
+										$password = generate_password($password_length, $password_strength);
 									}
 
-								//prepare the values
-									//mwi account
+								//prepare the values for mwi account
 										if (strlen($mwi_account) > 0) {
 											if (strpos($mwi_account, '@') === false) {
 												if (count($_SESSION["domains"]) > 1) {
@@ -342,10 +345,10 @@
 
 								//generate a password
 									if ($action == "add" && strlen($password) == 0) {
-										$password = generate_password();
+										$password = generate_password($password_length, $password_strength);
 									}
 									if ($action == "update" && permission_exists('extension_password') && strlen($password) == 0) {
-										$password = generate_password();
+										$password = generate_password($password_length, $password_strength);
 									}
 
 								//create the data array
@@ -1172,7 +1175,7 @@
 				}
 				echo "	</tr>\n";
 
-				if (is_array($device_lines) && @sizeof($device_lines) != 0) { break; } //show one row when editing extension and no device assigned
+				break; //show one empty row whether adding or editing
 			}
 			echo "		</table>\n";
 			echo "		<br />\n";
