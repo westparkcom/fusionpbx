@@ -165,7 +165,7 @@
 				}
 			}
 		}
-	}
+	//}
 
 //get the http values and set them as php variables
 	if (count($_POST) > 0) {
