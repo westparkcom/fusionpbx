@@ -68,6 +68,8 @@ if ($domains_processed == 1) {
 		if ($_SESSION['recordings']['storage_type']['text'] == 'base64') {
 			$sql = "select phrase_detail_uuid, phrase_detail_data ";
 			$sql .= "from v_phrase_details where phrase_detail_function = 'play-file' ";
+			$sql .= "and phrase_detail_data not like '\${lua streamfile.lua %}' ";
+			$sql .= "and phrase_detail_data not like '\${python streamtext %}'";
 			$database = new database;
 			$result = $database->select($sql, null, 'all');
 			if (is_array($result) && @sizeof($result) != 0) {
@@ -78,9 +80,9 @@ if ($domains_processed == 1) {
 						$phrase_detail_data = str_replace($_SESSION['switch']['recordings']['dir'].'/'.$domain_name.'/', '', $phrase_detail_data);
 					}
 					//update function and data to be base64 compatible
-						$phrase_detail_data = "lua(streamfile.lua ".$phrase_detail_data.")";
+						$phrase_detail_data = "\${lua streamfile.lua ".$phrase_detail_data."}";
 						$array['phrase_details'][$index]['phrase_detail_uuid'] = $phrase_detail_uuid;
-						$array['phrase_details'][$index]['phrase_detail_function'] = 'execute';
+						$array['phrase_details'][$index]['phrase_detail_function'] = 'play-file';
 						$array['phrase_details'][$index]['phrase_detail_data'] = $phrase_detail_data;
 				}
 				if (is_array($array) && @sizeof($array) != 0) {
@@ -89,7 +91,7 @@ if ($domains_processed == 1) {
 
 					$database = new database;
 					$database->app_name = 'phrases';
-					$database->app_uuid = '5c6f597c-9b78-11e4-89d3-123b93f75cba';
+					$database->app_uuid = '5b6f597c-9b78-12e4-89d3-123c93f85cbd';
 					$database->save($array);
 					unset($array);
 
@@ -103,8 +105,8 @@ if ($domains_processed == 1) {
 		else if ($_SESSION['recordings']['storage_type']['text'] != 'base64') {
 			$sql = "select phrase_detail_uuid, phrase_detail_data ";
 			$sql .= "from v_phrase_details where ";
-			$sql .= "phrase_detail_function = 'execute' ";
-			$sql .= "and phrase_detail_data like 'lua(streamfile.lua %)' ";
+			$sql .= "phrase_detail_function = 'play-file' ";
+			$sql .= "and phrase_detail_data like '\${lua streamfile.lua %}' ";
 			$database = new database;
 			$result = $database->select($sql, null, 'all');
 			if (is_array($result) && @sizeof($result) != 0) {
@@ -112,8 +114,8 @@ if ($domains_processed == 1) {
 					$phrase_detail_uuid = $row['phrase_detail_uuid'];
 					$phrase_detail_data = $row['phrase_detail_data'];
 					//update function and data to use standard method
-						$phrase_detail_data = str_replace('lua(streamfile.lua ', '', $phrase_detail_data);
-						$phrase_detail_data = str_replace(')', '', $phrase_detail_data);
+						$phrase_detail_data = str_replace('${lua streamfile.lua ', '', $phrase_detail_data);
+						$phrase_detail_data = str_replace('}', '', $phrase_detail_data);
 						if (substr_count($phrase_detail_data, '/') === 0) {
 							$phrase_detail_data = $_SESSION['switch']['recordings']['dir'].'/'.$domain_name.'/'.$phrase_detail_data;
 						}
@@ -127,7 +129,7 @@ if ($domains_processed == 1) {
 
 					$database = new database;
 					$database->app_name = 'phrases';
-					$database->app_uuid = '5c6f597c-9b78-11e4-89d3-123b93f75cba';
+					$database->app_uuid = '5b6f597c-9b78-12e4-89d3-123c93f85cbd';
 					$database->save($array);
 					unset($array);
 
