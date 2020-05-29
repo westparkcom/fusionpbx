@@ -86,6 +86,7 @@
 			record_silence_threshold = session:getVariable("record-silence-threshold");
 			voicemail_authorized = session:getVariable("voicemail_authorized");
 			sip_from_user = session:getVariable("sip_from_user");
+			user_name = session:getVariable("user_name");
 			sip_number_alias = session:getVariable("sip_number_alias");
 
 		--modify caller_id_number if effective_caller_id_number is set
@@ -351,7 +352,7 @@
 				local sql = [[SELECT * FROM v_voicemails
 					WHERE domain_uuid = :domain_uuid
 					AND voicemail_id = :voicemail_id]]
-				local params = {domain_uuid = domain_uuid, voicemail_id = id};
+				local params = {domain_uuid = domain_uuid, voicemail_id = voicemail_id};
 				if (debug["sql"]) then
 					freeswitch.consoleLog("notice", "[voicemail] SQL: " .. sql .. "; params:" .. json.encode(params) .. "\n");
 				end
@@ -378,7 +379,7 @@
 				if (voicemail_id) then
 					if (voicemail_authorized) then
 						if (voicemail_authorized == "true") then
-							if (voicemail_id == sip_from_user or voicemail_id == sip_number_alias) then
+							if (voicemail_id == user_name or voicemail_id == sip_number_alias) then
 								--skip the password check
 							else
 								check_password(voicemail_id, password_tries);

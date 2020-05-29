@@ -1085,7 +1085,7 @@ if (!class_exists('menu')) {
 				}
 				if ($_SESSION['theme']['menu_side_pin']['boolean'] == 'true') {
 					$html .= "		<a class='menu_side_item_main' id='menu_side_state_set_expanded' onclick=\"menu_side_state_set('expanded');\" oncontextmenu=\"menu_side_state_set('delete'); return false;\" style='padding: 8px 14px 8px 16px !important; ".($_SESSION['theme']['menu_side_state']['text'] == 'expanded' ? 'display: none' : null)."' title=\"".$this->text['theme-label-pin_menu']."\"><i class='fas fa-toggle-off fa-sm fa-fw'></i></a>\n";
-					$html .= "		<a class='menu_side_item_main' id='menu_side_state_set_contracted' onclick=\"menu_side_state_set('contracted'); menu_side_contract();\" oncontextmenu=\"menu_side_state_set('delete'); return false;\" style='padding: 8px 14px 8px 16px !important; ".($_SESSION['theme']['menu_side_state']['text'] != 'expanded' ? 'display: none' : null)."' title=\"".$this->text['theme-label-unpin_menu']."\"><i class='fas fa-toggle-on fa-sm fa-fw'></i></a>\n";
+					$html .= "		<a class='menu_side_item_main' id='menu_side_state_set_contracted' onclick=\"menu_side_state_set('contracted');\" oncontextmenu=\"menu_side_state_set('delete'); return false;\" style='padding: 8px 14px 8px 16px !important; ".($_SESSION['theme']['menu_side_state']['text'] != 'expanded' ? 'display: none' : null)."' title=\"".$this->text['theme-label-unpin_menu']."\"><i class='fas fa-toggle-on fa-sm fa-fw'></i></a>\n";
 				}
 				$html .= "		</div>\n";
 				if ($_SESSION['theme']['menu_brand_type']['text'] == 'none') {
@@ -1103,9 +1103,9 @@ if (!class_exists('menu')) {
 					$html .= 			"<img id='menu_brand_image_expanded' ".($_SESSION['theme']['menu_side_state']['text'] != 'expanded' ? "style='display: none;'" : null)." src='".escape($menu_brand_image_expanded)."' title=\"".escape($menu_brand_text)."\">";
 					$html .= 		"</a>\n";
 				}
-				else {
-					$html .= "		<a class='menu_side_item_main menu_side_expand' ".($_SESSION['theme']['menu_side_state']['text'] == 'expanded' ? "style='display: none';" : null)." onclick='menu_side_expand();' title=\"".$this->text['theme-label-expand_menu']."\"><i class='fas fa-bars fa-fw' style='z-index: 99800; padding-left: 1px;'></i></a>";
-				}
+// 				else {
+// 					$html .= "		<a class='menu_side_item_main menu_side_expand' ".($_SESSION['theme']['menu_side_state']['text'] == 'expanded' ? "style='display: none';" : null)." onclick='menu_side_expand();' title=\"".$this->text['theme-label-expand_menu']."\"><i class='fas fa-bars fa-fw' style='z-index: 99800; padding-left: 1px;'></i></a>";
+// 				}
 				$html .= "	</div>\n";
 			//main menu items
 				if (is_array($menu_array) && sizeof($menu_array) != 0) {
@@ -1134,14 +1134,23 @@ if (!class_exists('menu')) {
 					$html .= "	<div style='height: 100px;'></div>\n";
 				}
 			$html .= "</div>\n";
-			$html .= "<div id='content_container' ".($_SESSION['theme']['menu_side_state']['text'] != 'expanded' ? "onclick=\"clearTimeout(menu_side_contract_timer); if ($(window).width() >= 576 && document.getElementById('menu_side_state_current').value != 'expanded') { menu_side_contract(); }\"" : null).">\n";
-			$html .= "	<div id='content_header'>\n";
+			if ($_SESSION['theme']['menu_side_state']['text'] != 'expanded' && $_SESSION['theme']['menu_side_state']['text'] != 'hidden') {
+				$content_container_onclick = "onclick=\"clearTimeout(menu_side_contract_timer); if ($(window).width() >= 576) { menu_side_contract(); }\"";
+			}
+			$html .= "<div id='content_container' ".$content_container_onclick.">\n";
+			$html .= "	<div id='body_header'>\n";
 			//header: left
 				$html .= "<div class='float-left'>\n";
-				$html .= button::create(['type'=>'button','title'=>$this->text['theme-label-expand_menu'],'icon'=>'bars','class'=>'default hide-sm-up float-left','onclick'=>'menu_side_expand();']);
-				if ($_SESSION['theme']['menu_brand_type']['text'] == 'text' || $_SESSION['theme']['menu_brand_type']['text'] == 'image_text') {
-					$body_header_brand_text = $_SESSION['theme']['body_header_brand_text']['text'] != '' ? escape($_SESSION['theme']['body_header_brand_text']['text']) : "FusionPBX";
-					$html .= "	<div id='body_header_brand_text'><a href='".PROJECT_PATH."/'>".$body_header_brand_text."</a></div>\n";
+				$html .= button::create(['type'=>'button','id'=>'menu_side_state_hidden_button','title'=>$this->text['theme-label-expand_menu'],'icon'=>'bars','class'=>'default '.($_SESSION['theme']['menu_side_state']['text'] != 'hidden' ? 'hide-sm-up ' : null).'float-left','onclick'=>'menu_side_expand();']);
+				$body_header_brand_text = $_SESSION['theme']['body_header_brand_text']['text'] != '' ? escape($_SESSION['theme']['body_header_brand_text']['text']) : "FusionPBX";
+				if ($_SESSION['theme']['body_header_brand_type']['text'] == 'image' || $_SESSION['theme']['body_header_brand_type']['text'] == 'image_text') {
+					$body_header_brand_image = $_SESSION['theme']['body_header_brand_image']['text'] != '' ? $_SESSION['theme']['body_header_brand_image']['text'] : PROJECT_PATH."/themes/default/images/logo_side_expanded.png";
+					$html .= 	"<div id='body_header_brand_image'>";
+					$html .= 		"<a href='".PROJECT_PATH."/'><img id='body_header_brand_image' src='".escape($body_header_brand_image)."' title=\"".escape($body_header_brand_text)."\"></a>";
+					$html .= 	"</div>";
+				}
+				if ($_SESSION['theme']['body_header_brand_type']['text'] == 'text' || $_SESSION['theme']['body_header_brand_type']['text'] == 'image_text') {
+					$html .= 	"<div id='body_header_brand_text'><a href='".PROJECT_PATH."/'>".$body_header_brand_text."</a></div>";
 				}
 				$html .= "</div>\n";
 			//header: right
