@@ -376,11 +376,13 @@ end
 		--${lua streamfile.lua <FNAME>} (we're extracting <FNAME>)
 		local recFileName = string.sub(phrases[1][zeropad(3, phrasenumber)]['detail']['phrase_detail_data'], 22, -2);
 		local phrase_recording_id = phraseRecordingID(recFileName, accountnum);
-		if phrase_recording_id == nil then
-			freeswitch.consoleLog('err', phrasetype .. ' phrase ' .. phrasenumber .. ' references a missing recording!!!');
-			session:execute('playback', saytext(greetings['phraseNoMatch']));
-		else
-			freeswitch.consoleLog('info', phrasetype .. ' phrase ' .. phrasenumber .. ' matches recording number ' .. tostring(phrase_recording_id) .. '!!!')
+		if string.sub(phrases[1][zeropad(3, phrasenumber)]['detail']['phrase_detail_data'], 1, 29) ~= "${lua streamfile.lua default-" then
+			if phrase_recording_id == nil then
+				freeswitch.consoleLog('err', phrasetype .. ' phrase ' .. phrasenumber .. ' references a missing recording!!!');
+				session:execute('playback', saytext(greetings['phraseNoMatch']));
+			else
+				freeswitch.consoleLog('info', phrasetype .. ' phrase ' .. phrasenumber .. ' matches recording number ' .. tostring(phrase_recording_id) .. '!!!')
+			end
 		end
 		local recordingsdata = recordingsQuery(accountnum);
 		local validchoice = false;
