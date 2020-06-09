@@ -4,7 +4,7 @@
 <mac>{$mac|replace:'-':''}</mac>
   <config version="1">
     <!-- ########################################################################################## -->
-    <!-- ## Configuration Template For GRP26xx Firmware Version 1.0.3.6    ## -->
+    <!-- ## Configuration Template For GRP2613    ## -->
     <!-- ########################################################################################## -->
 
     <!-- #################################################################### -->
@@ -16,7 +16,7 @@
     <!-- ############################################################### -->
     <!-- # Account 1/General Settings -->
     <!-- ############################################################### -->
-    <!-- # Account Active. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Account Active. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P271>1</P271>
@@ -121,7 +121,7 @@
 {if isset($grandstream_nat_traversal)}
     <P52>{$grandstream_nat_traversal}</P52>
 {else}
-    <P52>0</P52>
+    <P52>2</P52>
 {/if}
 
     <!-- # Proxy-Require (A SIP extension to enable firewall penetration). Max length is 64 characters -->
@@ -147,7 +147,7 @@
     <P31>1</P31>
 
     <!-- # Unregister On Reboot. 0 - No, 1 - Yes, 2 - Instance. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
+    <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P81>0</P81>
 
@@ -203,15 +203,22 @@
     <!-- # Mandatory -->
     <P250>400</P250>
 
+    <!-- # Switch Backup Proxy on No Response. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0,1 -->
+    <!-- # Mandatory -->
+    <P26092>0</P26092>
+
     <!-- # SIP Transport. 0 - UDP, 1 - TCP, 2 - TLS/TCP. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
+
 {$tp=0}
 {if $account.1.sip_transport == 'udp'}{$tp=0}{/if}
 {if $account.1.sip_transport == 'tcp'}{$tp=1}{/if}
 {if $account.1.sip_transport == 'tls'}{$tp=2}{/if}
 {if $account.1.sip_transport == 'dns srv'}{$tp=1}{/if}
     <P130>{$tp}</P130>
+
 
     <!-- # SIP Listening Mode.  -->
     <!-- # 0 - Transport Only, 1 - Dual, 2 - Dual (BLF Enforced), 3 - Dual (Secured). Default is 0 -->
@@ -248,6 +255,7 @@
 {else}
     <P99>0</P99>
 {/if}
+
 
     <!-- # SUBSCRIBE for Registration. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -335,16 +343,12 @@
     <!-- # Mandatory -->
     <P2313>15</P2313>
 
-    <!-- # Presence Eventlist URI -->
-    <!-- # String -->
-    <P26084></P26084>
-
     <!-- # Eventlist BLF URI -->
     <!-- # String -->
     <P134></P134>
 
-    <!-- # Auto Provision Eventlists. 0 - Disabled, 1 - BLF Eventlist, 2 - Presence Eventlist. Default is 0 -->
-    <!-- # Number:0,1,2 -->
+    <!-- # Auto Provision Eventlist BLFs. 0-Disabled, 1-Enabled. Default is 0 -->
+    <!-- # Number:0,1 -->
     <!-- # Mandatory -->
     <P2389>0</P2389>
 
@@ -423,23 +427,10 @@
     <!-- # Mandatory -->
     <P2388>0</P2388>
 
-    <!-- # VQ RTCP-XR -->
-    <!-- # VQ RTCP-XR Collector Name. -->
-    <!-- # String -->
-    <P26093></P26093>
-
-    <!-- # VQ RTCP-XR Collector Address. -->
-    <!-- # String -->
-    <P26094></P26094>
-
-    <!-- # VQ RTCP-XR Collector Port -->
-    <!-- # String -->
-    <P26095>5060</P26095>
-
     <!-- ############################################################### -->
     <!-- # Account 1/SIP Settings/Session Timer -->
     <!-- ############################################################### -->
-    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P2395>1</P2395>
@@ -524,39 +515,39 @@
     <!-- # Account 1/Audio Settings -->
     <!-- ############################################################### -->
     <!-- # Preferred Vocoder -->
-    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 125 - OPUS -->
+    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 123 - OPUS -->
     <!-- # choice 1. Default is 0 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125 -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123 -->
     <!-- # Mandatory -->
     <P57>0</P57>
 
     <!-- # choice 2. Default is 8 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P58>8</P58>
 
     <!-- # choice 3. Default is 4 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123 -->
     <!-- # Mandatory -->
     <P59>4</P59>
 
     <!-- # choice 4. Default is 18 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125 -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123 -->
     <!-- # Mandatory -->
     <P60>18</P60>
 
     <!-- # choice 5. Default is 9 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P61>9</P61>
 
     <!-- # choice 6. Default is 98 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P62>98</P62>
 
     <!-- # choice 7. Default is 2 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P46>2</P46>
 
@@ -579,7 +570,7 @@
     <!-- # Default is 0 -->
     <!-- # Number: 0,1 -->
     <!-- # Mandatory -->
-    <P26047>0</P26047>
+    <P26047>1</P26047>
 
     <!-- # Disable Multiple m line in SDP -->
     <!-- # 0 - No, 1 - Yes. Default is 0 -->
@@ -709,7 +700,7 @@
 
     <!-- # Bypass Dial Plan -->
     <!-- # String: contact,incoming,outgoing,dialing,mpk,api. Default is mpk -->
-    <P2382>mpk</P2382>
+    <P2382>mpk,incoming,outgoing,contact</P2382>
 
     <!-- # Call Log. 0 - Log All Calls, 1 - Log Incoming/Outgoing only (missed calls NOT recorded), 2 - Disable Call Log. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
@@ -790,14 +781,16 @@
     <!-- # Number: 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
 
+{if isset($grandstream_account_ring_tone_1)}
     <P104>{$grandstream_account_ring_tone_1}</P104>
+{/if}
 
     <!-- # Matching Incoming Caller ID. Matching Rule 1 -->
     <!-- # String -->
     <P1488>ring1</P1488>
 
     <!-- # Matching Rule 1 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P1489>5</P1489>
@@ -827,7 +820,7 @@
     <P6716></P6716>
 
     <!-- # Matching Rule 4 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P6717>5</P6717>
@@ -837,7 +830,7 @@
     <P6718></P6718>
 
     <!-- # Matching Rule 5 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P6719>5</P6719>
@@ -847,7 +840,7 @@
     <P6720></P6720>
 
     <!-- # Matching Rule 6 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P6721>5</P6721>
@@ -857,7 +850,7 @@
     <P26064></P26064>
 
     <!-- # Matching Rule 7 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P26065>5</P26065>
@@ -867,7 +860,7 @@
     <P26066></P26066>
 
     <!-- # Matching Rule 8 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P26067>5</P26067>
@@ -877,7 +870,7 @@
     <P26068></P26068>
 
     <!-- # Matching Rule 9 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P26069>5</P26069>
@@ -887,7 +880,7 @@
     <P26096></P26096>
 
     <!-- # Matching Rule 10 Distinctive Ringtone -->
-    <!-- # 1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
+    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
     <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
     <P26097>5</P26097>
@@ -900,7 +893,7 @@
     <!-- ############################################################### -->
     <!-- # Account 1/Intercom Settings -->
     <!-- ############################################################### -->
-    <!-- # Allow Auto Answer by Call-Info/Alert-Info. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Allow Auto Answer by Call-Info/Alert-Info. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P298>1</P298>
@@ -918,9 +911,9 @@
     <!-- # Play warning tone for Auto Answer Intercom. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P26072>0</P26072>
+    <P26072>1</P26072>
 
-    <!-- # Custom Alert-Info for Auto Answer. -->
+    <!-- # Custom Call-Info for Auto Answer. -->
     <!-- # String -->
     <P2356></P2356>
 
@@ -948,10 +941,6 @@
     <!-- # String -->
     <P26014></P26014>
 
-    <!-- #Call Forward Unconditionally (All) - Target -->
-    <!-- # String -->
-    <!-- # Pforward_0 =  -->
-
     <!-- #Call Forward Busy - On -->
     <!-- # String -->
     <P26009></P26009>
@@ -959,10 +948,6 @@
     <!-- #Call Forward Busy - Off -->
     <!-- # String -->
     <P26010></P26010>
-
-    <!-- #Call Forward Busy - Target -->
-    <!-- # String -->
-    <!-- # PbusyForward_0 =  -->
 
     <!-- #Call Forward Delayed (No Answer) - On -->
     <!-- #String -->
@@ -972,11 +957,7 @@
     <!-- #String -->
     <P26012></P26012>
 
-    <!-- #Call Forward Delayed (No Answer) - Target -->
-    <!-- #String -->
-    <!-- #PdelayedForward_0 =  -->
-
-    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 12 -->
+    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 20 -->
     <!-- #Number: 1 - 120 -->
     <!-- #Mandatory -->
     <P139>20</P139>
@@ -1095,7 +1076,7 @@
 {if isset($grandstream_nat_traversal)}
     <P414>{$grandstream_nat_traversal}</P414>
 {else}
-    <P414>0</P414>
+    <P414>2</P414>
 {/if}
 
     <!-- # Proxy-Require (A SIP extension to enable firewall penetration). Max length is 64 characters -->
@@ -1121,7 +1102,7 @@
     <P410>1</P410>
 
     <!-- # Unregister On Reboot. 0 - No, 1 - Yes, 2 - Instance. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
+    <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P411>0</P411>
 
@@ -1159,7 +1140,7 @@
     <!-- # Local SIP port. Default is 5060 -->
     <!-- # Number -->
     <!-- # Mandatory -->
-    <P413>5060</P413>
+    <P413>6051</P413>
 
     <!-- # SIP Registration Failure Retry Wait Time (in seconds). Default is 20 -->
     <!-- # Number: 1 - 3600 -->
@@ -1177,6 +1158,11 @@
     <!-- # Number: 200, 400, 800 -->
     <!-- # Mandatory -->
     <P441>400</P441>
+
+    <!-- # Switch Backup Proxy on No Response. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0,1 -->
+    <!-- # Mandatory -->
+    <P26192>0</P26192>
 
     <!-- # SIP Transport. 0 - UDP, 1 - TCP, 2 - TCP/TLS. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
@@ -1309,17 +1295,13 @@
     <!-- # Mandatory -->
     <P2413>15</P2413>
 
-    <!-- # Presence Eventlist URI -->
-    <!-- # String -->
-    <P26184></P26184>
-
     <!-- # Eventlist BLF URI -->
     <!-- # String -->
     <P444></P444>
 
-    <!-- # Auto Provision Eventlists. 0 - Disabled, 1 - BLF Eventlist, 2 - Presence Eventlist. Default is 0 -->
-    <!-- # Number:0,1,2 -->
-    <!-- # Mandatory -->
+    <!-- #Auto Provision Eventlist BLFs. 0-Disabled, 1-Enabled. Default is 0 -->
+    <!-- #Number:0,1 -->
+    <!-- #Mandatory -->
     <P2489>0</P2489>
 
     <!-- # Conference URI -->
@@ -1396,24 +1378,10 @@
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P2488>0</P2488>
-
-    <!-- # VQ RTCP-XR -->
-    <!-- # VQ RTCP-XR Collector Name. -->
-    <!-- # String -->
-    <P26193></P26193>
-
-    <!-- # VQ RTCP-XR Collector Address. -->
-    <!-- # String -->
-    <P26194></P26194>
-
-    <!-- # VQ RTCP-XR Collector Port.Default is 5060 -->
-    <!-- # String -->
-    <P26195>5060</P26195>
-
     <!-- ############################################################### -->
     <!-- # Account 2/SIP Settings/Session Timer -->
     <!-- ############################################################### -->
-    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P2495>1</P2495>
@@ -1498,44 +1466,44 @@
     <!-- # Account 2/Audio Settings -->
     <!-- ############################################################### -->
     <!-- # Preferred Vocoder -->
-    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 125 - OPUS -->
+    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 123 - OPUS -->
     <!-- # choice 1. Default is 0 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P451>0</P451>
 
     <!-- # choice 2. Default is 8 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P452>8</P452>
 
     <!-- # choice 3. Default is 4 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P453>4</P453>
 
     <!-- # choice 4. Default is 18 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P454>18</P454>
 
     <!-- # choice 5. Default is 9 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P455>9</P455>
 
     <!-- # choice 6. Default is 98 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P456>98</P456>
 
     <!-- # choice 7. Default is 2 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P457>2</P457>
 
-    <!-- # choice 8. Default is 125 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # choice 8. Default is 123 -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P458>123</P458>
 
@@ -1565,7 +1533,11 @@
     <!-- # 0 - Disabled, 1 - Enabled but not forced, 2 - Enabled and forced, 3 - Optional. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3 -->
     <!-- # Mandatory -->
+{if isset($grandstream_srtp)}
+    <P443>{$grandstream_srtp}</P443>
+{else}
     <P443>0</P443>
+{/if}
 
     <!-- # SRTP Key Length. 0 - AES 128&256 bit, 1 - AES 128 bit, 2 - AES 256 bit. Default is 0 -->
     <!-- # Default is 0 -->
@@ -1685,85 +1657,16 @@
     <!-- # Mandatory -->
     <P442>0</P442>
 
-    <!-- # Send Anonymous (caller ID will be blocked if set to Yes). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P421>0</P421>
-
-    <!-- # Anonymous Call Rejection. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P446>0</P446>
-
-    <!-- # Auto Answer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P425>0</P425>
-
-    <!-- # Refer-To Use Target Contact. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P469>0</P469>
-
-    <!-- # Transfer on Conference Hangup. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2404>0</P2404>
-
-    <!-- # Disable Recovery on Blind Transfer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2484>0</P2484>
-
-    <!-- # Blind Transfer Wait Timeout. Default is 30 -->
-    <!-- # Number: 30 - 300 -->
-    <!-- # Mandatory -->
-    <P26170>30</P26170>
-
-    <!-- # No Key Entry Timeout (in seconds). Default is 4 -->
-    <!-- # Number: 1 - 15 -->
-    <!-- # Mandatory -->
-    <P491>4</P491>
-
-    <!-- # Key as Send. 0 - Disabled, 1 - Pound (#), 2 - Star (*). Default is 1 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P492>1</P492>
-
-    <!-- # On Hold Reminder Tone. 0 - Disabled, 1 - Enable. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26106>1</P26106>
-
-    <!-- # RFC2543 Hold. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26162>0</P26162>
-
-    <!-- # Hiding Dialing Password -->
-    <!-- # Prefix for dialing password -->
-    <!-- # String -->
-    <P26149></P26149>
-
-    <!-- # Password length. Default is 0 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P26150>0</P26150>
-
-    <!-- # Disable Call Waiting. 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26163>{$grandstream_call_waiting}</P26163>
-
-    <!-- # Account Ring Tone. 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5 -->
+    <!-- # Account Ring Tone. 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory  -->
-
+{if isset($grandstream_account_ring_tone_2)}
     <P423>{$grandstream_account_ring_tone_2}</P423>
+{/if}
 
     <!-- # Matching Incoming Caller ID. Matching Rule 1 -->
     <!-- # String -->
-    <P1494></P1494>
+    <P1494>ring1</P1494>
 
     <!-- # Matching Rule 1 Distinctive Ringtone -->
     <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
@@ -1866,6 +1769,76 @@
     <!-- # Mandatory -->
     <P476>60</P476>
 
+    <!-- # Send Anonymous (caller ID will be blocked if set to Yes). 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P421>0</P421>
+
+    <!-- # Anonymous Call Rejection. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P446>0</P446>
+
+    <!-- # Auto Answer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P425>0</P425>
+
+    <!-- # Refer-To Use Target Contact. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P469>0</P469>
+
+    <!-- # Transfer on conference HangUp. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2404>0</P2404>
+
+    <!-- # Disable Recovery on Blind Transfer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2484>0</P2484>
+
+    <!-- # Blind Transfer Wait Timeout. Default is 30 -->
+    <!-- # Number: 30 - 300 -->
+    <!-- # Mandatory -->
+    <P26170>30</P26170>
+
+    <!-- # No Key Entry Timeout. Default is 4 -->
+    <!-- # Number: 1 - 15 -->
+    <!-- # Mandatory -->
+    <P491>4</P491>
+
+    <!-- # Use # As Dial Key. 0 - No, 1 - Yes -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P492>1</P492>
+
+    <!-- #On Hold Reminder Tone. 0 - Disabled, 1 - Enable. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P26106>0</P26106>
+
+    <!-- # RFC2543 Hold. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Number: 0, 1, 2 -->
+    <!-- # Mandatory -->
+    <P26162>1</P26162>
+
+    <!-- # Hiding Dialing Password -->
+    <!-- # Prefix for dialing password -->
+    <!-- # String -->
+    <P26149></P26149>
+
+    <!-- # Password length. Default is 0 -->
+    <!-- # Number -->
+    <!-- # Mandatory -->
+    <P26150>0</P26150>
+
+    <!-- # Disable Call Waiting. 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1, 2 -->
+    <!-- # Mandatory -->
+    <P26163>{$grandstream_call_waiting}</P26163>
+
     <!-- ############################################################### -->
     <!-- # Account 2/Intercom Settings -->
     <!-- ############################################################### -->
@@ -1889,7 +1862,7 @@
     <!-- # Mandatory -->
     <P26172>0</P26172>
 
-    <!-- # Custom Alert-Info for Auto Answer. -->
+    <!-- # Custom Call-Info for Auto Answer. -->
     <!-- # String -->
     <P2456></P2456>
 
@@ -1917,10 +1890,6 @@
     <!-- # String -->
     <P26114></P26114>
 
-    <!-- #Call Forward Unconditionally (All) - Target -->
-    <!-- # String -->
-    <!-- #Pforward_1 =  -->
-
     <!-- #Call Forward Busy - On -->
     <!-- # String -->
     <P26109></P26109>
@@ -1928,10 +1897,6 @@
     <!-- #Call Forward Busy - Off -->
     <!-- # String -->
     <P26110></P26110>
-
-    <!-- #Call Forward Busy - Target -->
-    <!-- # String -->
-    <!-- #PbusyForward_1 =  -->
 
     <!-- #Call Forward Delayed (No Answer) - On -->
     <!-- #String -->
@@ -1941,17 +1906,13 @@
     <!-- #String -->
     <P26112></P26112>
 
-    <!-- #Call Forward Delayed (No Answer) - Target -->
-    <!-- #String -->
-    <!-- #PdelayedForward_1 =  -->
-
-    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 12 -->
+    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 20 -->
     <!-- #Number: 1 - 120 -->
     <!-- #Mandatory -->
-    <P470>12</P470>
+    <P470></P470>
 
     <!-- #################################################################### -->
-    <!-- # Account 3   GRP2613/2614 -->
+    <!-- # Account 3 -->
     <!-- #################################################################### -->
     <!-- ############################################################### -->
     <!-- # Account 3/General Settings -->
@@ -2040,6 +2001,7 @@
 {else}
     <P508>0</P508>
 {/if}
+
     <!-- # DNS SRV Fail-over Mode. 0 - Default, 1 - Saved one until DNS TTL, 2 - Saved one until no response. Default is 0 -->
     <!-- # Number: 0,1,2 -->
     <!-- # Mandatory -->
@@ -2057,13 +2019,13 @@
     <!-- # String -->
     <P2510></P2510>
 
-    <!-- # NAT Traversal. 0 - No, 1 - STUN, 2 - keep alive, 3 - UPnP, 4 - Auto, 5 - VPN. Default is 4 -->
+    <!-- # NAT Traversal. 0 - No, 1 - STUN, 2 - keep alive, 3 - UPnP, 4 - Auto, 5 - VPN. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
 {if isset($grandstream_nat_traversal)}
     <P514>{$grandstream_nat_traversal}</P514>
 {else}
-    <P514>0</P514>
+    <P514>2</P514>
 {/if}
 
     <!-- # Proxy-Require (A SIP extension to enable firewall penetration). Max length is 64 characters -->
@@ -2089,7 +2051,7 @@
     <P510>1</P510>
 
     <!-- # Unregister On Reboot. 0 - No, 1 - Yes, 2 - Instance. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
+    <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P511>0</P511>
 
@@ -2144,6 +2106,11 @@
     <!-- # Number: 200, 400, 800 -->
     <!-- # Mandatory -->
     <P541>400</P541>
+
+    <!-- # Switch Backup Proxy on No Response. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0,1 -->
+    <!-- # Mandatory -->
+    <P26292>0</P26292>
 
     <!-- # SIP Transport. 0 - UDP, 1 - TCP. 2- TCP/TLS. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
@@ -2205,10 +2172,10 @@
     <!-- # Mandatory -->
     <P26225>0</P26225>
 
-    <!-- # Caller ID Display. 0 - Auto, 1 - Disabled, 2 - From Header. Default is 2 -->
+    <!-- # Caller ID Display. 0 - Auto, 1 - Disabled, 2 - From Header. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
-    <P2524>2</P2524>
+    <P2524>0</P2524>
 
     <!-- # Add Auth Header On Initial REGISTER -->
     <!-- # 0 - No, 1 - Yes. Default is 0 -->
@@ -2276,17 +2243,13 @@
     <!-- # Mandatory -->
     <P2513>15</P2513>
 
-    <!-- # Presence Eventlist URI -->
-    <!-- # String -->
-    <P26284></P26284>
-
     <!-- # Eventlist BLF URI -->
     <!-- # String -->
     <P544></P544>
 
-    <!-- # Auto Provision Eventlists. 0 - Disabled, 1 - BLF Eventlist, 2 - Presence Eventlist. Default is 0 -->
-    <!-- # Number:0,1,2 -->
-    <!-- # Mandatory -->
+    <!-- #Auto Provision Eventlist BLFs. 0-Disabled, 1-Enabled. Default is 0 -->
+    <!-- #Number:0,1 -->
+    <!-- #Mandatory -->
     <P2589>0</P2589>
 
     <!-- # Conference URI -->
@@ -2364,23 +2327,10 @@
     <!-- # Mandatory -->
     <P2588>0</P2588>
 
-    <!-- # VQ RTCP-XR -->
-    <!-- # VQ RTCP-XR Collector Name. -->
-    <!-- # String -->
-    <P26293></P26293>
-
-    <!-- # VQ RTCP-XR Collector Address. -->
-    <!-- # String -->
-    <P26294></P26294>
-
-    <!-- # VQ RTCP-XR Collector Port. Default is 5060 -->
-    <!-- # String -->
-    <P26295>5060</P26295>
-
     <!-- ########################################## -->
     <!-- # Account 3/SIP Settings/Session Timer -->
     <!-- ########################################## -->
-    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P2595>1</P2595>
@@ -2411,7 +2361,7 @@
     <!-- # Mandatory -->
     <P530>0</P530>
 
-    <!-- # UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS. Default is 1 -->
+    <!-- # UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
     <P532>0</P532>
@@ -2463,45 +2413,70 @@
     <!-- ########################################## -->
     <!-- # Account 3/Audio Settings -->
     <!-- ########################################## -->
+    <!-- # Send DTMF: In-audio. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2501>0</P2501>
+
+    <!-- # Send DTMF: Via RTP (RFC2833). 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2502>1</P2502>
+
+    <!-- # Send DTMF: Via SIP INFO. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2503>0</P2503>
+
+    <!-- # OPUS Payload Type. Default is 123 -->
+    <!-- # Number: 96 - 127 -->
+    <!-- # Mandatory -->
+    <P2585>123</P2585>
+
+    <!-- # DTMF Payload Type. Default is 101 -->
+    <!-- # Number: 96 - 127 -->
+    <!-- # Mandatory -->
+    <P596>101</P596>
+
     <!-- # Preferred Vocoder -->
-    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 125 - OPUS -->
+    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 123 - OPUS -->
     <!-- # choice 1. Default is 0 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123 -->
     <!-- # Mandatory -->
     <P551>0</P551>
 
     <!-- # choice 2. Default is 8 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P552>8</P552>
 
     <!-- # choice 3. Default is 4 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P553>4</P553>
 
     <!-- # choice 4. Default is 18 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P554>18</P554>
 
     <!-- # choice 5. Default is 9 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P555>9</P555>
 
     <!-- # choice 6. Default is 98 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P556>98</P556>
 
     <!-- # choice 7. Default is 2 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P557>2</P557>
 
-    <!-- # choice 8. Default is 125 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
+    <!-- # choice 8. Default is 123 -->
+    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 123  -->
     <!-- # Mandatory -->
     <P558>123</P558>
 
@@ -2514,12 +2489,6 @@
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P29261>1</P29261>
-
-    <!-- # Hide Vocoder. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Default is 0 -->
-    <!-- # Number: 0,1 -->
-    <!-- # Mandatory -->
-    <P26247>0</P26247>
 
     <!-- # Disable Multiple m line in SDP -->
     <!-- #0 - No, 1 - Yes. Default is 0 -->
@@ -2543,8 +2512,8 @@
     <!-- # Mandatory -->
     <P2583>0</P2583>
 
-    <!-- # Crypto Life Time -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
+    <!-- #Crypto Life Time -->
+    <!-- #0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P2563>0</P2563>
@@ -2558,16 +2527,6 @@
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P585>0</P585>
-
-    <!-- # Jitter Buffer Type. 0 - Fixed, 1 - Adaptive. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P598>1</P598>
-
-    <!-- # Jitter Buffer Length. 0 - 100ms, 1 - 200ms, 2 - 300ms, 3 - 400ms, 4 - 500ms, 5 - 600ms, 6 - 700ms, 7 - 800ms. Default is 2 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5, 6, 7 -->
-    <!-- # Mandatory -->
-    <P597>2</P597>
 
     <!-- # Voice Frames per TX (up to 10/20/32/64 frames for G711/G726/G723/other codecs respectively). Default is 2 -->
     <!-- # Number: 1 - 64 -->
@@ -2594,30 +2553,21 @@
     <!-- # Mandatory -->
     <P594>97</P594>
 
-    <!-- # OPUS Payload Type. Default is 123 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P2585>123</P2585>
-
-    <!-- # DTMF Payload Type. Default is 101 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P596>101</P596>
-
-    <!-- # Send DTMF: In-audio. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Jitter Buffer Type. 0 - Fixed, 1 - Adaptive. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P2501>0</P2501>
+    <P598>1</P598>
 
-    <!-- # Send DTMF: Via RTP (RFC2833). 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
+    <!-- # Jitter Buffer Length. 0 - 100ms, 1 - 200ms, 2 - 300ms, 3 - 400ms, 4 - 500ms, 5 - 600ms, 6 - 700ms, 7 - 800ms. Default is 2 -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5, 6, 7 -->
     <!-- # Mandatory -->
-    <P2502>1</P2502>
+    <P597>2</P597>
 
-    <!-- # Send DTMF: Via SIP INFO. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
+    <!-- # Hide Vocoder. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Default is 0 -->
+    <!-- # Number: 0,1 -->
     <!-- # Mandatory -->
-    <P2503>0</P2503>
+    <P26247>0</P26247>
 
     <!-- # DTMF Delay. Default is 250 -->
     <!-- # Number: 100 - 250  -->
@@ -2654,80 +2604,12 @@
     <!-- # Mandatory -->
     <P542>0</P542>
 
-    <!-- # Send Anonymous (caller ID will be blocked if set to Yes). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P521>0</P521>
-
-    <!-- # Anonymous Call Rejection. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P546>0</P546>
-
-    <!-- # Auto Answer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P525>0</P525>
-
-    <!-- # Refer-To Use Target Contact. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P569>0</P569>
-
-    <!-- # Transfer on conference Hang-Up. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2504>0</P2504>
-
-    <!-- #Disable Recovery on Blind Transfer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2584>0</P2584>
-
-    <!-- # Blind Transfer Wait Timeout. Default is 30 -->
-    <!-- # Number: 30 - 300 -->
-    <!-- # Mandatory -->
-    <P26270>30</P26270>
-
-    <!-- # No Key Entry Timeout. Default is 4 -->
-    <!-- # Number: 1 - 15 -->
-    <!-- # Mandatory -->
-    <P591>4</P591>
-
-    <!-- # Use # As Dial Key. 0 - No, 1 - Yes -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P592>1</P592>
-
-    <!-- #On Hold Reminder Tone. 0 - Disabled, 1 - Enable. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26206>1</P26206>
-
-    <!-- # RFC2543 Hold. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26262>0</P26262>
-
-    <!-- # Hiding Dialing Password -->
-    <!-- # Prefix for dialing password -->
-    <!-- # String -->
-    <P26249></P26249>
-
-    <!-- # Password length. Default is 0 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P26250>0</P26250>
-
-    <!-- # Disable Call Waiting. 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26263>{$grandstream_call_waiting}</P26263>
-
-    <!-- # Account Ring Tone. 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5 -->
+    <!-- # Account Ring Tone. 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
+{if isset($grandstream_account_ring_tone_3)}
     <P523>{$grandstream_account_ring_tone_3}</P523>
+{/if}
 
     <!-- # Matching Incoming Caller ID. Matching Rule 1 -->
     <!-- # String -->
@@ -2834,6 +2716,76 @@
     <!-- # Mandatory -->
     <P576>60</P576>
 
+    <!-- # Send Anonymous (caller ID will be blocked if set to Yes). 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P521>0</P521>
+
+    <!-- # Anonymous Call Rejection. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P546>0</P546>
+
+    <!-- # Auto Answer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P525>0</P525>
+
+    <!-- # Refer-To Use Target Contact. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P569>0</P569>
+
+    <!-- # Transfer on conference Hang-Up. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2504>0</P2504>
+
+    <!-- #Disable Recovery on Blind Transfer. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2584>0</P2584>
+
+    <!-- # Blind Transfer Wait Timeout. Default is 30 -->
+    <!-- # Number: 30 - 300 -->
+    <!-- # Mandatory -->
+    <P26270>30</P26270>
+
+    <!-- # No Key Entry Timeout. Default is 4 -->
+    <!-- # Number: 1 - 15 -->
+    <!-- # Mandatory -->
+    <P591>4</P591>
+
+    <!-- # Use # As Dial Key. 0 - No, 1 - Yes -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P592>1</P592>
+
+    <!-- #On Hold Reminder Tone. 0 - Disabled, 1 - Enable. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P26206>0</P26206>
+
+    <!-- # RFC2543 Hold. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Number: 0, 1, 2 -->
+    <!-- # Mandatory -->
+    <P26262>1</P26262>
+
+    <!-- # Hiding Dialing Password -->
+    <!-- # Prefix for dialing password -->
+    <!-- # String -->
+    <P26249></P26249>
+
+    <!-- # Password length. Default is 0 -->
+    <!-- # Number -->
+    <!-- # Mandatory -->
+    <P26250>0</P26250>
+
+    <!-- # Disable Call Waiting. 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1, 2 -->
+    <!-- # Mandatory -->
+    <P26263>{$grandstream_call_waiting}</P26263>
+
     <!-- ############################################################### -->
     <!-- # Account 3/Intercom Settings -->
     <!-- ############################################################### -->
@@ -2852,19 +2804,20 @@
     <!-- # Mandatory -->
     <P26271>0</P26271>
 
-    <!-- # Play warning tone for Auto Answer Intercom. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Play warning tone for Auto Answer Intercom. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P26272>1</P26272>
+    <P26272>0</P26272>
 
-    <!-- # Custom Alert-Info for Auto Answer. -->
+    <!-- # Custom Call-Info for Auto Answer. -->
     <!-- # String -->
     <P2556></P2556>
+
 
     <!-- ########################################## -->
     <!-- # Account 3/Feature Codes -->
     <!-- ########################################## -->
-    <!-- #Enable Local Call Features.  0 - No, 1 - Yes. Default is 1 -->
+    <!-- #Enable Call Features.  0 - No, 1 - Yes. Default is 1 -->
     <!-- #Number: 0, 1  -->
     <!-- #Mandatory -->
     <P520>0</P520>
@@ -2885,10 +2838,6 @@
     <!-- # String -->
     <P26214></P26214>
 
-    <!-- #Call Forward Unconditionally (All) - Target -->
-    <!-- # String -->
-    <!-- #Pforward_2 =  -->
-
     <!-- #Call Forward Busy - On -->
     <!-- # String -->
     <P26209></P26209>
@@ -2896,10 +2845,6 @@
     <!-- #Call Forward Busy - Off -->
     <!-- # String -->
     <P26210></P26210>
-
-    <!-- #Call Forward Busy - Target -->
-    <!-- # String -->
-    <!-- #PbusyForward_2 =  -->
 
     <!-- #Call Forward Delayed (No Answer) - On -->
     <!-- #String -->
@@ -2909,1970 +2854,24 @@
     <!-- #String -->
     <P26212></P26212>
 
-    <!-- #Call Forward Delayed (No Answer) - Target -->
-    <!-- #String -->
-    <!-- #PdelayedForward_2 =  -->
-
-    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 12 -->
+    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 20 -->
     <!-- #Number: 1 - 120 -->
     <!-- #Mandatory -->
     <P570></P570>
 
-    <!-- #################################################################### -->
-    <!-- # Account 4     GRP2614/GRP2615 only -->
-    <!-- #################################################################### -->
-    <!-- ########################################## -->
-    <!-- # Account 4/General Settings -->
-    <!-- ########################################## -->
-    <!-- # Account Active. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-{if isset($account.4.password)}
-    <P601>1</P601>
-{else}
-    <P601>0</P601>
-{/if}
-
-    <!-- # Account Name -->
-    <!-- # String -->
-    <P617>{$account.4.display_name}</P617>
-
-    <!-- # SIP Server -->
-    <!-- # String -->
-    <P602>{$account.4.server_address}:{$account.4.sip_port}</P602>
-
-    <!-- # Secondary SIP Server -->
-    <!-- # String -->
-    <P2612></P2612>
-{if isset($account.4.server_address_secondary)}
-    <P2612>{$account.4.server_address_secondary}:{$account.4.sip_port}</P2612>
-{else}
-    <P2612>{$account.4.server_address_secondary}</P2612>
-{/if}
-
-    <!-- # Outbound Proxy -->
-    <!-- # String -->
-    
-{if isset($account.4.outbound_proxy_primary)}
-    <P603>{$account.4.outbound_proxy_primary}:{$account.4.sip_port}</P603>
-{else}
-    <P603>{$account.4.outbound_proxy_primary}</P603>
-{/if}	
-
-    <!-- # Backup Outbound Proxy -->
-    <!-- # String -->
-    
-{if isset($account.4.outbound_proxy_secondary)}
-    <P2633>{$account.4.outbound_proxy_secondary}:{$account.4.sip_port}</P2633>
-{else}
-    <P2633>{$account.4.outbound_proxy_secondary}</P2633>
-{/if}
-
-    <!-- # BLF Server -->
-    <!-- # String -->
-    <P2675></P2675>
-
-    <!-- # SIP User ID -->
-    <!-- # String -->
-    <P604>{$account.4.user_id}</P604>
-
-    <!-- # Authenticate ID -->
-    <!-- # String -->
-    <P605>{$account.4.auth_id}</P605>
-
-    <!-- # Authenticate password -->
-    <!-- # String -->
-    <P606>{$account.4.password}</P606>
-
-    <!-- # Name -->
-    <!-- # String -->
-    <P607>{$account.4.display_name}</P607>
-
-    <!-- # Voice Mail UserID -->
-    <!-- # String -->
-    <P626>*97</P626>
-
-    <!-- # Account Display -->
-    <!-- # Number: 0, 1. 0 - User Name, 1 - User ID. Default is 0 -->
-    <!-- # Mandatory -->
-    <P2680>0</P2680>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/Network Settings -->
-    <!-- ########################################## -->
-    <!-- # DNS Mode. 0 - A Record, 1 - SRV, 2 - NAPTR/SRV, 3 - Use Configured IP. Default is 0 -->
-    <!-- # Number: 0, 1, 2, 3 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_dns_mode)}
-    <P608>{$grandstream_dns_mode}</P608>
-{else}
-    <P608>0</P608>
-{/if}
-
-    <!-- # DNS SRV Fail-over Mode. 0 - Default, 1 - Saved one until DNS TTL, 2 - Saved one until no response. Default is 0 -->
-    <!-- # Number: 0,1,2 -->
-    <!-- # Mandatory -->
-    <P26340>0</P26340>
-
-    <!-- # Primary IP. Maximum 15 characters -->
-    <!-- # String  -->
-    <P2608></P2608>
-
-    <!-- # Backup IP 1 -->
-    <!-- # String -->
-    <P2609></P2609>
-
-    <!-- # Backup IP 2 -->
-    <!-- # String -->
-    <P2610></P2610>
-
-    <!-- # NAT Traversal. 0 - No, 1 - STUN, 2 - keep alive, 3 - UPnP, 4 - Auto, 5 - VPN. Default is 4 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_nat_traversal)}
-    <P614>{$grandstream_nat_traversal}</P614>
-{else}
-    <P614>0</P614>
-{/if}
-
-    <!-- # Proxy-Require (A SIP extension to enable firewall penetration). Max length is 64 characters -->
-    <!-- # String -->
-    <P618></P618>
-
-    <!-- # Use SBC. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26390>0</P26390>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/SIP Settings/Basic Settings -->
-    <!-- ########################################## -->
-    <!-- # TEL URI. 0 - Disabled, 1 - User=Phone, 2 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P609>0</P609>
-
-    <!-- # SIP Registration. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P610>1</P610>
-
-    <!-- # Unregister On Reboot. 0 - No, 1 - Yes, 2 - Instance. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P611>0</P611>
-
-    <!-- # Register Expiration (in minutes). Default is 60. Max is 45 days -->
-    <!-- # Number: 1 - 64800 -->
-    <!-- # Mandatory -->
-    <P612>{$account.4.register_expires}</P612>
-
-    <!-- # Subscribe Expiration. Default is 60. Max about 45 days -->
-    <!-- # Number: 1 - 64800 -->
-    <!-- # Mandatory -->
-    <P26351>60</P26351>
-
-    <!-- # Reregister before Expiration (in seconds). Default is 0 -->
-    <!-- # Number: 0 - 64800 -->
-    <!-- # Mandatory -->
-    <P2630>0</P2630>
-
-    <!-- # Enable OPTIONS Keep Alive. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0,1 -->
-    <!-- # Mandatory -->
-    <P2697>0</P2697>
-
-    <!-- # OPTIONS Keep Alive Interval. Default is 30 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P2698>30</P2698>
-
-    <!-- # OPTIONS Keep Alive Max Lost. Default is 3 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P2699>30</P2699>
-
-    <!-- # Local SIP port. Default is 5066 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P613>5066</P613>
-
-    <!-- # SIP Registration Failure Retry Wait Time (in seconds). Default is 20 -->
-    <!-- # Number: 1 - 3600 -->
-    <!-- # Mandatory -->
-    <P671>20</P671>
-
-    <!-- # SIP T1 Timeout. RFC 3261 T1 value (RTT estimate) -->
-    <!-- # 50 - 0.5 sec, 100 - 1 sec, 200 - 2 sec. Default is 100 -->
-    <!-- # Number: 50, 100, 200 -->
-    <!-- # Mandatory -->
-    <P640>50</P640>
-
-    <!-- # SIP T2 Timeout. RFC 3261 T2 value. The maximum retransmit interval for non-INVITE requests and INVITE responses -->
-    <!-- # 200 - 2 sec, 400 - 4 sec, 800 - 8 sec. Default is 400 -->
-    <!-- # Number: 200, 400, 800 -->
-    <!-- # Mandatory -->
-    <P641>400</P641>
-
-    <!-- # SIP Transport. 0 - UDP, 1 - TCP. 2 - TCP/TLS. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-{$tp=0}
-{if $account.4.sip_transport == 'udp'}{$tp=0}{/if}
-{if $account.4.sip_transport == 'tcp'}{$tp=1}{/if}
-{if $account.4.sip_transport == 'tls'}{$tp=2}{/if}
-{if $account.4.sip_transport == 'dns srv'}{$tp=1}{/if}
-    <P648>{$tp}</P648>
-
-    <!-- # SIP Listening Mode.  -->
-    <!-- # 0 - Transport Only, 1 - Dual, 2 - Dual (BLF Enforced), 3 - Dual (Secured). Default is 0 -->
-    <!-- # Number: 0,1,2,3 -->
-    <!-- # Mandatory -->
-    <P26324>0</P26324>
-
-    <!-- # SIP URI Scheme When Using TLS. 0 - sip, 1 - sips. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2629>1</P2629>
-
-    <!-- # Use Actual Ephemeral Port in Contact with TCP/TLS. 0 - No, 1- Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2631>0</P2631>
-
-    <!-- # Outbound Proxy Mode. 0 - in route, 1 - not in route, 2 - always send to -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2605>0</P2605>
-
-    <!-- # Support SIP Instance ID. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P689>1</P689>
-
-    <!-- # SUBSCRIBE for MWI (Whether or not send SUBSCRIBE for Message Waiting Indication). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-{if isset($subscribe_mwi)}
-    <P615>1</P615>
-{else}
-    <P615>0</P615>
-{/if}
-
-    <!-- # SUBSCRIBE for Registration. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2619>0</P2619>
-
-    <!-- # Enable 100rel. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P635>0</P635>
-
-    <!-- # Callee ID Display. 0 - Auto, 1 - Disabled, 2 - From Header. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26325>0</P26325>
-
-    <!-- # Caller ID Display. 0 - Auto, 1 - Disabled, 2 - From Header. Default is 2 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2624>2</P2624>
-
-    <!-- # Add Auth Header On Initial REGISTER -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2659>0</P2659>
-
-    <!-- #Allow SIP Reset -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- #Mandatory -->
-    <P26315>0</P26315>
-
-    <!-- # Ignore Alert-Info header -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26318>0</P26318>
-
-    <!-- ############################################################### -->
-    <!-- # Account 4/SIP Settings/Custom SIP Headers -->
-    <!-- ############################################################### -->
-
-    <!-- # Use Privacy Header -->
-    <!-- # 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2638>0</P2638>
-
-    <!-- # Use P-Preferred-Identity Header -->
-    <!-- # 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2639>0</P2639>
-
-    <!-- # Use X-Grandstream-PBX Header -->
-    <!-- # 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26354>1</P26354>
-
-    <!-- # Use P-Access-Network-Info Header -->
-    <!-- # 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26358>1</P26358>
-
-    <!-- # Use P-Emergency-Info Header -->
-    <!-- # 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26359>1</P26359>
-
-    <!-- # Use MAC Header -->
-    <!-- # 0 - No, 1 - Yes except REGISTER, 2 - Yes to all SIP. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26361>1</P26361>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/SIP Settings/Advanced Features -->
-    <!-- ########################################## -->
-    <!-- # Line-Seize Timeout (in seconds). Default is 15 -->
-    <!-- # Number: 15 - 60 -->
-    <!-- # Mandatory -->
-    <P2613>15</P2613>
-
-    <!-- # Presence Eventlist URI -->
-    <!-- # String -->
-    <P26384></P26384>
-
-    <!-- # Eventlist BLF URI -->
-    <!-- # String -->
-    <P644></P644>
-
-    <!-- # Auto Provision Eventlists. 0 - Disabled, 1 - BLF Eventlist, 2 - Presence Eventlist. Default is 0 -->
-    <!-- # Number:0,1,2 -->
-    <!-- # Mandatory -->
-    <P2689>0</P2689>
-
-    <!-- # Conference URI -->
-    <!-- # String -->
-    <P2618></P2618>
-
-    <!-- # Music On Hold URI -->
-    <!-- # String -->
-    <P2650></P2650>
-
-    <!-- # BLF Call-pickup. 0 - Auto, 1 - Force BLF Call-pickup by prefix, 2 - Disabled. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P6755>{$grandstream_blf_call_pickup}</P6755>
-
-    <!-- # BLF Call-pickup Prefix. Default is ** -->
-    <!-- # String -->
-    <!-- # Mandatory -->
-    <P681>**</P681>
-
-    <!-- # Call Pickup Barge-In Code -->
-    <!-- # String -->
-    <!-- #P26346 =  -->
-
-    <!-- # PUBLISH for Presence. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P688>0</P688>
-
-    <!-- # Omit charset=UTF-8 in MESSAGE. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2655>0</P2655>
-
-    <!-- # Allow Unsolicited REFER. 0 - Disabled, 1 - Enabled, 2 - Enabled/Force Auth. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26323>0</P26323>
-
-    <!-- # Special Feature. 100 - Standard, 101 - Nortel MCS, 102- Broadsoft, 108 - CBCOM,  -->
-    <!-- # 109 - RNK, 110 - Sylantro, 117 - Huawei IMS, 119 - Phonepower, 120 - UCM Call Center -->
-    <!-- # Default is 100 -->
-    <!-- # Number: 100, 101, 102, 108, 109, 110, 117, 119, 120 -->
-    <!-- # Mandatory -->
-    <P624>100</P624>
-
-    <!-- # Broadsoft -->
-    <!-- # Broadsoft Call Center. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2641>0</P2641>
-
-    <!-- # Hoteling Event. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2642>0</P2642>
-
-    <!-- # Call Center Status. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2643>0</P2643>
-
-    <!-- # Broadsoft Executive Assistant. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2664>0</P2664>
-
-    <!-- # Feature Key Synchronization. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2625>0</P2625>
-
-    <!-- # Broadsoft Call Park. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2688>0</P2688>
-
-    <!-- # VQ RTCP-XR -->
-    <!-- # VQ RTCP-XR Collector Name. -->
-    <!-- # String -->
-    <P26393></P26393>
-
-    <!-- # VQ RTCP-XR Collector Address. -->
-    <!-- # String -->
-    <P26394></P26394>
-
-    <!-- # VQ RTCP-XR Collector Port. Default is 5060 -->
-    <!-- # String -->
-    <P26395>5060</P26395>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/SIP Settings/Session Timer -->
-    <!-- ########################################## -->
-    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2695>1</P2695>
-
-    <!-- # Session Expiration (in seconds). Default is 180 -->
-    <!-- # Number: 90 - 64800 -->
-    <!-- # Mandatory -->
-    <P634>180</P634>
-
-    <!-- # Minimum SE (in seconds). Default is 90 seconds. This value must be lower than or equal to P634 -->
-    <!-- # Number: 90 - 64800 -->
-    <!-- # Mandatory -->
-    <P627>90</P627>
-
-    <!-- # Caller Request Timer (Request for timer when calling). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P628>0</P628>
-
-    <!-- # Callee Request Timer (Request for timer when called. i.e. if remote party supports timer but did not request for one) -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P629>0</P629>
-
-    <!-- # Force Timer (Still use timer when remote party does not support timer). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P630>0</P630>
-
-    <!-- # UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS. Default is 1 -->
-    <!-- # Number: 0 - 2 -->
-    <!-- # Mandatory -->
-    <P632>0</P632>
-
-    <!-- # UAS Specify Refresher. 1 - UAC, 2 - UAS. Default is 1 -->
-    <!-- # Number: 1, 2 -->
-    <!-- # Mandatory -->
-    <P633>1</P633>
-
-    <!-- # Force INVITE (Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE). -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P631>0</P631>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/SIP Settings/Security Settings -->
-    <!-- ########################################## -->
-    <!-- # Check Domain Certificates. When set to Yes/Enabled, the domain certificate will be checked as defined in RFC5922 -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2611>0</P2611>
-
-    <!-- # Validate Certification Chain. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2667>0</P2667>
-
-    <!-- # Validate Incoming Messages. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2606>0</P2606>
-
-    <!-- # Check SIP User ID for incoming INVITE. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P649>0</P649>
-
-    <!-- # Accept Incoming SIP from Proxy Only. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2647>1</P2647>
-
-    <!-- # Authenticate Incoming INVITE. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2646>0</P2646>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/Audio Settings -->
-    <!-- ########################################## -->
-    <!-- # Preferred Vocoder -->
-    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 125 - OPUS -->
-    <!-- # choice 1. Default is 0 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P651>0</P651>
-
-    <!-- # choice 2. Default is 8 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P652>8</P652>
-
-    <!-- # choice 3. Default is 4 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P653>4</P653>
-
-    <!-- # choice 4. Default is 18 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P654>18</P654>
-
-    <!-- # choice 5. Default is 9 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P655>9</P655>
-
-    <!-- # choice 6. Default is 98 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P656>98</P656>
-
-    <!-- # choice 7. Default is 2 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P657>2</P657>
-
-    <!-- # choice 8. Default is 125 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P658>123</P658>
-
-    <!-- # Use First Matching Vocoder in 200OK SDP. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2648>0</P2648>
-
-    <!-- # Codec Negotiation Priority. 0 - Caller, 1 - Callee. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P29361>1</P29361>
-
-    <!-- # Hide Vocoder. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Default is 0 -->
-    <!-- # Number: 0,1 -->
-    <!-- # Mandatory -->
-    <P26347>0</P26347>
-
-    <!-- # Disable Multiple m line in SDP -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P687>0</P687>
-
-    <!-- # SRTP Mode -->
-    <!-- # 0 - Disabled, 1 - Enabled but not forced, 2 - Enabled and forced, 3 - Optional. Default is 0 -->
-    <!-- # Number: 0, 1, 2, 3 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_srtp)}
-    <P643>{$grandstream_srtp}</P643>
-{else}
-    <P643>0</P643>
-{/if}
-
-    <!-- # SRTP Key Length. 0 - AES 128&256 bit, 1 - AES 128 bit, 2 - AES 256 bit. Default is 0 -->
-    <!-- # Default is 0 -->
-    <!-- # Number: 0,1 -->
-    <!-- # Mandatory -->
-    <P2683>0</P2683>
-
-    <!-- # Crypto Life Time -->
-    <!-- #0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2663>0</P2663>
-
-    <!-- # Symmetric RTP. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P660>0</P660>
-
-    <!-- # Silence Suppression 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P685>0</P685>
-
-    <!-- # Jitter Buffer Type. 0 - Fixed, 1 - Adaptive. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P698>1</P698>
-
-    <!-- # Jitter Buffer Length.  -->
-    <!-- # 0 - 100ms, 1 - 200ms, 2 - 300ms, 3 - 400ms, 4 - 500ms, 5 - 600ms, 6 - 700ms, 7 - 800ms. Default is 2 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5, 6, 7 -->
-    <!-- # Mandatory -->
-    <P697>2</P697>
-
-    <!-- # Voice Frames per TX (up to 10/20/32/64 frames for G711/G726/G723/other codecs respectively). Default is 2 -->
-    <!-- # Number: 1 - 64 -->
-    <!-- # Mandatory -->
-    <P686>2</P686>
-
-    <!-- # G723 Rate. 0 - 6.3kbps encoding rate, 1 - 5.3kbps encoding rate. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P693>1</P693>
-
-    <!-- # G.726-32 Packing Mode. 0 - ITU, 1 - IETF. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2623>0</P2623>
-
-    <!-- # iLBC Frame Size. 0 - 20ms, 1 - 30ms. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P695>1</P695>
-
-    <!-- # iLBC Payload Type. Default is 97 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P694>97</P694>
-
-    <!-- # OPUS Payload Type. Default is 123 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P2685>123</P2685>
-
-    <!-- # DTMF Payload Type. Default is 101 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P696>101</P696>
-
-    <!-- # Send DTMF: In-audio. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2601>0</P2601>
-
-    <!-- # Send DTMF: Via RTP (RFC2833). 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2602>1</P2602>
-
-    <!-- # Send DTMF: Via SIP INFO. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2603>0</P2603>
-
-    <!-- # DTMF Delay. Default is 250 -->
-    <!-- # Number: 100 - 250  -->
-    <!-- # Mandatory -->
-    <P26360>250</P26360>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/Call Settings -->
-    <!-- ########################################## -->
-    <!-- # Early Dial (use "Yes" only if proxy supports 484 response). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P622>0</P622>
-
-    <!-- # Dial Plan Prefix -->
-    <!-- # String -->
-    <P619></P619>
-
-    <!-- # Dial Plan. Default is { x+ | \+x+ | *x+ | *xx*x+ } -->
-    <!-- # String -->
-    <!-- # Mandatory -->
-{if isset($grandstream_dial_plan) }
-    <P659>{$grandstream_dial_plan}</P659>
-{else}
-    <P659>{literal}{x+|*x+|*++|\p\a\r\k\+*x+| \f\l\o\w\+*x+}{/literal}</P659>
-{/if}
-
-    <!-- # Bypass Dial Plan -->
-    <!-- # String: contact,incoming,outgoing,dialing,mpk,api. Default is mpk -->
-    <P2682>mpk</P2682>
-
-    <!-- # Call Log. 0 - Log All Calls, 1 - Log Incoming/Outgoing only (Missed calls NOT recorded), 2 - Disable Call Log. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P642>0</P642>
-
-    <!-- # Send Anonymous (caller ID will be blocked if set to Yes). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P621>0</P621>
-
-    <!-- # Anonymous Call Rejection. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P646>0</P646>
-
-    <!-- # Auto Answer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P625>0</P625>
-
-    <!-- # Refer-To Use Target Contact. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P669>0</P669>
-
-    <!-- # Transfer on conference Hang-Up. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2604>0</P2604>
-
-    <!-- #Disable Recovery on Blind Transfer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2684>0</P2684>
-
-    <!-- # Blind Transfer Wait Timeout. Default is 30 -->
-    <!-- # Number: 30 - 300 -->
-    <!-- # Mandatory -->
-    <P26370>30</P26370>
-
-    <!-- # No Key Entry Timeout. Default is 4 -->
-    <!-- # Number: 1 - 15 -->
-    <!-- # Mandatory -->
-    <P691>4</P691>
-
-    <!-- # Use # As Dial Key. 0 - No, 1 - Yes -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P692>1</P692>
-
-    <!-- #On Hold Reminder Tone. 0 - Disabled, 1 - Enable. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26306>1</P26306>
-
-    <!-- # RFC2543 Hold. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26362>0</P26362>
-
-    <!-- # Hiding Dialing Password -->
-    <!-- # Prefix for dialing password -->
-    <!-- # String -->
-    <P26349></P26349>
-
-    <!-- # Password length. Default is 0 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P26350>0</P26350>
-
-    <!-- # Disable Call Waiting. 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26363>0</P26363>
-
-    <!-- # Account Ring Tone. 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P623>{$grandstream_account_ring_tone_4}</P623>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 1 -->
-    <!-- # String -->
-    <P1506></P1506>
-
-    <!-- # Matching Rule 1 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P1507>0</P1507>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 2 -->
-    <!-- # String -->
-    <P1508></P1508>
-
-    <!-- # Matching Rule 2 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P1509>0</P1509>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 3 -->
-    <!-- # String -->
-    <P1510></P1510>
-
-    <!-- # Matching Rule 3 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P1511>0</P1511>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 4 -->
-    <!-- # String -->
-    <P6734></P6734>
-
-    <!-- # Matching Rule 4 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P6735>5</P6735>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 5 -->
-    <!-- # String -->
-    <P6736></P6736>
-
-    <!-- # Matching Rule 5 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P6737>5</P6737>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 6 -->
-    <!-- # String -->
-    <P6738></P6738>
-
-    <!-- # Matching Rule 6 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P6739>5</P6739>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 7 -->
-    <!-- # String -->
-    <P26364></P26364>
-
-    <!-- # Matching Rule 7 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26365>5</P26365>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 8 -->
-    <!-- # String -->
-    <P26366></P26366>
-
-    <!-- # Matching Rule 8 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26367>5</P26367>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 9 -->
-    <!-- # String -->
-    <P26368></P26368>
-
-    <!-- # Matching Rule 9 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26369>5</P26369>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 10 -->
-    <!-- # String -->
-    <P26396></P26396>
-
-    <!-- # Matching Rule 10 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26397>5</P26397>
-
-    <!-- # Ring Timeout (in seconds). Default is 60 -->
-    <!-- # Number: 30 - 3600 -->
-    <!-- # Mandatory -->
-    <P676>60</P676>
-
-    <!-- ############################################################### -->
-    <!-- # Account 4/Intercom Settings -->
-    <!-- ############################################################### -->
-    <!-- # Allow Auto Answer by Call-Info/Alert-Info. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P638>0</P638>
-
-    <!-- # Allow Barging by Call-Info/Alert-Info. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26319>0</P26319>
-
-    <!-- # Mute on answer Intercom call. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26371>0</P26371>
-
-    <!-- # Play warning tone for Auto Answer Intercom. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26372>0</P26372>
-
-    <!-- # Custom Alert-Info for Auto Answer. -->
-    <!-- # String -->
-    <P2656></P2656>
-
-    <!-- ########################################## -->
-    <!-- # Account 4/Feature Codes -->
-    <!-- ########################################## -->
-    <!-- #Enable Local Call Features.  0 - No, 1 - Yes. Default is 1 -->
-    <!-- #Number: 0, 1  -->
-    <!-- #Mandatory -->
-    <P620>1</P620>
-
-    <!-- #Do Not Disturb (DND) - On -->
-    <!-- # String -->
-    <P2644></P2644>
-
-    <!-- #Do Not Disturb (DND) - Off -->
-    <!-- # String -->
-    <P2645></P2645>
-
-    <!-- #Call Forward Unconditionally (All) - On -->
-    <!-- # String -->
-    <P26313></P26313>
-
-    <!-- #Call Forward Unconditionally (All) - Off -->
-    <!-- # String -->
-    <P26314></P26314>
-
-    <!-- #Call Forward Unconditionally (All) - Target -->
-    <!-- # String -->
-    <!-- #Pforward_3 = 66 -->
-
-    <!-- #Call Forward Busy - On -->
-    <!-- # String -->
-    <P26309></P26309>
-
-    <!-- #Call Forward Busy - Off -->
-    <!-- # String -->
-    <P26310></P26310>
-
-    <!-- #Call Forward Busy - Target -->
-    <!-- # String -->
-    <!-- #PbusyForward_3 = 55 -->
-
-    <!-- #Call Forward Delayed (No Answer) - On -->
-    <!-- #String -->
-    <P26311></P26311>
-
-    <!-- #Call Forward Delayed (No Answer) - Off -->
-    <!-- #String -->
-    <P26312></P26312>
-
-    <!-- #Call Forward Delayed (No Answer) - Target -->
-    <!-- #String -->
-    <!-- #PdelayedForward_3 = 44 -->
-
-    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 12 -->
-    <!-- #Number: 1 - 120 -->
-    <!-- #Mandatory -->
-    <P670>12</P670>
-
-    <!-- #################################################################### -->
-    <!-- # Account 5     GRP2615 only -->
-    <!-- #################################################################### -->
-    <!-- ########################################## -->
-    <!-- # Account 5/General Settings -->
-    <!-- ########################################## -->
-    <!-- # Account Active. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-{if isset($account.5.password)}
-    <P701>1</P701>
-{else}
-    <P701>0</P701>
-{/if}
-
-    <!-- # Account Name -->
-    <!-- # String -->
-    <P717>{$account.5.display_name}</P717>
-
-    <!-- # SIP Server -->
-    <!-- # String -->
-    <P702>{$account.5.server_address}:{$account.5.sip_port}</P702>
-
-    <!-- # Secondary SIP Server -->
-    <!-- # String -->
-    <P2712></P2712>
-{if isset($account.5.server_address_secondary)}
-    <P2712>{$account.5.server_address_secondary}:{$account.5.sip_port}</P2712>
-{else}
-    <P2712>{$account.5.server_address_secondary}</P2712>
-{/if}
-
-    <!-- # Outbound Proxy -->
-    <!-- # String -->
-
-{if isset($account.5.outbound_proxy_primary)}
-    <P703>{$account.5.outbound_proxy_primary}:{$account.5.sip_port}</P703>
-{else}
-    <P703>{$account.5.outbound_proxy_primary}</P703>
-{/if}
-
-    <!-- # Backup Outbound Proxy -->
-    <!-- # String -->
-    <P2733></P2733>
-{if isset($account.5.outbound_proxy_secondary)}
-    <P2733>{$account.5.outbound_proxy_secondary}:{$account.5.sip_port}</P2733>
-{else}
-    <P2733>{$account.5.outbound_proxy_secondary}</P2733>
-{/if}
-
-    <!-- # BLF Server -->
-    <!-- # String -->
-    <P2775></P2775>
-
-    <!-- # SIP User ID -->
-    <!-- # String -->
-    <P704></P704>
-
-    <!-- # Authenticate ID -->
-    <!-- # String -->
-    <P705>{$account.5.user_id}</P705>
-
-    <!-- # Authenticate password -->
-    <!-- # String -->
-    <P706>{$account.5.password}</P706>
-
-    <!-- # Name -->
-    <!-- # String -->
-    <P707>{$account.5.display_name}</P707>
-
-    <!-- # Voice Mail UserID -->
-    <!-- # String -->
-    <P726>*97</P726>
-
-    <!-- # Account Display -->
-    <!-- # Number: 0, 1. 0 - User Name, 1 - User ID. Default is 0 -->
-    <!-- # Mandatory -->
-    <P2780>0</P2780>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/Network Settings -->
-    <!-- ########################################## -->
-    <!-- # DNS Mode. 0 - A Record, 1 - SRV, 2 - NAPTR/SRV, 3 - Use Configured IP. Default is 0 -->
-    <!-- # Number: 0, 1, 2, 3 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_dns_mode)}
-    <P708>{$grandstream_dns_mode}</P708>
-{else}
-    <P708>0</P708>
-{/if}
-
-    <!-- # DNS SRV Fail-over Mode. 0 - Default, 1 - Saved one until DNS TTL, 2 - Saved one until no response. Default is 0 -->
-    <!-- # Number: 0,1,2 -->
-    <!-- # Mandatory -->
-    <P26440>0</P26440>
-
-    <!-- # Primary IP. Maximum 15 characters -->
-    <!-- # String  -->
-    <P2708></P2708>
-
-    <!-- # Backup IP 1 -->
-    <!-- # String -->
-    <P2709></P2709>
-
-    <!-- # Backup IP 2 -->
-    <!-- # String -->
-    <P2710></P2710>
-
-    <!-- # NAT Traversal. 0 - No, 1 - STUN, 2 - keep alive, 3 - UPnP, 4 - Auto, 5 - VPN. Default is 4 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_nat_traversal)}
-    <P714>{$grandstream_nat_traversal}</P714>
-{else}
-    <P714>0</P714>
-{/if}
-
-    <!-- # Proxy-Require (A SIP extension to enable firewall penetration). Max length is 64 characters -->
-    <!-- # String -->
-    <P718></P718>
-
-    <!-- # Use SBC. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26490>0</P26490>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/SIP Settings/Basic Settings -->
-    <!-- ########################################## -->
-    <!-- # TEL URI. 0 - Disabled, 1 - User=Phone, 2 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P709>0</P709>
-
-    <!-- # SIP Registration. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P710>1</P710>
-
-    <!-- # Unregister On Reboot. 0 - No, 1 - Yes, 2 - Instance. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P711>0</P711>
-
-    <!-- # Register Expiration (in minutes). Default is 60. Max is 45 days -->
-    <!-- # Number: 1 - 64800 -->
-    <!-- # Mandatory -->
-    <P712>{$account.5.register_expires}</P712>
-
-    <!-- # Subscribe Expiration. Default is 60. Max about 45 days -->
-    <!-- # Number: 1 - 64800 -->
-    <!-- # Mandatory -->
-    <P26451>60</P26451>
-
-    <!-- # Reregister before Expiration (in seconds). Default is 0 -->
-    <!-- # Number: 0 - 64800 -->
-    <!-- # Mandatory -->
-    <P2730>0</P2730>
-
-    <!-- # Enable OPTIONS Keep Alive. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0,1 -->
-    <!-- # Mandatory -->
-    <P2797>0</P2797>
-
-    <!-- # OPTIONS Keep Alive Interval. Default is 30 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P2798>30</P2798>
-
-    <!-- # OPTIONS Keep Alive Max Lost. Default is 3 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P2799>30</P2799>
-
-    <!-- # Local SIP port. Default is 5066 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P713>5066</P713>
-
-    <!-- # SIP Registration Failure Retry Wait Time (in seconds). Default is 20 -->
-    <!-- # Number: 1 - 3600 -->
-    <!-- # Mandatory -->
-    <P771>20</P771>
-
-    <!-- # SIP T1 Timeout. RFC 3261 T1 value (RTT estimate) -->
-    <!-- # 50 - 0.5 sec, 100 - 1 sec, 200 - 2 sec. Default is 100 -->
-    <!-- # Number: 50, 100, 200 -->
-    <!-- # Mandatory -->
-    <P740>50</P740>
-
-    <!-- # SIP T2 Timeout. RFC 3261 T2 value. The maximum retransmit interval for non-INVITE requests and INVITE responses -->
-    <!-- # 200 - 2 sec, 400 - 4 sec, 800 - 8 sec. Default is 400 -->
-    <!-- # Number: 200, 400, 800 -->
-    <!-- # Mandatory -->
-    <P741>400</P741>
-
-    <!-- # SIP Transport. 0 - UDP, 1 - TCP. 2 - TCP/TLS. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-{$tp=0}
-{if $account.5.sip_transport == 'udp'}{$tp=0}{/if}
-{if $account.5.sip_transport == 'tcp'}{$tp=1}{/if}
-{if $account.5.sip_transport == 'tls'}{$tp=2}{/if}
-{if $account.5.sip_transport == 'dns srv'}{$tp=1}{/if}
-    <P748>{$tp}</P748>
-
-    <!-- # SIP Listening Mode.  -->
-    <!-- # 0 - Transport Only, 1 - Dual, 2 - Dual (BLF Enforced), 3 - Dual (Secured). Default is 0 -->
-    <!-- # Number: 0,1,2,3 -->
-    <!-- # Mandatory -->
-    <P26424>0</P26424>
-
-    <!-- # SIP URI Scheme When Using TLS. 0 - sip, 1 - sips. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2729>1</P2729>
-
-    <!-- # Use Actual Ephemeral Port in Contact with TCP/TLS. 0 - No, 1- Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2731>0</P2731>
-
-    <!-- # Outbound Proxy Mode. 0 - in route, 1 - not in route, 2 - always send to -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2705>0</P2705>
-
-    <!-- # Support SIP Instance ID. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P789>1</P789>
-
-    <!-- # SUBSCRIBE for MWI (Whether or not send SUBSCRIBE for Message Waiting Indication). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-{if isset($subscribe_mwi)}
-    <P715>1</P715>
-{else}
-    <P715>0</P715>
-{/if}
-
-    <!-- # SUBSCRIBE for Registration. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2719>0</P2719>
-
-    <!-- # Enable 100rel. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P735>0</P735>
-
-    <!-- # Callee ID Display. 0 - Auto, 1 - Disabled, 2 - From Header. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26425>0</P26425>
-
-    <!-- # Caller ID Display. 0 - Auto, 1 - Disabled, 2 - From Header. Default is 2 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2724>2</P2724>
-
-    <!-- # Add Auth Header On Initial REGISTER -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2759>0</P2759>
-
-    <!-- #Allow SIP Reset -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- #Mandatory -->
-    <P26415>0</P26415>
-
-    <!-- # Ignore Alert-Info header -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26418>0</P26418>
-
-    <!-- ############################################################### -->
-    <!-- # Account 5/SIP Settings/Custom SIP Headers -->
-    <!-- ############################################################### -->
-
-    <!-- # Use Privacy Header -->
-    <!-- # 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2738>0</P2738>
-
-    <!-- # Use P-Preferred-Identity Header -->
-    <!-- # 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P2739>0</P2739>
-
-    <!-- # Use X-Grandstream-PBX Header -->
-    <!-- # 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26454>1</P26454>
-
-    <!-- # Use P-Access-Network-Info Header -->
-    <!-- # 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26458>1</P26458>
-
-    <!-- # Use P-Emergency-Info Header -->
-    <!-- # 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26459>1</P26459>
-
-    <!-- # Use MAC Header -->
-    <!-- # 0 - No, 1 - Yes except REGISTER, 2 - Yes to all SIP. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26461>1</P26461>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/SIP Settings/Advanced Features -->
-    <!-- ########################################## -->
-    <!-- # Line-Seize Timeout (in seconds). Default is 15 -->
-    <!-- # Number: 15 - 60 -->
-    <!-- # Mandatory -->
-    <P2713>15</P2713>
-
-    <!-- # Presence Eventlist URI -->
-    <!-- # String -->
-    <P26484></P26484>
-
-    <!-- # Eventlist BLF URI -->
-    <!-- # String -->
-    <P744></P744>
-
-    <!-- # Auto Provision Eventlists. 0 - Disabled, 1 - BLF Eventlist, 2 - Presence Eventlist. Default is 0 -->
-    <!-- # Number:0,1,2 -->
-    <!-- # Mandatory -->
-    <P2789>0</P2789>
-
-    <!-- # Conference URI -->
-    <!-- # String -->
-    <P2718></P2718>
-
-    <!-- # Music On Hold URI -->
-    <!-- # String -->
-    <P2750></P2750>
-
-    <!-- # BLF Call-pickup. 0 - Auto, 1 - Force BLF Call-pickup by prefix, 2 - Disabled. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P6756>0</P6756>
-
-    <!-- # BLF Call-pickup Prefix. Default is ** -->
-    <!-- # String -->
-    <!-- # Mandatory -->
-    <P781>**</P781>
-
-    <!-- # Call Pickup Barge-In Code -->
-    <!-- # String -->
-    <!-- #P26446 =  -->
-
-    <!-- # PUBLISH for Presence. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P788>0</P788>
-
-    <!-- # Omit charset=UTF-8 in MESSAGE. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2755>0</P2755>
-
-    <!-- # Allow Unsolicited REFER. 0 - Disabled, 1 - Enabled, 2 - Enabled/Force Auth. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26423>0</P26423>
-
-    <!-- # Special Feature. 100 - Standard, 101 - Nortel MCS, 102- Broadsoft, 108 - CBCOM,  -->
-    <!-- # 109 - RNK, 110 - Sylantro, 117 - Huawei IMS, 119 - Phonepower, 120 - UCM Call Center -->
-    <!-- # Default is 100 -->
-    <!-- # Number: 100, 101, 102, 108, 109, 110, 117, 119, 120 -->
-    <!-- # Mandatory -->
-    <P724>100</P724>
-
-    <!-- # Broadsoft -->
-    <!-- # Broadsoft Call Center. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2741>0</P2741>
-
-    <!-- # Hoteling Event. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2742>0</P2742>
-
-    <!-- # Call Center Status. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2743>0</P2743>
-
-    <!-- # Broadsoft Executive Assistant. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2764>0</P2764>
-
-    <!-- # Feature Key Synchronization. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2725>0</P2725>
-
-    <!-- # Broadsoft Call Park. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2788>0</P2788>
-
-    <!-- # VQ RTCP-XR -->
-    <!-- # VQ RTCP-XR Collector Name. -->
-    <!-- # String -->
-    <P26493></P26493>
-
-    <!-- # VQ RTCP-XR Collector Address. -->
-    <!-- # String -->
-    <P26494></P26494>
-
-    <!-- # VQ RTCP-XR Collector Port. Default is 5060 -->
-    <!-- # String -->
-    <P26495>5060</P26495>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/SIP Settings/Session Timer -->
-    <!-- ########################################## -->
-    <!-- # Enable Session Timer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2795>1</P2795>
-
-    <!-- # Session Expiration (in seconds). Default is 180 -->
-    <!-- # Number: 90 - 64800 -->
-    <!-- # Mandatory -->
-    <P734>180</P734>
-
-    <!-- # Minimum SE (in seconds). Default is 90 seconds. This value must be lower than or equal to P634 -->
-    <!-- # Number: 90 - 64800 -->
-    <!-- # Mandatory -->
-    <P727>90</P727>
-
-    <!-- # Caller Request Timer (Request for timer when calling). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P728>0</P728>
-
-    <!-- # Callee Request Timer (Request for timer when called. i.e. if remote party supports timer but did not request for one) -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P729>0</P729>
-
-    <!-- # Force Timer (Still use timer when remote party does not support timer). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P730>0</P730>
-
-    <!-- # UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS. Default is 1 -->
-    <!-- # Number: 0 - 2 -->
-    <!-- # Mandatory -->
-    <P732>1</P732>
-
-    <!-- # UAS Specify Refresher. 1 - UAC, 2 - UAS. Default is 1 -->
-    <!-- # Number: 1, 2 -->
-    <!-- # Mandatory -->
-    <P733>1</P733>
-
-    <!-- # Force INVITE (Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE). -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P731>0</P731>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/SIP Settings/Security Settings -->
-    <!-- ########################################## -->
-    <!-- # Check Domain Certificates. When set to Yes/Enabled, the domain certificate will be checked as defined in RFC5922 -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2711>0</P2711>
-
-    <!-- # Validate Certification Chain. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2767>0</P2767>
-
-    <!-- # Validate Incoming Messages. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2706>0</P2706>
-
-    <!-- # Check SIP User ID for incoming INVITE. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P749>0</P749>
-
-    <!-- # Accept Incoming SIP from Proxy Only. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2747>1</P2747>
-
-    <!-- # Authenticate Incoming INVITE. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2746>0</P2746>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/Audio Settings -->
-    <!-- ########################################## -->
-    <!-- # Preferred Vocoder -->
-    <!-- # 0 - PCMU, 2 - G.726-32, 8 - PCMA, 9 - G.722, 18 - G.729A/B, 4 - G.723.1, 98 - iLBC, 125 - OPUS -->
-    <!-- # choice 1. Default is 0 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P751>0</P751>
-
-    <!-- # choice 2. Default is 8 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P752>8</P752>
-
-    <!-- # choice 3. Default is 4 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P753>4</P753>
-
-    <!-- # choice 4. Default is 18 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P754>18</P754>
-
-    <!-- # choice 5. Default is 9 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P755>9</P755>
-
-    <!-- # choice 6. Default is 98 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P756>98</P756>
-
-    <!-- # choice 7. Default is 2 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P757>2</P757>
-
-    <!-- # choice 8. Default is 125 -->
-    <!-- # Number: 0, 2, 4, 8, 9, 18, 98, 125  -->
-    <!-- # Mandatory -->
-    <P758>123</P758>
-
-    <!-- # Use First Matching Vocoder in 200OK SDP. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2748>0</P2748>
-
-    <!-- # Codec Negotiation Priority. 0 - Caller, 1 - Callee. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P29461>1</P29461>
-
-    <!-- # Hide Vocoder. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Default is 0 -->
-    <!-- # Number: 0,1 -->
-    <!-- # Mandatory -->
-    <P26447>0</P26447>
-
-    <!-- # Disable Multiple m line in SDP -->
-    <!-- # 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P787>0</P787>
-
-    <!-- # SRTP Mode -->
-    <!-- # 0 - Disabled, 1 - Enabled but not forced, 2 - Enabled and forced, 3 - Optional. Default is 0 -->
-    <!-- # Number: 0, 1, 2, 3 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_srtp)}
-    <P743>{$grandstream_srtp}</P743>
-{else}
-    <P743>0</P743>
-{/if}
-
-    <!-- # SRTP Key Length. 0 - AES 128&256 bit, 1 - AES 128 bit, 2 - AES 256 bit. Default is 0 -->
-    <!-- # Default is 0 -->
-    <!-- # Number: 0,1,2 -->
-    <!-- # Mandatory -->
-    <P2783>0</P2783>
-
-    <!-- # Crypto Life Time -->
-    <!-- #0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2763>0</P2763>
-
-    <!-- # Symmetric RTP. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P760>0</P760>
-
-    <!-- # Silence Suppression 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P785>0</P785>
-
-    <!-- # Jitter Buffer Type. 0 - Fixed, 1 - Adaptive. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P798>1</P798>
-
-    <!-- # Jitter Buffer Length.  -->
-    <!-- # 0 - 100ms, 1 - 200ms, 2 - 300ms, 3 - 400ms, 4 - 500ms, 5 - 600ms, 6 - 700ms, 7 - 800ms. Default is 2 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5, 6, 7 -->
-    <!-- # Mandatory -->
-    <P797>2</P797>
-
-    <!-- # Voice Frames per TX (up to 10/20/32/64 frames for G711/G726/G723/other codecs respectively). Default is 2 -->
-    <!-- # Number: 1 - 64 -->
-    <!-- # Mandatory -->
-    <P786>2</P786>
-
-    <!-- # G723 Rate. 0 - 6.3kbps encoding rate, 1 - 5.3kbps encoding rate. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P793>1</P793>
-
-    <!-- # G.726-32 Packing Mode. 0 - ITU, 1 - IETF. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2723>0</P2723>
-
-    <!-- # iLBC Frame Size. 0 - 20ms, 1 - 30ms. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P795>1</P795>
-
-    <!-- # iLBC Payload Type. Default is 97 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P794>97</P794>
-
-    <!-- # OPUS Payload Type. Default is 123 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P2785>123</P2785>
-
-    <!-- # DTMF Payload Type. Default is 101 -->
-    <!-- # Number: 96 - 127 -->
-    <!-- # Mandatory -->
-    <P796>101</P796>
-
-    <!-- # Send DTMF: In-audio. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2701>0</P2701>
-
-    <!-- # Send DTMF: Via RTP (RFC2833). 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2702>1</P2702>
-
-    <!-- # Send DTMF: Via SIP INFO. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2703>0</P2703>
-
-    <!-- # DTMF Delay. Default is 250 -->
-    <!-- # Number: 100 - 250  -->
-    <!-- # Mandatory -->
-    <P26460>250</P26460>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/Call Settings -->
-    <!-- ########################################## -->
-    <!-- # Early Dial (use "Yes" only if proxy supports 484 response). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P722>0</P722>
-
-    <!-- # Dial Plan Prefix -->
-    <!-- # String -->
-    <P719></P719>
-
-    <!-- # Dial Plan. Default is { x+ | \+x+ | *x+ | *xx*x+ } -->
-    <!-- # String -->
-    <!-- # Mandatory -->
-{if isset($grandstream_dial_plan) }
-    <P1759>{$grandstream_dial_plan}</P1759>
-{else}
-    <P1759>{literal}{x+|*x+|*++|\p\a\r\k\+*x+| \f\l\o\w\+*x+}{/literal}</P1759>
-{/if}
-
-    <!-- # Bypass Dial Plan -->
-    <!-- # String: contact,incoming,outgoing,dialing,mpk,api. Default is mpk -->
-    <P2782>mpk</P2782>
-
-    <!-- # Call Log. 0 - Log All Calls, 1 - Log Incoming/Outgoing only (Missed calls NOT recorded), 2 - Disable Call Log. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P742>0</P742>
-
-    <!-- # Send Anonymous (caller ID will be blocked if set to Yes). 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P721>0</P721>
-
-    <!-- # Anonymous Call Rejection. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P746>0</P746>
-
-    <!-- # Auto Answer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P725>0</P725>
-
-    <!-- # Refer-To Use Target Contact. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P769>0</P769>
-
-    <!-- # Transfer on conference Hang-Up. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2704>0</P2704>
-
-    <!-- #Disable Recovery on Blind Transfer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2784>0</P2784>
-
-    <!-- # Blind Transfer Wait Timeout. Default is 30 -->
-    <!-- # Number: 30 - 300 -->
-    <!-- # Mandatory -->
-    <P26470>30</P26470>
-
-    <!-- # No Key Entry Timeout. Default is 4 -->
-    <!-- # Number: 1 - 15 -->
-    <!-- # Mandatory -->
-    <P791>4</P791>
-
-    <!-- # Use # As Dial Key. 0 - No, 1 - Yes -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P792>1</P792>
-
-    <!-- #On Hold Reminder Tone. 0 - Disabled, 1 - Enable. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26406>1</P26406>
-
-    <!-- # RFC2543 Hold. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26462>0</P26462>
-
-    <!-- # Hiding Dialing Password -->
-    <!-- # Prefix for dialing password -->
-    <!-- # String -->
-    <P26449></P26449>
-
-    <!-- # Password length. Default is 0 -->
-    <!-- # Number -->
-    <!-- # Mandatory -->
-    <P26450>0</P26450>
-
-    <!-- # Disable Call Waiting. 0 - Default, 1 - No, 2 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P26463>{$grandstream_call_waiting}</P26463>
-
-    <!-- # Account Ring Tone. 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P723>{$grandstream_account_ring_tone_5}</P723>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 1 -->
-    <!-- # String -->
-    <P1512></P1512>
-
-    <!-- # Matching Rule 1 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P1513>0</P1513>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 2 -->
-    <!-- # String -->
-    <P1514></P1514>
-
-    <!-- # Matching Rule 2 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P1515>0</P1515>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 3 -->
-    <!-- # String -->
-    <P1516></P1516>
-
-    <!-- # Matching Rule 3 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 0. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P1517>0</P1517>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 4 -->
-    <!-- # String -->
-    <P6740></P6740>
-
-    <!-- # Matching Rule 4 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P6741>5</P6741>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 5 -->
-    <!-- # String -->
-    <P6742></P6742>
-
-    <!-- # Matching Rule 5 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P6743>5</P6743>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 6 -->
-    <!-- # String -->
-    <P6744></P6744>
-
-    <!-- # Matching Rule 6 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P6745>5</P6745>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 7 -->
-    <!-- # String -->
-    <P26464></P26464>
-
-    <!-- # Matching Rule 7 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26465>5</P26465>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 8 -->
-    <!-- # String -->
-    <P26466></P26466>
-
-    <!-- # Matching Rule 8 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26467>5</P26467>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 9 -->
-    <!-- # String -->
-    <P26468></P26468>
-
-    <!-- # Matching Rule 9 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26469>5</P26469>
-
-    <!-- # Matching Incoming Caller ID. Matching Rule 10 -->
-    <!-- # String -->
-    <P26496></P26496>
-
-    <!-- # Matching Rule 10 Distinctive Ringtone -->
-    <!-- # -1 - No Ringtone, 0 - system ring tone, 1 - custom ring tone 1, 2 - custom ring tone 2, 3 - custom ring tone 3, 4 - silent, 5 - Default Ringtone. Default is 5. -->
-    <!-- # Number: -1, 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <P26497>5</P26497>
-
-    <!-- # Ring Timeout (in seconds). Default is 60 -->
-    <!-- # Number: 30 - 3600 -->
-    <!-- # Mandatory -->
-    <P776>60</P776>
-
-    <!-- ############################################################### -->
-    <!-- # Account 5/Intercom Settings -->
-    <!-- ############################################################### -->
-    <!-- # Allow Auto Answer by Call-Info/Alert-Info. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P738>0</P738>
-
-    <!-- # Allow Barging by Call-Info/Alert-Info. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26419>0</P26419>
-
-    <!-- # Mute on answer Intercom call. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26471>0</P26471>
-
-    <!-- # Play warning tone for Auto Answer Intercom. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P26472>1</P26472>
-
-    <!-- # Custom Alert-Info for Auto Answer. -->
-    <!-- # String -->
-    <P2756></P2756>
-
-    <!-- ########################################## -->
-    <!-- # Account 5/Feature Codes -->
-    <!-- ########################################## -->
-    <!-- #Enable Local Call Features.  0 - No, 1 - Yes. Default is 1 -->
-    <!-- #Number: 0, 1  -->
-    <!-- #Mandatory -->
-    <P720>1</P720>
-
-    <!-- #Do Not Disturb (DND) - On -->
-    <!-- # String -->
-    <P2744></P2744>
-
-    <!-- #Do Not Disturb (DND) - Off -->
-    <!-- # String -->
-    <P2745></P2745>
-
-    <!-- #Call Forward Unconditionally (All) - On -->
-    <!-- # String -->
-    <P26413></P26413>
-
-    <!-- #Call Forward Unconditionally (All) - Off -->
-    <!-- # String -->
-    <P26414></P26414>
-
-    <!-- #Call Forward Unconditionally (All) - Target -->
-    <!-- # String -->
-    <!-- #Pforward_4 =  -->
-
-    <!-- #Call Forward Busy - On -->
-    <!-- # String -->
-    <P26409></P26409>
-
-    <!-- #Call Forward Busy - Off -->
-    <!-- # String -->
-    <P26410></P26410>
-
-    <!-- #Call Forward Busy - Target -->
-    <!-- # String -->
-    <!-- #PbusyForward_4 =  -->
-
-    <!-- #Call Forward Delayed (No Answer) - On -->
-    <!-- #String -->
-    <P26411></P26411>
-
-    <!-- #Call Forward Delayed (No Answer) - Off -->
-    <!-- #String -->
-    <P26412></P26412>
-
-    <!-- #Call Forward Delayed (No Answer) - Target -->
-    <!-- #String -->
-    <!-- #PdelayedForward_4 =  -->
-
-    <!-- #Delayed Call Forward Wait Time (in seconds). Default is 12 -->
-    <!-- #Number: 1 - 120 -->
-    <!-- #Mandatory -->
-    <P770>12</P770>
-
     <!-- ################################################################### -->
     <!-- ## Network/Basic Settings                                       ## -->
     <!-- ################################################################### -->
-    <!-- # Internet Protocol. 0 - Both, prefer IPv4, 1 - Both, prefer IPv6, 2 - IPv4 Only, 3 - IPv6 Only. Default is 2 -->
+    <!-- # Internet Protocol. 0 - Both, prefer IPv4, 1 - Both, prefer IPv6, 2 - IPv4 Only, 3 - IPv6 Only. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3 -->
     <!-- # Mandatory -->
-    <P1415>2</P1415>
+    <P1415>0</P1415>
 
-    <!-- # IPv4 Address Type. 0 - DHCP, 1 - Static IP, 2 - PPPoE. Default is 0 -->
+    <!-- # IP Address Mode. 0 - DHCP, 1 - Static IP, 2 - PPPoE. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
     <!-- # P8 = 0 -->
-
+	<P8>0</P8>
     <!-- ########################################## -->
     <!-- # DHCP -->
     <!-- ########################################## -->
@@ -4882,145 +2881,8 @@
 
     <!-- # Vendor Class ID, DHCP option 60. Max length allowed is 64 characters -->
     <!-- # String -->
-    <!-- # For GRP2612, Default value is Grandstream GRP2612. -->
-    <!-- # P148 = Grandstream GRP2612 -->
-    <!--   -->
-    <!-- # For GRP2613, Default value is Grandstream GRP2613. -->
-    <!-- # P148 = Grandstream GRP2613 -->
-
-    <!-- # For GRP2614, Default value is Grandstream GRP2614. -->
-    <!-- # P148 = Grandstream GRP2614 -->
-
-    <!-- # For GRP2615, Default value is Grandstream GRP2615. -->
-    <!-- # P148 = Grandstream GRP2615 -->
-
-    <!-- ########################################## -->
-    <!-- # PPPoE -->
-    <!-- ########################################## -->
-    <!-- # PPPoE Account ID -->
-    <!-- # String -->
-    <P82></P82>
-
-    <!-- # PPPoE Password -->
-    <!-- # String -->
-    <!-- # Cannot contain ` or " -->
-    <P83></P83>
-
-    <!-- # PPPoE Service Name -->
-    <!-- # String  -->
-    <P269></P269>
-
-    <!-- ########################################## -->
-    <!-- # Statically Configured -->
-    <!-- ########################################## -->
-    <!-- # IP Address. Ignore if DHCP or PPPoE is used -->
-    <!-- # Number: 0 - 255 -->
-    <P9>192</P9>
-
-    <!-- # Number: 0 - 255 -->
-    <P10>168</P10>
-
-    <!-- # Number: 0 - 255 -->
-    <P11>0</P11>
-
-    <!-- # Number: 0 - 255 -->
-    <P12>160</P12>
-
-    <!-- # Subnet mask. Ignore if DHCP or PPPoE is used -->
-    <!-- # Number: 0 - 255 -->
-    <P13>255</P13>
-
-    <!-- # Number: 0 - 255 -->
-    <P14>255</P14>
-
-    <!-- # Number: 0 - 255 -->
-    <P15>0</P15>
-
-    <!-- # Number: 0 - 255 -->
-    <P16>0</P16>
-
-    <!-- # Gateway. Ignore if DHCP or PPPoE is used -->
-    <!-- # Number: 0 - 255 -->
-    <P17>0</P17>
-
-    <!-- # Number: 0 - 255 -->
-    <P18>0</P18>
-
-    <!-- # Number: 0 - 255 -->
-    <P19>0</P19>
-
-    <!-- # Number: 0 - 255 -->
-    <P20>0</P20>
-
-    <!-- # DNS 1 Server. Ignore if DHCP or PPPoE is used -->
-    <!-- # Number: 0 - 255 -->
-    <P21>0</P21>
-
-    <!-- # Number: 0 - 255 -->
-    <P22>0</P22>
-
-    <!-- # Number: 0 - 255 -->
-    <P23>0</P23>
-
-    <!-- # Number: 0 - 255 -->
-    <P24>0</P24>
-
-    <!-- # DNS 2 Server. Ignore if DHCP or PPPoE is used -->
-    <!-- # Number: 0 - 255 -->
-    <P25>0</P25>
-
-    <!-- # Number: 0 - 255 -->
-    <P26>0</P26>
-
-    <!-- # Number: 0 - 255 -->
-    <P27>0</P27>
-
-    <!-- # Number: 0 - 255 -->
-    <P28>0</P28>
-
-    <!-- # Preferred DNS server.  (if specified). -->
-    <!-- # Number: 0 - 255 -->
-    <P92>0</P92>
-
-    <!-- # Number: 0 - 255 -->
-    <P93>0</P93>
-
-    <!-- # Number: 0 - 255 -->
-    <P94>0</P94>
-
-    <!-- # Number: 0 - 255 -->
-    <P95>0</P95>
-
-    <!-- # IPv6 Address Type. 0 - Auto Configured, 1 - Statically Configured. Default is 0. -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P1419>0</P1419>
-
-    <!-- # IPv6 Static Mode: Statically configured. 0 - Full Static, 1 - Prefix Static -->
-    <!-- # Number: 0, 1 -->
-    <P1426>0</P1426>
-
-    <!-- # Full Static: Static IPv6 Address -->
-    <P1420></P1420>
-
-    <!-- # Full Static: IPv6 Prefix Length -->
-    <P1421></P1421>
-
-    <!-- # Prefix Static: IPv6 Prefix (64bits) -->
-    <P1422></P1422>
-
-    <!-- # DNS Server 1 for IPv6 Address -->
-    <!-- # String: a-z, A-Z, 0-9, ".", ":", "[", "]" -->
-    <P1424></P1424>
-
-    <!-- # DNS Server 2 for IPv6 Address -->
-    <!-- # String: a-z, A-Z, 0-9, ".", ":", "[", "]" -->
-    <P1425></P1425>
-
-    <!-- # Preferred DNS Server for IPv6 Address -->
-    <!-- # String: a-z, A-Z, 0-9, ".", ":", "[", "]" -->
-    <P1423></P1423>
-
+    <P148>GrandstreamGRP2613</P148>
+ 
     <!-- ############################################################################## -->
     <!-- ## Network/Advanced Settings                                                ## -->
     <!-- ############################################################################## -->
@@ -5071,9 +2933,9 @@
     <!-- # Enable DHCP VLAN. 0 - Disable, 1 - Enable. Default is 0. -->
     <!-- # Number: 0,1 -->
     <!-- # Mandatory -->
-    <P8300>0</P8300>
+    <P8300>1</P8300>
 
-    <!-- # Enable Manual VLAN Configuration. 0 - Disable, 1 - Enable. Default is 1. -->
+    <!-- # Enable Manual VLAN Configuration. 0 - Disable, 1 - Enable. Default is 0. -->
     <!-- # Number: 0,1 -->
     <!-- # Mandatory -->
     <P22174>1</P22174>
@@ -5087,7 +2949,7 @@
     <P51>0</P51>
 {/if}
 
-    <!-- # 802.1p priority value (0 - 7). Default is 0 -->
+    <!-- # Layer 2 QoS. 802.1p priority value (0 - 7). Default is 0 -->
     <!-- # Number: 0 - 7 -->
     <!-- # Mandatory -->
     <P87>0</P87>
@@ -5131,6 +2993,11 @@
     <!-- # Mandatory -->
     <P244>1500</P244>
 
+    <!-- # Enable IEEE 802.3az EEE (Energy Efficient Ethernet). 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P8499>0 </P8499>
+
     <!-- ############################################################################## -->
     <!-- ##  Network/Remote Control -->
     <!-- ############################################################################## -->
@@ -5154,43 +3021,6 @@
     <P32053>0</P32053>
 
     <!-- ############################################################################## -->
-    <!-- ##  Network/Affinity Settings       GRP2614/GRP2615 -->
-    <!-- ############################################################################## -->
-    <!-- # Affinity Support. 0 - Disabled, 1 - Enabled -->
-    <!-- # Number: 0, 1. Default is 0 -->
-    <!-- # Mandatory -->
-    <P8334>0</P8334>
-
-    <!-- # Preferred Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0 - 5. Default is 0 -->
-    <!-- # Mandatory -->
-    <P8335>0</P8335>
-
-    <!-- ############################################################################## -->
-    <!-- ##  Network /Bluetooth Settings     GRP2614/GRP2615 -->
-    <!-- ############################################################################## -->
-    <!-- # Bluetooth Power. Default is 1. -->
-    <!-- # 0 - Off, 1 - On, 2 - Off & Hide Menu From LCD -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-{if isset($grandstream_bluetooth_power)}
-    <P2910>{$grandstream_bluetooth_power}</P2910>
-{/if}
-
-    <!-- # Handsfree Mode. Default is 0. -->
-    <!-- # Number: 0, 1. 0 - Off, 1 - On -->
-    <!-- # Mandatory -->
-{if isset($grandstream_bluetooth_handsfree)}
-    <P2911>{$grandstream_bluetooth_handsfree}</P2911>
-{/if}
-    <!-- # Number -->
-    <P8485></P8485>
-
-    <!-- # Bluetooth Name. -->
-    <!-- # String -->
-    <P8364></P8364>
-
-    <!-- ############################################################################## -->
     <!-- ## Network/OpenVPN Settings                     ## -->
     <!-- ############################################################################## -->
     <!-- # OpenVPN Enable.  0 - No, 1 - Yes. Default is 0 -->
@@ -5211,6 +3041,18 @@
     <!-- #Number: 0, 1  -->
     <!-- #Mandatory -->
     <P2912>0</P2912>
+
+    <!-- # OpenVPN CA -->
+    <!-- # String -->
+    <P9902></P9902>
+
+    <!-- # OpenVPN Certificate -->
+    <!-- # String -->
+    <P9903></P9903>
+
+    <!-- # OpenVPN Client Key -->
+    <!-- # String -->
+    <P9904></P9904>
 
     <!-- # OpenVPN Cipher Method. 0 - Blowfish, 1 - AES-128, 2 - AES-256, 3 - Triple-DES. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3  -->
@@ -5247,14 +3089,6 @@
     <!-- # Mandatory -->
     <P21903>161</P21903>
 
-    <!-- # Community -->
-    <!-- # String -->
-    <P21902></P21902>
-
-    <!-- # SNMP Trap Version -->
-    <!-- # Number: 1, 2. 1 - Version 1, 2 - Version 2, 3 - Version 3. Default is 2 -->
-    <P21899>2</P21899>
-
     <!-- # SNMP Trap IP -->
     <!-- # String -->
     <P21897></P21897>
@@ -5267,7 +3101,15 @@
     <!-- # Number: 1 - 1440. Default is 5 -->
     <P21901>5</P21901>
 
-    <!-- # SNMP Trap Community -->
+    <!-- # SNMP Trap Version -->
+    <!-- # Number: 1, 2. 1 - Version 1, 2 - Version 2, 3 - Version 3. Default is 1 -->
+    <P21899>1</P21899>
+
+    <!-- # Community -->
+    <!-- # String -->
+    <P21902></P21902>
+
+    <!-- # Snmp Trap Community -->
     <!-- # String -->
     <P21900></P21900>
 
@@ -5285,7 +3127,7 @@
     <!-- # Mandatory -->
     <P21906>0</P21906>
 
-    <!-- # Privacy Protocol -->
+    <!-- # Privacy Portocol -->
     <!-- # Number: 0 - None, 1 - DES, 2 - AES. Default is 0 -->
     <!-- # Mandatory -->
     <P21907>0</P21907>
@@ -5307,6 +3149,7 @@
     <!-- # Mandatory -->
     <P21916>0</P21916>
 
+
     <!-- # Trap Authentication Protocol -->
     <!-- # Number: 0 - None, 1 - MD5, 2 - SHA. Default is 0 -->
     <!-- # Mandatory -->
@@ -5326,323 +3169,15 @@
     <P21915></P21915>
 
     <!-- ############################################################################## -->
-    <!-- ## Network/WiFi Settings          GRP2614/GRP2615           ## -->
-    <!-- ############################################################################## -->
-    <!-- # Enable/Disable WiFi -->
-    <!-- # Number: 0 - No, 2 - Off & Hide Menu From LCD, 1 - Yes. Default is 0 -->
-    <P7800>0</P7800>
-
-    <!-- # Access Point 1 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8403></P8403>
-
-    <!-- # Access Point 1 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8404></P8404>
-
-    <!-- # Access Point 1 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8405>4</P8405>
-
-    <!-- # Access Point 1 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22020>0</P22020>
-
-    <!-- # Access Point 1 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22021></P22021>
-
-    <!-- # Access Point 1 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22022></P22022>
-
-    <!-- # Access Point 2 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8406></P8406>
-
-    <!-- # Access Point 2 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8407></P8407>
-
-    <!-- # Access Point 2 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8408>4</P8408>
-
-    <!-- # Access Point 2 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22135>0</P22135>
-
-    <!-- # Access Point 2 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22136></P22136>
-
-    <!-- # Access Point 2 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22137></P22137>
-
-    <!-- # Access Point 3 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8409></P8409>
-
-    <!-- # Access Point 3 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8410></P8410>
-
-    <!-- # Access Point 3 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8411>4</P8411>
-
-    <!-- # Access Point 3 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22138>0</P22138>
-
-    <!-- # Access Point 3 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22139></P22139>
-
-    <!-- # Access Point 3 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22140></P22140>
-
-    <!-- # Access Point 4 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8412></P8412>
-
-    <!-- # Access Point 4 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8413></P8413>
-
-    <!-- # Access Point 4 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8414>4</P8414>
-
-    <!-- # Access Point 4 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22141>0</P22141>
-
-    <!-- # Access Point 4 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22142></P22142>
-
-    <!-- # Access Point 4 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22143></P22143>
-
-    <!-- # Access Point 5 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8415></P8415>
-
-    <!-- # Access Point 5 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8416></P8416>
-
-    <!-- # Access Point 5 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8417>4</P8417>
-
-    <!-- # Access Point 5 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22144>0</P22144>
-
-    <!-- # Access Point 5 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22145></P22145>
-
-    <!-- # Access Point 5 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22146></P22146>
-
-    <!-- # Access Point 6 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8418></P8418>
-
-    <!-- # Access Point 6 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8419></P8419>
-
-    <!-- # Access Point 6 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8420>4</P8420>
-
-    <!-- # Access Point 6 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22147>0</P22147>
-
-    <!-- # Access Point 6 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22148></P22148>
-
-    <!-- # Access Point 6 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22149></P22149>
-
-    <!-- # Access Point 7 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8421></P8421>
-
-    <!-- # Access Point 7 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8422></P8422>
-
-    <!-- # Access Point 7 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8423>4</P8423>
-
-    <!-- # Access Point 7 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22150>0</P22150>
-
-    <!-- # Access Point 7 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22151></P22151>
-
-    <!-- # Access Point 7 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22152></P22152>
-
-    <!-- # Access Point 8 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8424></P8424>
-
-    <!-- # Access Point 8 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8425></P8425>
-
-    <!-- # Access Point 8 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8426>4</P8426>
-
-    <!-- # Access Point 8 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22153>0</P22153>
-
-    <!-- # Access Point 8 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22154></P22154>
-
-    <!-- # Access Point 8 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22155></P22155>
-
-    <!-- # Access Point 9 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8427></P8427>
-
-    <!-- # Access Point 9 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8428></P8428>
-
-    <!-- # Access Point 9 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8429>4</P8429>
-
-    <!-- # Access Point 9 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <P22156>0</P22156>
-
-    <!-- # Access Point 9 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22157></P22157>
-
-    <!-- # Access Point 9 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22158></P22158>
-
-    <!-- # Access Point 10 -->
-    <!-- # SSID -->
-    <!-- # String -->
-    <P8430></P8430>
-
-    <!-- # Access Point 10 -->
-    <!-- # Password -->
-    <!-- # String -->
-    <P8431></P8431>
-
-    <!-- # Access Point 10 -->
-    <!-- # Security Type -->
-    <!-- # Number: 0 - None, 1 - WEP, 4 - WPA/WPA2 PSK, 5 - WPA/WPA2 EAP, 8 - Auto. Default is 4 -->
-    <P8432>4</P8432>
-
-    <!-- # Access Point 10 -->
-    <!-- # EAP Method -->
-    <!-- # Number: 0 - None, 25 - PEAP, 13 - TLS, 21 - TTLS, 52 - PWD, 18 - SIM, 23 - AKA, 50 - AKA'. Default is 0 -->
-    <!-- # P22159 = 0 -->
-
-    <!-- # Access Point 10 -->
-    <!-- # EAP Identity -->
-    <!-- # String -->
-    <P22160></P22160>
-
-    <!-- # Access Point 10 -->
-    <!-- # EAP Password -->
-    <!-- # String -->
-    <P22161></P22161>
-    <!-- ############################################################################## -->
     <!-- ##  Maintenance/ Web Access     ## -->
     <!-- ############################################################################## -->
 
     <!-- # End User Password -->
     <!-- # String: a-z, A-Z, 0-9 -->
-    <!-- # P196 = -->
     <P196>{$user_password}</P196>
-    <!-- # Admin Password for web interface -->
-    <!-- # String: a-z, A-Z, 0-9 -->
-    <!-- # P2 =  -->
 
+    <!-- # Admin password for web interface -->
+    <!-- # String: a-z, A-Z, 0-9 -->
 {if isset($admin_password)}
     <P2>{$admin_password}</P2>
 {else}
@@ -5666,15 +3201,11 @@
     <!-- # Mandatory -->
     <P20713>0</P20713>
 
-    <!-- # Validate Hostname in Certificate. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P22030>0</P22030>
-
     <!-- # Allow DHCP Option 43 and Option 66 to override server. 0 - No, 1 - Yes, 2 - Prefer, fallback when failed. Default is 1 -->
     <!-- # When set to Yes(1), it will override the configured provision path and method -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
-    <P145>1</P145>
+    <P145>0</P145>
 
     <!-- # Additional Override DHCP Option. 0 - None,  1 - Option 150,  2 - Option 160. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
@@ -5690,7 +3221,7 @@
     <!-- # 3CX Auto Provision. 0 - No, 1 - Yes. Default is Yes -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P1414>1</P1414>
+    <P1414>0</P1414>
 
     <!-- # Automatic Upgrade.  -->
     <!-- # 0 - No,  -->
@@ -5707,22 +3238,22 @@
     <!-- # Mandatory -->
     <P193>10080</P193>
 
-    <!-- # Randomized Automatic Upgrade. 0 - No, 1 - Yes. Default is No -->
+    <!-- # Radomized Automitic Upgrade. 0 - No, 1 - Yes. Default is No -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P8458>0</P8458>
+    <P8458>1</P8458>
 
-    <!-- # Hour of the Day-Start (0-23). Default is 1 -->
+    <!-- # Hour of the Day ~~ Start (0-23). Default is 1 -->
     <!-- # Number: 0 - 23 -->
-    <P285>1</P285>
+    <P285>0</P285>
 
-    <!-- # Hour of the Day-End (-1, 0-23). Default is 0 -->
+    <!-- # Hour of the Day ~~ End (-1, 0-23). Default is 0 -->
     <!-- # Number: -1, 0 - 23 -->
     <P8459>0</P8459>
 
     <!-- # Day of the Week (0-6). Default is 1 -->
     <!-- # Number: 0-6 -->
-    <P286>1</P286>
+    <P286>0</P286>
 
     <!-- # Disable SIP NOTIFY Authentication. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0,1 -->
@@ -5732,10 +3263,10 @@
     <!-- # Firmware Upgrade Confirmation. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0,1 -->
     <!-- # Mandatory -->
-    <P8375>1</P8375>
+    <P8375>0</P8375>
 
-    <!-- # Config -->
-    <!-- # Config Upgrade Via. 0 - TFTP,  1 - HTTP, 2 - HTTPS, 3 - FTP, 4 - FTPS. Default is 1. Default is 2 -->
+    <!-- #Config -->
+    <!-- # Config Via. 0 - TFTP,  1 - HTTP, 2 - HTTPS, 3 - FTP, 4 - FTPS. Default is 1. Default is 2 -->
     <!-- # Number: 0, 1, 2, 3, 4 -->
     <!-- # Mandatory -->
     <P212>2</P212>
@@ -5750,13 +3281,13 @@
     <P237>{$domain_name}{$project_path}/app/provision</P237>
 {/if}
 
-    <!-- # Config HTTP/HTTPS User Name -->
-    <!-- # String -->
-    <P1360>{$http_auth_username}</P1360>
+<!-- # Config HTTP/HTTPS User Name -->
+<!-- # String -->
+<P1360>{$http_auth_username}</P1360>
 
-    <!-- # Config HTTP/HTTPS Password -->
-    <!-- # String -->
-    <P1361>{$http_auth_password}</P1361>
+<!-- # Config HTTP/HTTPS Password -->
+<!-- # String -->
+<P1361>{$http_auth_password}</P1361>
 
     <!-- # Config File Prefix -->
     <!-- # String -->
@@ -5801,7 +3332,7 @@
     <P192>{$domain_name}{$project_path}/app/provision/resources/firmware/</P192>
 {/if}
 
-    <!-- # Firmware HTTP/HTTPS Username -->
+    <!-- # Firmware HTTP/HTTPS User Name -->
     <!-- # String -->
     <P6768></P6768>
 
@@ -5842,7 +3373,7 @@
     <!-- # String -->
     <P22129></P22129>
 
-    <!-- # Send SIP Log. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Send SIP Log. 0 - Do not send SIP log in Syslog, 1 - Send SIP log in Syslog if configured and set to DEBUG level. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
 {if isset($grandstream_send_sip_log)}
@@ -5851,37 +3382,60 @@
     <P1387>0</P1387>
 {/if}
 
-    <!-- # Show Network Warning Message. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Show Internet Down Message. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P8370>0</P8370>
 
-    <!-- # Auto Recover from Abnormal. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Auto recover from abnormal. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P1438>1</P1438>
 
-    <!-- # USB Console Log. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- ############################################################################## -->
+    <!-- ##  Maintenance/Language -->
+    <!-- ############################################################################## -->
+    <!-- # Display Language. Default is Auto -->
+    <!-- # ar - Arabic, cz - Czech, de - Deutsh -->
+    <!-- # en - English, es - Spanish, fr - Francais -->
+    <!-- # he - Hebrew, hr - Hrvatski, hu - Magyar  -->
+    <!-- # it - Italiano, ja - japanese, ko - korean, lv - latvian -->
+    <!-- # nl - Dutch, pl - Polski, pt - Portugue -->
+    <!-- # ru - Russian, sl - Slovenian, se - Svenska, tr - Turkish -->
+    <!-- # zh-tw - traditional chinese, zh - simplified chinese, auto - Automatic -->
+    <!-- # gxp - Downloaded Language -->
+    <!-- # String -->
+    <!-- # Mandatory -->
+    <P1362>Auto</P1362>
+
+    <!-- # Default Input Selection. Default is Multi-Tap. -->
+    <!-- # 0 - Multi-Tap, 1 - Shiftable -->
+    <P2920>0</P2920>
+
+    <!-- # Auto language download. 1 - Yes, 0 - No. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P2922>0</P2922>
+    <P2961>0</P2961>
 
     <!-- ############################################################################## -->
     <!-- ##  Maintenance/TR-069 -->
     <!-- ############################################################################## -->
     <!-- # ACS URL -->
     <!-- # String -->
-    <!-- # P4503 = https://acs.gdms.cloud -->
+    <!-- # P4503 = -->
+    <P4503>https://acs.gdms.cloud</P4503>
+    
 
     <!-- # TR-069 Username -->
     <!-- # String -->
     <P4504></P4504>
+    
 
     <!-- # TR-069 Password -->
     <!-- # String -->
     <P4505></P4505>
 
-    <!-- # Periodic Inform Enable. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Periodic Inform Enable. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P4506>0</P4506>
@@ -5892,7 +3446,7 @@
 
     <!-- # Connection Request Username	 -->
     <!-- # String: a-z, A-Z, 0-9 -->
-    <P4511></P4511>
+    <P4511>{$mac|replace:'-':''}</P4511>
 
     <!-- # Connection Request Password	 -->
     <!-- # String: a-z, A-Z, 0-9 -->
@@ -5921,11 +3475,7 @@
     <!-- # Configuration Via Keypad Menu. 0 - Unrestricted, 1 - Basic settings only, 2 - Constraint mode, 3 - Locked Mode. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3 -->
     <!-- # Mandatory -->
-    <P1357>0</P1357>
-
-    <!-- # Allow Configure MPK through LCD. 0 - No, 1 - Yes. Default is 1 -->
-    <!-- # Number: 0, 1 -->
-    <P8444>1</P8444>
+    <P1357>2</P1357>
 
     <!-- # Validate Server Certificates. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -5947,9 +3497,9 @@
     <!-- # Web Access Mode. 0 - HTTPS, 1 - HTTP, 2 - Disabled, 3 - Both HTTP and HTTPS. Default is 1 -->
     <!-- # Number: 0, 1, 2, 3 -->
     <!-- # Mandatory -->
-    <P1650>1</P1650>
+    <P1650>0</P1650>
 
-    <!-- # Enable User Web Access. 0 - Disabled, 1 - Enabled. Default is 1 -->
+    <!-- # Enable User Web Access. 0 - Disabled, 1 - Enabled. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P8469>1</P8469>
@@ -5978,14 +3528,34 @@
 
     <!-- # Web Session Attempt Limit -->
     <!-- # Number: 1 - 10. Default is 5 -->
-    <P28117>10</P28117>
+    <P28117>3</P28117>
 
     <!-- ############################################################################## -->
     <!-- ##  Maintenance/Security Settings/Trusted CA Certificates   ## -->
     <!-- ############################################################################## -->
-    <!-- # Load CA Certificates. 0 - Default Certificates, 1 - Custom Certificates, 2 - All Certificates -->
-    <!-- # Number: 0, 1, 2. Default is 0 -->
-    <P8502>0</P8502>
+    <!-- # Trusted CA Certificate 1 -->
+    <!-- # String -->
+    <!-- # P8433 = -->
+
+    <!-- # Trusted CA Certificate 2 -->
+    <!-- # String -->
+    <!-- # P8434 = -->
+
+    <!-- # Trusted CA Certificate 3 -->
+    <!-- # String -->
+    <!-- # P8435 = -->
+
+    <!-- # Trusted CA Certificate 4 -->
+    <!-- # String -->
+    <!-- # P8436 = -->
+
+    <!-- # Trusted CA Certificate 5 -->
+    <!-- # String -->
+    <!-- # P8437 = -->
+
+    <!-- # Trusted CA Certificate 6 -->
+    <!-- # String -->
+    <!-- # P8438 = -->
 
     <!-- ############################################################################## -->
     <!-- ##  Maintenance/Security Settings/Keypad Lock  ## -->
@@ -6016,22 +3586,14 @@
     <!-- ############################################################################## -->
     <!-- ##  Maintenance/Packet Capture       ## -->
     <!-- ############################################################################## -->
-    <!-- # Capture Location. 0 - Internal Storage, 1 - USB. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2999>0</P2999>
 
     <!-- # With RTP Packets. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P6007>0</P6007>
 
-    <!-- # USB Filename -->
-    <!-- # String -->
-    <P6008></P6008>
-
     <!-- ############################################################################## -->
-    <!-- ##  Directory/Phonebook Management -->
+    <!-- ##  Phonebook/Phonebook Management -->
     <!-- ############################################################################## -->
     <!-- # Enable Phonebook XML Download. # 0 - Disabled, 1 - Enabled, use HTTP, 2 - Enabled, use TFTP, 3 - Enabled, use HTTPS. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3 -->
@@ -6041,11 +3603,11 @@
 
     <!-- # HTTP/HTTPS User Name -->
     <!-- # String -->
-    <P6713></P6713>
+    <P6713>{$http_auth_username}</P6713>
 
     <!-- # HTTP/HTTPS Password -->
     <!-- # String -->
-    <P6714></P6714>
+    <P6714>{$http_auth_password}</P6714>
 
     <!-- # Phonebook XML Server Path -->
     <!-- # This is a string of up to 256 characters that should contain a path to the XML file. It MUST be in the host/path format. -->
@@ -6083,23 +3645,13 @@
     <!-- # Mandatory -->
     <P2914>0</P2914>
 
-    <!-- # For GRP2614 only -->
-    <!-- # Phonebook Key Function. 0 - Default, 1 - LDAP Search, 2 - Local Phonebook, 3 - Local Group, 4 - Broadsoft Phonebook -->
-    <!-- # Number: 0, 1, 2, 3, 4. -->
-    <!-- # Mandatory -->
-{if isset($contact_grandstream)}
-    <P1526>2</P1526>
-{else}
-    <P1526>0</P1526>
-{/if}
-
     <!-- # Default search mode. 0 - Quick match, 1 - Exact match. Default is 0 -->
     <!-- # Number: 0, 1. -->
     <!-- # Mandatory -->
     <P2970>0</P2970>
 
     <!-- ############################################################################## -->
-    <!-- ##  Directory/LDAP -->
+    <!-- ##  Phonebook/LDAP -->
     <!-- ############################################################################## -->
     <!-- # LDAP protocol. 0 - LDAP, 1 - LDAPS -->
     <!-- # Number: 0,1 -->
@@ -6108,7 +3660,7 @@
 
     <!-- # LDAP Server Address, up to 256 characters can be used. It can be IP address or Domain name -->
     <!-- # String -->
-    <P8020></P8020>
+    <P8020>{$grandstream_ldap_server}</P8020>
 
     <!-- # LDAP Server Port. Default is 389. -->
     <!-- # Number: 1 - 65535 -->
@@ -6185,21 +3737,24 @@
     <!-- # String -->
     <P8036>givenName sn title</P8036>
 
+    <!-- # Exact Match Search. . 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Mandatory -->
+    <P8505>0</P8505>
 
     <!-- ############################################################################## -->
     <!-- ##  Settings/General Settings -->
     <!-- ############################################################################## -->
-    <!-- # Local RTP Port. Default is 5004 -->
+    <!-- # Local RTP port. Default is 5004 -->
     <!-- # Number: 1024 - 65400. Must be even number -->
     <!-- # Mandatory -->
     <P39>5004</P39>
 
-    <!-- # Local RTP Port Range. Default is 200 -->
+    <!-- # Local RTP port range. Default is 200 -->
     <!-- # Number: 48 - 10000 -->
     <!-- # Mandatory -->
     <P29610>200</P29610>
 
-    <!-- # Use Random Port. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Use Random Port. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P78>1</P78>
@@ -6217,16 +3772,7 @@
     <!-- # String -->
     <P76></P76>
 
-    <!-- # Delay Registration. Default is 0. -->
-    <!-- # Number: 0 - 90 -->
-    <!-- # Mandatory -->
-    <P8359>0</P8359>
-
-    <!-- # Test Password Strength. Default is 0. -->
-    <!-- # Number: 0, 1. 0 - No, 1 - Yes.  -->
-    <P8468>0</P8468>
-
-    <!-- # Enable Public Mode. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Public Mode. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
 {if isset($public_mode) }
@@ -6243,6 +3789,7 @@
     <P1345>0</P1345>
 {/if}
 
+
     <!-- # Enable Fix For RTP Timestamp Jump. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
@@ -6256,29 +3803,14 @@
     <!-- # String -->
     <P8471></P8471>
 
-    <!-- # Enable Remote Synchronization. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P8448>0</P8448>
+    <!-- # Delay Registration. Default is 0. -->
+    <!-- # Number: 0 - 90 -->
+    <!-- # Mandatory -->
+    <P8359>0</P8359>
 
-    <!-- # Server Type. 0 - TFTP, 1 - FTP, 2 - HTTP. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <P8449>0</P8449>
-
-    <!-- # Server Path -->
-    <!-- # String -->
-    <P8450></P8450>
-
-    <!-- # FTP/HTTP User Name -->
-    <!-- # String -->
-    <P8451></P8451>
-
-    <!-- # FTP/HTTP Password -->
-    <!-- # String -->
-    <P8452></P8452>
-
-    <!-- # Enable Outbound Notification. 0 - Disabled, 1 - Enabled. Default is 1. -->
-    <!-- # Number: 0, 1 -->
-    <P32062>1</P32062>
+    <!-- # Test Password Strength. Default is 0. -->
+    <!-- # Number: 0, 1. 0 - No, 1 - Yes.  -->
+    <P8468>0</P8468>
 
     <!-- ############################################################################## -->
     <!-- ##  Settings/Broadsoft -->
@@ -6299,12 +3831,20 @@
     <!-- # String -->
     <P2937></P2937>
 
-    <!-- # Broadsoft Contact Download Interval. Default is 360. If set to 0, automatic download will be disabled. Valid range is 5 to 4320.  -->
+    <!-- # Broadsoft Contact Download Interval. Default is 4320. If set to 0, automatic download will be disabled. Valid range is 5 to 4320.  -->
     <!-- # Number: 5 - 720 -->
     <!-- # Mandatory -->
-    <P8362>360</P8362>
+    <P8362>4320</P8362>
 
-    <!-- # XSI Authentication Type. 0 - Login Credentials, 1 - SIP Credentials, 2 - Account 1, 3 - Account 2, 4 - Account 3, 5 - Account 4, 6 - Account 5.  -->
+    <!-- # Broadsoft Contacts Download Limitation -->
+    <!-- # Number: 0 - 2000. Default is 100 -->
+    <P8464>100</P8464>
+
+    <!-- # Broadsoft Contacts Search Limitation -->
+    <!-- # Number: 0 - 2000. Default is 100 -->
+    <P8465>100</P8465>
+
+    <!-- # XSI Authentication Type. 0 - Login Credentials, 1 - SIP Credentials, 2 - Account 1, 3 - Account 2, 4 - Account 3, 5 - Account 4, 6 - Account 5, 7 - Account 6.  -->
     <!-- # Number: 0,1,2,3,4,5,6,7.Default is 0. -->
     <!-- # Mandatory -->
     <P22054>0</P22054>
@@ -6331,7 +3871,7 @@
     <!-- # String -->
     <P6773></P6773>
 
-    <!-- # Sort Phonebook by. 0 - Last Name, 1 - First Name. Default is 0. -->
+    <!-- # Sort Phonebook by. 0 - Last Name, 1 - First Name. Defaut is 0. -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P22131>0</P22131>
@@ -6420,47 +3960,6 @@
     <P2986></P2986>
 
     <!-- ############################################################################## -->
-    <!-- ##  Broadsoft IM&P  Broadsoft Instant Message and Presence   GRP2614 -->
-    <!-- ############################################################################## -->
-    <!-- # Login Credentials  -->
-    <!-- # Server. -->
-    <!-- # String -->
-    <P6006></P6006>
-
-    <!-- # Port.  -->
-    <!-- # Number. Default is 5222 -->
-    <P6005>5222</P6005>
-
-    <!-- # Username.  -->
-    <!-- # String -->
-    <P2966></P2966>
-
-    <!-- # Password.  -->
-    <!-- # String -->
-    <P2967></P2967>
-
-    <!-- # IM&P Settings  -->
-    <!-- # Broadsoft IM&P. Default is 0. -->
-    <!-- # Number: 0,1. 1 - Enabled, 0 - Disabled -->
-    <!-- # Mandatory -->
-    <P2964>0</P2964>
-
-    <!-- # Associated Broadsoft Account. Default is 0. -->
-    <!-- # Number: 0 - 5 : Account 1 - Account 6 -->
-    <!-- # Mandatory -->
-    <P2965>0</P2965>
-
-    <!-- # Auto Login. Default is 0. -->
-    <!-- # 0 - No, 1 - Yes -->
-    <!-- # Mandatory -->
-    <P2968>0</P2968>
-
-    <!-- # Display Non XMPP Contacts. Default is 0. -->
-    <!-- # 0 - No, 1 - Yes -->
-    <!-- # Mandatory -->
-    <P2969>0</P2969>
-
-    <!-- ############################################################################## -->
     <!-- ##  Settings/External Service -->
     <!-- ############################################################################## -->
     <!-- ##  Grandstream Door System -->
@@ -6473,8 +3972,8 @@
     <P32000>-1</P32000>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32001>0</P32001>
 
@@ -6499,8 +3998,8 @@
     <P32005>-1</P32005>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32006>0</P32006>
 
@@ -6525,8 +4024,8 @@
     <P32010>-1</P32010>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32011>0</P32011>
 
@@ -6551,8 +4050,8 @@
     <P32015>-1</P32015>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32016>0</P32016>
 
@@ -6577,8 +4076,8 @@
     <P32020>-1</P32020>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32021>0</P32021>
 
@@ -6603,8 +4102,8 @@
     <P32025>-1</P32025>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32026>0</P32026>
 
@@ -6629,8 +4128,8 @@
     <P32030>-1</P32030>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32031>0</P32031>
 
@@ -6655,8 +4154,8 @@
     <P32035>-1</P32035>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32036>0</P32036>
 
@@ -6681,8 +4180,8 @@
     <P32040>-1</P32040>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32041>0</P32041>
 
@@ -6707,8 +4206,8 @@
     <P32045>-1</P32045>
 
     <!-- # Account -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P32046>0</P32046>
 
@@ -6728,8 +4227,8 @@
     <!-- ##  Settings/Call Features -->
     <!-- ############################################################################## -->
     <!-- # Preferred Default Account.  -->
-    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # 0 - Account 1, 1 - Account 2, 2 - Account 3.  -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5. Default is 0. -->
     <!-- # Mandatory -->
     <P29612>0</P29612>
 
@@ -6753,7 +4252,7 @@
 
     <!-- # Off-hook Auto Dial Delay -->
     <!-- # Number: 0 - 10 -->
-    <P8388>4</P8388>
+    <P8388>0</P8388>
 
     <!-- # Off-hook Timeout (in seconds). Default is 30 -->
     <!-- # Number: 10 - 60 -->
@@ -6770,10 +4269,6 @@
     <!-- # Mandatory -->
     <P8351>5</P8351>
 
-    <!-- # Last Call Forward All. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P32063>0</P32063>
-
     <!-- # Enable Automatic Redial. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
@@ -6784,10 +4279,10 @@
     <!-- # Mandatory -->
     <P8354>10</P8354>
 
-    <!-- # Automatic Redial Interval. Default is 10 -->
+    <!-- # Automatic Redial Interval. Default is 20 -->
     <!-- # Number -->
     <!-- # Mandatory -->
-    <P8355>10</P8355>
+    <P8355>20</P8355>
 
     <!-- # Bypass Dial Plan Through Call History and Directories. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -6826,7 +4321,7 @@
     <!-- # Disable Direct IP Call. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P1310>0</P1310>
+    <P1310>1</P1310>
 
     <!-- # Use Quick IP call mode. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -6838,6 +4333,11 @@
     <!-- # Mandatory -->
     <P1311>0</P1311>
 
+    <!-- # Only Same Account in Conference. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P8506>0</P8506>
+
     <!-- # Disable in-call DTMF display. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
@@ -6847,6 +4347,11 @@
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P1339>0</P1339>
+
+    <!-- # Disable Active MPK Page. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P6764>0</P6764>
 
     <!-- # Enable Active VPK Page. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -6861,10 +4366,7 @@
     <!-- # Mute Key Functions While Idle. 0 - DND, 1 - Idle Mute, 2 - Disabled. Default is 0 -->
     <!-- # Number: 0,1,2 -->
     <!-- # Mandatory -->
-    <P1565>0</P1565>
-
-    <!-- # Enable Auto Unmute. 0 - No, 1 - Yes. Default is 1 -->
-    <P8488>1</P8488>
+    <P1565>2</P1565>
 
     <!-- # DND Override. 0 - Off, 1 - Allow All, 2 - Allow Only Contacts, 3 - Allow Only Favourites. Default is 0 -->
     <!-- # Number: 0,1,2,3 -->
@@ -6876,11 +4378,11 @@
     <!-- # Mandatory -->
     <P1341>0</P1341>
 
-    <!-- # In-call Dial Number on Pressing Transfer Key -->
+    <!-- # In-call Dial Number on pressing transfer key -->
     <!-- # String -->
     <P1525></P1525>
 
-    <!-- # Attended Transfer Mode. 0 - Static, 1 - Dynamic. Default is 1 -->
+    <!-- # Attended Transfer Mode. 0 - Static, 1 - Dynamic. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
 {if isset($grandstream_auto_attended_transfer)}
@@ -6888,16 +4390,8 @@
 {else}
     <P1376>1</P1376>
 {/if}
-    <!-- # Transfer Mode via VPK. 0 - Blind Transfer, 1 - Attended Transfer, 2 - New Call. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
-    <!-- # Mandatory -->
-    <P8390>0</P8390>
 
-    <!-- # Hold Call In Transfer. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P8466>1</P8466>
-
-    <!-- # Show On Hold Duration. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Show On Hold Duration. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P8503>1</P8503>
@@ -6918,14 +4412,14 @@
     <P6765>0</P6765>
 
     <!-- # Return Code When Refusing Incoming Call. Default is 0 -->
-    <!-- # Number: 0,1,2,3. 0 - Busy(486), 1 - Temporarily Unavailable(480), 2 - Not Found(404), 3 - Decline(603). -->
+    <!-- # Number: 0,1,2,3. 0 - Busy, 1 - Temporarily Unavailable, 2 - Not Found(404), 3 - Decline(603). -->
     <!-- # Mandatory -->
     <P8360>0</P8360>
 
-    <!-- # Return Code When Enable DND. Default is 1 -->
-    <!-- # Number: 0,1,2,3. 0 - Busy(486), 1 - Temporarily Unavailable(480), 2 - Not Found(404), 3 - Decline(603). -->
+    <!-- # Return Code When Enable DND. Default is 0 -->
+    <!-- # Number: 0,1,2,3. 0 - Busy, 1 - Temporarily Unavailable, 2 - Not Found(404), 3 - Decline(603). -->
     <!-- # Mandatory -->
-    <P8361>1</P8361>
+    <P8361>0</P8361>
 
     <!-- # Enable BLF Pickup Screen.  0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -6937,7 +4431,7 @@
     <!-- # Mandatory -->
     <P9906>0</P9906>
 
-    <!-- # BLF Pickup Sound List. 0 - All Except, 1 - Only Allow. Default is 0 -->
+    <!-- # Enable BLF Pickup Sound List. 0 - Except List, 1 - Only List. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P9907>0</P9907>
@@ -6946,22 +4440,16 @@
     <!-- # String -->
     <P9908></P9908>
 
+    <!-- # BLF Pickup Sound Only List. -->
+    <!-- # String -->
+    <P9909></P9909>
+
     <!-- # Local Call Recording Feature. 0 - Disable, 1 - Enable. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P6760>0</P6760>
 
-    <!-- # Saved Local Call Recording Location. 0 - Internal Storage, 1 - USB. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P6761>0</P6761>
-
-    <!-- # Replace the oldest call record. 0 - Disable, 1 - Enable. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P8453>0</P8453>
-
-    <!-- # Enable IM Popup. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Enable IM Popup Timeout. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P8474>1</P8474>
@@ -6985,11 +4473,6 @@
     <!-- # String -->
     <P8358></P8358>
 
-    <!-- # For GRP2614 Only -->
-    <!-- # Auto Provision List Starting Point. 1 - VPK, 2 - MPK. -->
-    <!-- # Mandatory -->
-    <!-- #P8349 = 1 -->
-    <!--   -->
     <!-- # Hide BLF Remote Status. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
@@ -7020,9 +4503,10 @@
     <!-- # Mandatory -->
     <P22175>1</P22175>
 
-    <!-- # Auto Answer Delay -->
-    <!-- # String -->
-    <P8486>0</P8486>
+    <!-- # Enable diversion information display. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P22237>1</P22237>
 
     <!-- ############################################################################## -->
     <!-- ##  Settings/Multicast Paging -->
@@ -7045,7 +4529,7 @@
     <P1567>0</P1567>
 
     <!-- # Multicast Paging Codec. 18 - G.729A/B, 0 - PCMU, 8 - PCMA, 2 - G.726-32, 9 - G.722, 98 - iLBC, 4- G.723.1 -->
-    <!-- # Number: 18, 0, 8, 2, 9, 98, 4. Default is 9. -->
+    <!-- # Number: 18, 0, 8, 2, 9, 98, 4. Default is 0. -->
     <!-- # Mandatory -->
     <P1568>0</P1568>
 
@@ -7054,8 +4538,8 @@
     <P8454>0</P8454>
 
     <!-- # Multicast Sender ID -->
-    <!-- # String -->
-    <P8455></P8455>
+    <!-- # Strings -->
+    <P8455>{$account.1.display_name}</P8455>
 
     <!-- ### Multicast Listening ###  -->
     <!-- # Priority 1 -->
@@ -7186,6 +4670,10 @@
     <!-- # String -->
     <P8312></P8312>
 
+    <!-- # Answered Call -->
+    <!-- # String -->
+    <P22171></P22171>
+
     <!-- # Established Call -->
     <!-- # String  -->
     <P8313></P8313>
@@ -7226,6 +4714,22 @@
     <!-- # String -->
     <P8325></P8325>
 
+    <!-- # Mute Call -->
+    <!-- # String -->
+    <P8326></P8326>
+
+    <!-- # UnMute Call -->
+    <!-- # String -->
+    <P8327></P8327>
+
+    <!-- # IP Change -->
+    <!-- # String -->
+    <P22170></P22170>
+
+    <!-- # Auto-Provision Finish -->
+    <!-- # String -->
+    <P8332></P8332>
+
     <!-- ###################################################################################### -->
     <!-- # Destination -->
     <!-- ###################################################################################### -->
@@ -7245,32 +4749,41 @@
     <!-- # Mandatory -->
     <P1312>0</P1312>
 
+   {if isset ($grandstream_EHS)}
+    <P6779>{$grandstream_EHS}</P6779>
+    <P1487>{$grandstream_EHS}</P1487>
+    {else}
     <!-- # Headset Type. 0 - Normal, 1 - Plantronics EHS. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P1487>0</P1487>
-
-    <!-- # EHS Headset Ringtone. 0 - Normal, 1 - Plantronics EHS. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P6779>0</P6779>
 
-    <!-- # Always Ring Speaker. 0 - No, 1 - Yes, both, 2 - Yes, speaker only. Default is 0 -->
-    <!-- # Number: 0, 1, 2 -->
+    <!-- # EHS Headset Ring Tone. 0 - Normal, 1 - Plantronics EHS. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P1487>0</P1487>
+	{/if}
+    <!-- # Always Ring Speaker. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P1439>0</P1439>
 
-    <!-- # Headset TX gain(dB). 1 - -6, 0 - 0, 2 - +6. Default is 0 -->
+    <!-- # Group Listen with Speaker. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P22163>0</P22163>
+
+    <!-- # Headset TX gain(db). 1 - -6, 0 - 0, 2 - +6. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
     <P1301>0</P1301>
 
-    <!-- # Headset RX gain(dB). 1 - -6, 0 - 0, 2 - +6. Default is 0 -->
+    <!-- # Headset RX gain(db). 1 - -6, 0 - 0, 2 - +6. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
     <P1302>0</P1302>
 
-    <!-- # Handset TX gain(dB). 1 - -6, 0 - 0, 2 - +6. Default is 0 -->
+    <!-- # Handset TX gain(db). 1 - -6, 0 - 0, 2 - +6. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
     <P1464>0</P1464>
@@ -7296,10 +4809,10 @@
 
     <!-- # NTP Update Interval -->
     <!-- # String -->
-    <!-- # Number: 5 - 1440 Default is 1440  -->
+    <!-- # Number: 5 - 1440， Default is 1440  -->
     <P5005>1440</P5005>
 
-    <!-- # Allow DHCP Option 42 to override NTP server. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Allow DHCP Option 42 to override NTP server. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # When set to Yes(1), it will override the configured NTP server -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
@@ -7309,8 +4822,8 @@
 
     <!-- # Web GUI Option										P Value -->
     <!-- # Automatic												auto -->
-    <!-- # GMT-12:00 (International Date Line West)				TAZ+12 -->
-    <!-- # GMT-11:00 (Midway Island, Samoa) 						TAB+11 -->
+    <!-- # GMT-12:00 (International Date Line West)				TZA+12 -->
+    <!-- # GMT-11:00 (Midway Island, Samoa) 						TZB+11 -->
     <!-- # GMT-10:00 (US Hawaiian Time) 							HAW10 -->
     <!-- # GMT-9:00 (US Alaska Time) 							AKST9AKDT -->
     <!-- # GMT-8:00 (US Pacific Time, Los Angeles)				PST8PDT -->
@@ -7326,9 +4839,9 @@
     <!-- # GMT-04:30 (Caracas) 									TZf+4:30 -->
     <!-- # GMT-04:00 (Atlantic Time) 							AST4ADT -->
     <!-- # GMT-04:00 (Atlantic Time (New Brunswick)) 			AST4ADT,M3.2.0,M11.1.0 -->
-    <!-- # GMT-03:30 (Newfoundland Time)							NST+3:30NDT+2:30,M4.1.0/00:01:00,M10.5.0/00:01:00 -->
+    <!-- # GMT-03:30 (Newfoundland Time)							NST+3:30NDT+2:30,M3.2.0/00:01:00,M11.1.0/00:01:00 -->
     <!-- # GMT-03:00 (Greenland) 								TZK+3 -->
-    <!-- # GMT-03:00 (Brazil, Sao Paulo) 						BRST+3BRDT+2,M11.1.0,M2.3.0 -->
+    <!-- # GMT-03:00 (Brazil, Sao Paulo) 						BRST+3BRDT+2,M10.3.0,M2.3.0 -->
     <!-- # GMT-02:00 (Argentina) 								UTC+3  -->
     <!-- # GMT-02:00 (Mid-Atlantic) 								TZL+2 -->
     <!-- # GMT-01:00 (Azores, Cape Verdi Is.) 					TZM+1 -->
@@ -7341,7 +4854,8 @@
     <!-- # GMT+02:00 (Helsinki, Athens, Tallinn) 				EET-2EEST-3,M3.5.0/03:00:00,M10.5.0/04:00:00 -->
     <!-- # GMT+02:00 (Kyiv, Ukraine) 							EET-2EEST,M3.5.0/3,M10.5.0/4  -->
     <!-- # GMT+03:00 (Kuwait, Baghdad, Tehran, Nairobi) 			TZQ-3 -->
-    <!-- # GMT+03:00 (Moscow, Russia) 							MSK-3 -->
+    <!-- # GMT+03:00 (Moscow, Russia) 							MSK-3MSD,M3.5.0/2,M10.5.0/3 -->
+    <!-- # GMT+03:00 (St.Petersburg, Russia) 					MST-3MDT,M3.5.0/2,M10.5.0/3 -->
     <!-- # GMT+04:00 (Abu Dhabi, Baku) 							TZR-4 -->
     <!-- # GMT+05:00 (Islamabad, Ekaterinburg, Karachi, Tashkent)TZS-5 -->
     <!-- # GMT+05:30 (Chennai, New Delhi, Mumbai) 				TZT-5:30 -->
@@ -7355,14 +4869,14 @@
     <!-- # GMT+08:00 (Ulaanbaatar, Mongolia) 					ULAT-8 -->
     <!-- # GMT+08:00 (Perth) 									WST-8 -->
     <!-- # GMT+09:00 (Japan, Korea, Yakutsk) 					TZZ-9 -->
-    <!-- # GMT+09:30 (Adelaide) 									CST-9:30CDT-10:30,M10.1.0/02:00:00,M4.1.0/03:00:00 -->
+    <!-- # GMT+09:30 (Adelaide) 									CST-9:30CDT-10:30,M10.5.0/02:00:00,M3.5.0/03:00:00 -->
     <!-- # GMT+09:30 (Darwin) 									CST-9:30  -->
     <!-- # GMT+10:00 (Guam) 										TZb-10 -->
-    <!-- # GMT+10:00 (Hobart) 									EST-10EDT-11,M10.1.0/02:00:00,M4.1.0/03:00:00 -->
-    <!-- # GMT+10:00 (Sydney, Melbourne, Canberra) 				EST-10EDT-11,M10.1.0/02:00:00,M4.1.0/03:00:00 -->
+    <!-- # GMT+10:00 (Hobart) 									EST-10EDT-11,M10.1.0/02:00:00,M3.5.0/03:00:00 -->
+    <!-- # GMT+10:00 (Sydney, Melbourne, Canberra) 				EST-10EDT-11,M10.5.0/02:00:00,M3.5.0/03:00:00 -->
     <!-- # GMT+10:00 (Brisbane) 									EST-10 -->
     <!-- # GMT+11:00 (Magadan, Solomon Is., New Caledonia) 		TZc-11 -->
-    <!-- # GMT+12:00 (Auckland, Wellington) 						NZST-12NZDT-13,M9.5.0/02:00:00,M4.1.0/03:00:00 -->
+    <!-- # GMT+12:00 (Auckland, Wellington) 						NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00 -->
     <!-- # GMT+12:00 (Fiji) 										TZd-12 -->
     <!-- # GMT+13:00 (Nuku'alofa) 								TZe-13 -->
     <!-- # Self-Defined Time Zone								customize -->
@@ -7377,11 +4891,13 @@
     <P64>auto</P64>
 {/if}
 
-    <!-- # Allow DHCP Option 2 to Override Time Zone Setting -->
+    <!-- # Allow DHCP Option 2 to override Time Zone setting. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # When set to Yes(1), it will override the configured Time Zone setting if available  -->
     <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
     <P143>1</P143>
 
-    <!-- # Self Defined Time Zone. Max length allowed is 64 characters -->
+    <!-- # Self Defined Time zone. Max length allowed is 64 characters -->
     <!-- # String -->
     <!-- # Mandatory -->
     <P246>MTZ+6MDT+5,M4.1.0,M11.1.0</P246>
@@ -7407,31 +4923,6 @@
     <P8387>0</P8387>
 
     <!-- ############################################################################## -->
-    <!-- ##  Settings/Preferences/Language -->
-    <!-- ############################################################################## -->
-    <!-- # Display Language. Default is auto -->
-    <!-- # ar - Arabic, cz - Czech, de - Deutsh -->
-    <!-- # en - English, es - Spanish, fr - Francais -->
-    <!-- # he - Hebrew, hr - Hrvatski, hu - Magyar  -->
-    <!-- # it - Italiano, ja - japanese, ko - korean, lv - latvian -->
-    <!-- # nl - Dutch, pl - Polski, pt - Portugue -->
-    <!-- # ru - Russian, sl - Slovenian, se - Svenska, tr - Turkish -->
-    <!-- # zh-tw - traditional chinese, zh - simplified chinese, auto - Automatic -->
-    <!-- # Downloaded Language -->
-    <!-- # String -->
-    <!-- # Mandatory -->
-    <P1362>auto</P1362>
-
-    <!-- # Default Input Selection. Default is Multi-Tap. -->
-    <!-- # 0 - Multi-Tap, 1 - Shiftable -->
-    <P2920>0</P2920>
-
-    <!-- # Auto language download. 1 - Yes, 0 - No. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <!-- # Mandatory -->
-    <P2961>0</P2961>
-
-    <!-- ############################################################################## -->
     <!-- ##  Settings/Preferences / LCD Display -->
     <!-- ############################################################################## -->
     <!-- # Backlight Brightness. -->
@@ -7453,19 +4944,19 @@
     <!-- # Disable Missed Call Backlight. 0 - No, 1 - Yes, 2 - Yes, but flash MWI LED. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
-    <P351>0</P351>
+    <P351>1</P351>
 
     <!-- # Wallpaper Settings -->
-    <!-- # Wallpaper Source. 0 - Default, 1 - Download, 2-USB(for GXP2140/2160/2170 only), 3 - Uploaded, 4 - Color Background -->
+    <!-- # Wallpaper Source. 0 - Default, 1 - Download, 2-USB, 3 - Uploaded, 4 - Color Background -->
     <!-- # Number: 0-4 -->
     <!-- # Mandatory -->
-    <P2916>0</P2916>
+    <!-- <P2916>1</P2916> -->
 
     <!-- # Wallpaper Server Path -->
     <!-- # String  -->
-{if isset($grandstream_wallpaper_url)}
+{if isset($grandstream2135_wallpaper_url)}
     <P2916>1</P2916>
-    <P2917>{$grandstream_wallpaper_url}</P2917>
+    <P2917>{$grandstream2135_wallpaper_url}</P2917>
 {else}
     <P2916>0</P2916>
     <P2917></P2917>
@@ -7528,21 +5019,6 @@
 {else}
     <P935>0</P935>
 {/if}
-    <!-- ############################################################################## -->
-    <!-- ##  For GRP2614 Only -->
-    <!-- ##  Settings/Preferences / MPK LCD Settings -->
-    <!-- ############################################################################## -->
-    <!-- # MPK LCD Display Order. 0 - Sequential, 1 - Alternating. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P8456>0</P8456>
-
-    <!-- # Display Contact on MPK LCD. 0 - No, 1 - Yes. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P8461>0</P8461>
-
-    <!-- # Wallpaper Source for MPK LCD. 0 - Default, 3 - Uploaded. Default is 0 -->
-    <!-- # Number: 0, 3 -->
-    <P2938>0</P2938>
 
     <!-- ############################################################################## -->
     <!-- ##  Settings/Preferences / LED Control -->
@@ -7557,6 +5033,7 @@
     <!-- # Mandatory -->
     <P8371>0</P8371>
 
+
     <!-- ############################################################################## -->
     <!-- ##  Settings/Preferences / Ring Tone -->
     <!-- ############################################################################## -->
@@ -7565,10 +5042,10 @@
     <!-- # Syntax: f1=val,f2=val[,c=on1/off1[-on2/off2[-on3/off3]]];  -->
     <!-- # (Frequencies are in Hz and cadence on and off are in 10ms)  -->
 
-    <!-- # System Ringtone -->
+    <!-- # System Ring Tone -->
     <!-- # String -->
     <!-- # Mandatory -->
-    <P345>f1=440,f2=480,c=200/400;</P345>
+    <P345>f1=500,f2=540,c=20/20-80/400;</P345>
 
     <!-- # Dial Tone -->
     <!-- # String -->
@@ -7580,7 +5057,7 @@
     <!-- # Mandatory -->
     <P2909>f1=350,f2=440;</P2909>
 
-    <!-- # Message Waiting -->
+    <!-- # Message Waiting Tone -->
     <!-- # String -->
     <!-- # Mandatory -->
     <P344>f1=350,f2=440,c=10/10;</P344>
@@ -7620,8 +5097,8 @@
     <!-- # Mandatory -->
     <P8399>5</P8399>
 
-    <!-- # Lock Speaker Volume. 0 - No, 1 - Ring, 2 - Talk, 3 - Both. Default is 0 -->
-    <!-- # Number: 0, 1, 2, 3 -->
+    <!-- # Lock Volumne. 0 - No, 1 - Yes. Default is 0 -->
+    <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P8392>0</P8392>
 
@@ -7636,7 +5113,6 @@
     <!-- ############################################################################## -->
     <!-- ##  Settings/Web Service -->
     <!-- ############################################################################## -->
-    <!-- # Weather Update -->
 
     <!-- # Use Auto Location Service. 0 - No, 1 - Yes. Default is 1 -->
     <!-- # Number: 0, 1 -->
@@ -7664,79 +5140,47 @@
     <P8368>0</P8368>
 
     <!-- ############################################################################## -->
-    <!-- ##  Settings/Voice Monitoring -->
-    <!-- ############################################################################## -->
-    <!-- # VQ RTCP-XR Session Report. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Numbero 0, 1 -->
-    <P8489>0</P8489>
-
-    <!-- # VQ RTCP-XR Interval Report. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Numbero 0, 1 -->
-    <P8490>0</P8490>
-
-    <!-- # VQ RTCP-XR Interval Report Period. 1 - 5, 2 - 10, 3 - 15, 4 - 20. Default is 4 -->
-    <!-- # Numbero 1, 2, 3, 4 -->
-    <P8491>4</P8491>
-
-    <!-- # Warning Threshold for Moslq -->
-    <!-- # String -->
-    <P8492>0</P8492>
-
-    <!-- # Critical Threshold for Moslq -->
-    <!-- # String -->
-    <P8493>0</P8493>
-
-    <!-- # Warning Threshold for Delay -->
-    <!-- # String -->
-    <P8494>0</P8494>
-
-    <!-- # Critical Threshold for Delay -->
-    <!-- # String -->
-    <P8495>0</P8495>
-
-    <!-- # Display Report on Web UI. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P8496>0</P8496>
-
-    <!-- # Display Report on LCD. 0 - Disabled, 1 - Enabled. Default is 0 -->
-    <!-- # Number: 0, 1 -->
-    <P8497>0</P8497>
-
-    <!-- # Custom Display Layout on LCD -->
-    <!-- # String -->
-    <P8507>StartTime,StopTime,LocalUser,RemoteUser,LocalIP,RemoteIP,LocalCodec,RemoteCodec,Jitter,JitterBufferMax,PacketLost,PacketLostRate,MosLQ,MosCQ,RoundTripDelay,EndSysDelay,SymmOneWayDelay</P8507>
-
-    <!-- ############################################################################## -->
     <!-- ##  Settings/Programmable Keys -->
     <!-- ############################################################################## -->
     <!-- ############################################################################## -->
     <!-- ##  Settings/Programmable Keys / Virtual Multi-Purpose Keys Settings -->
     <!-- ############################################################################## -->
-    <!-- # Use Long Label. 0 - No, 1 - Yes. Default is 1 -->
+
+    <!-- # Use Long Label. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P8346>1</P8346>
+    <P8346>0</P8346>
 
     <!-- # Call Screen Settings -->
-    <!-- # Key Mode. 1 - Line Mode, 2 - Account Mode. Default is 2 -->
+    <!-- # Key Mode. 1 - Line Mode, 2 - Account Mode. Default is 1 -->
     <!-- # Number: 1, 2 -->
     <!-- # Mandatory -->
-    <P8369>2</P8369>
+    <P8369>1</P8369>
 
     <!-- # Transfer Mode via VPK. 0 - Blind Transfer, 1 - Attended Transfer, 2 - New Call. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
-    <!-- #P8390 = 0 -->
+    <P8390>0</P8390>
 
     <!-- # Enable transfer via non-Transfer MPK. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
     <P22162>0</P22162>
 
+    <!-- # Show VPK Icon. 0 - No, 1 - Yes. Default is 0  -->
+    <!-- # Number: 0, 1 -->
+    <!-- # Mandatory -->
+    <P2936>0</P2936>
+
     <!-- # Show Keys Label. 1 - Show, 2 - Hide, 0 - Toggle. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->
     <!-- # Mandatory -->
-    <P8386>1</P8386>
+    <P8386>0</P8386>
+
+    <!-- # Show VPK shared line display description (This only can be done with provisioning) -->
+    <!-- # Number: 0, 1. 0 - No, 1 - Yes. Default is 1 -->
+    <!-- # Mandatory -->
+    <P8484>1</P8484>
 
     <!-- ############################################################################## -->
     <!-- ##  Settings/Programmable Keys/Virtual Multi-Purpose Keys -->
@@ -7744,45 +5188,39 @@
     <!-- ###################################################################################### -->
     <!-- # Virtual Multi-Purpose Keys (VPKs) -->
     <!-- # Note: 1. Fixed VPKs can only be edited. Adding or deleting Fixed VPK is not allowed. -->
-    <!-- #       2. Even if a Dynamic VPK has mode set to None, it should be added in sequence. Skipping one will remove everything after that VPK.  -->
+    <!-- #          2. Even if a Dynamic VPK has mode set to None, it should be added in sequence. Skipping one will remove everything after that VPK.  -->
     <!-- ###################################################################################### -->
 
     <!-- ###################################################################################### -->
-    <!-- ############################ For GRP2615       ########################################### -->
+    <!-- ############################               ########################################### -->
     <!-- ###################################################################################### -->
     <!-- # VPK 1~~ fixed VPK  -->
     <!-- ###################################################################################### -->
-    <!-- # Key Mode for line VPK. Default is 31. -->
+    <!-- # Key Mode for line VPK. Default  is 0. -->
     <!-- # Number: -1, 0, 1, 10 ~~ 36 -->
-    <!-- # None (-1), SpeedDial (0), BLF (1), PresenceWatcher (2), EventlistBLF (3), SpeedDialViaActiveAccount (4) -->
-    <!-- # DialDTMF (5), VoiceMail (6), CallReturn (7), Transfer (8), CallPark (9), Intercom (10), LDAPSearch (11) -->
-    <!-- # Conference (12), MulticastPaging (13), Record (14), CallLog (15), MonitoredCallPark (16), Menu (17) -->
-    <!-- # XMLApplication (18), Information (19), Message (20), Forward (21), DND (22), Redial (23), InstantMessages (24) -->
-    <!-- # MulticastListenAddress (25), KeypadLock (26), GDSOpenDoor (27), EventListPresence (28), Provision (29) -->
-    <!-- # AutoBLF (30), Default (31), SharedLine (32) -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, default or line, sharedline, speeddial, blf, presencewatcher, eventlistblf, speeddialaa, dialdtmf -->
-    <!-- # voicemail, callreturn, transfer, callpark, intercom, ldapsearch, conference, multicastpaging -->
-    <!-- # record, calllog, monitoredcp, moniteredcp(backward compatible version), menu, xmlapp, information, message, forward, dnd -->
-    <!-- # redial, instantmessage, multicastlistenaddress, keypadlock, gdsopendoor, presenceeventlist, provision -->
-    <!-- # P1363 = 31 -->
+    <!-- # -1 - None, 0 - Default, 1 - shared line, 10 - Speed Dial, 11 - BLF, 12 - Presence Watcher -->
+    <!-- # 13 - Eventlist BLF, 14 - Speed Dial via active account, 15 - DialDTMF -->
+    <!-- # 16 - Voicemail, 17 - Call Return, 18 - Transfer, 19 - CallPark, 20 - Intercom -->
+    <!-- # 21 - LDAP Search, 22 - Conference, 23 - Multicast Paging, 24 - Record, 25 - Call Log -->
+    <!-- # 26 - Monitored Call Park, 27 - Menu 28-XML Application,29-Information, 30-Message -->
+    <!-- # 31 - Forward, 32 - DND, 33 - Redial, 34 - Instant Messages, 35 - Multicast Listen Address, 36 - Keypad Lock -->
+    <!-- # Mandatory -->
+    <!-- # P1363 = 0 -->
 
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 0. -->
+    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3 -->
+    <!-- # Number: 0, 1, 2. Default is 0. -->
     <!-- # Mandatory -->
     <!-- # P1364 = 0 -->
 
     <!-- Set $fixed_keys variable below and the rest should work -->
-    <!-- detect with $template == grandstream/grp26xx  2612=3fixed 2613=4fixed 2614=6fixed 2615=12fixed -->
+    <!-- detect with $template == grandstream/gxp21xx  2130=3fixed 2140=4fixed 2160=6fixed 2170=12fixed 2135=8fixed -->
 
-{$fixed_keys=10}
-{if $template == "grandstream/grp2612"}{$fixed_keys=3}{/if}
-{if $template == "grandstream/grp2613"}{$fixed_keys=4}{/if}
-{if $template == "grandstream/grp2614"}{$fixed_keys=6}{/if}
-{if $template == "grandstream/grp2615"}{$fixed_keys=10}{/if}
+{$fixed_keys=3}
+
+
 <!-- Detected {$template} with {$fixed_keys} fixed keys -->
 {$start_id=1363}
-{assign var=key_types value=["none"=>-1,"line"=>31,"sharedline"=>32,"speeddial"=>0, "blf"=>1, "presence watcher"=>2, "eventlist blf"=>3,"speed dial active"=>4,"dial dtmf"=>5,"voicemail"=>6,"call return"=>7,"transfer"=>8,"call park"=>9,"intercom"=>10,"ldap search"=>11,"multicast paging"=>13,"record"=>14,"call log"=>15,"monitored call park"=>16,"menu"=>17,"dnd"=>22]}
+{assign var=key_types value=["none"=>-1,"line"=>31,"shared line"=>32,"speed dial"=>0, "blf"=>1, "presence watcher"=>2, "eventlist blf"=>3,"speed dial active"=>4,"dial dtmf"=>5,"voicemail"=>6,"call return"=>7,"transfer"=>8,"call park"=>9,"intercom"=>10,"ldap search"=>11,"multicast paging"=>13,"record"=>14,"call log"=>15,"monitored call park"=>16,"menu"=>17]}
 
 {for $line=1 to 6}
 {$pid=$line*2-2}
@@ -7790,7 +5228,7 @@
 {if $line <= $fixed_keys}
 <P{$start_id+$pid}>{$key_types[$keys.line.$line.device_key_type]}</P{$start_id+$pid}>
 {else}
-<P{$start_id+$pid}>{$key_types[$keys.line.$line.device_key_type]-10}</P{$start_id+$pid}>
+<P{$start_id+$pid}>{$key_types[$keys.line.$line.device_key_type]}</P{$start_id+$pid}>
 {/if}
 <P{$start_id+$pid+1}>{$keys.line.$line.device_key_line}</P{$start_id+$pid+1}>
 <P{$start_id+$pid+102}>{$keys.line.$line.device_key_label}</P{$start_id+$pid+102}>
@@ -7810,13 +5248,13 @@
 
 <!-- line 7 to 48 are sequential starting at 23800 in groups of 4 -->
 {$start_id=23800}
-{for $line=7 to 48}
+{for $line=7 to 16}
 {$pid=($line-6)*4-4}
 {if isset($keys.line.$line.device_key_category) && isset($keys.line.$line.device_key_type) && isset($key_types[$keys.line.$line.device_key_type])}
 {if $line <= $fixed_keys}
 <P{$start_id+$pid}>{$key_types[$keys.line.$line.device_key_type]}</P{$start_id+$pid}>
 {else}
-<P{$start_id+$pid}>{$key_types[$keys.line.$line.device_key_type]-10}</P{$start_id+$pid}>
+<P{$start_id+$pid}>{$key_types[$keys.line.$line.device_key_type]}</P{$start_id+$pid}>
 {/if}
 <P{$start_id+$pid+1}>{$keys.line.$line.device_key_line}</P{$start_id+$pid+1}>
 <P{$start_id+$pid+2}>{$keys.line.$line.device_key_label}</P{$start_id+$pid+2}>
@@ -7833,273 +5271,6 @@
 {/if}
 
 {/for}
-    
-    <!-- # Description. Max length allowed is 32 characters. -->
-    <!-- # String -->
-    <!-- # P1465 = -->
-
-    <!-- # Value. Max length allowed is 64 characters. -->
-    <!-- # String -->
-    <!-- # P1466 =  -->
-
-    <!-- # Locked: 0 - uncheck, 1 - check. Default is 0 -->
-    <!-- # Mandatory -->
-    <!-- # Number: 0, 1 -->
-    <!-- # P23968 = 0 -->
-
-    <!-- ###################################################################################### -->
-    <!-- # VPK 2~~ fixed VPK  -->
-    <!-- ###################################################################################### -->
-    <!-- # Key Mode for line VPK. Default is 31. -->
-    <!-- # Number: -1 - 32 -->
-    <!-- # None (-1), SpeedDial (0), BLF (1), PresenceWatcher (2), EventlistBLF (3), SpeedDialViaActiveAccount (4) -->
-    <!-- # DialDTMF (5), VoiceMail (6), CallReturn (7), Transfer (8), CallPark (9), Intercom (10), LDAPSearch (11) -->
-    <!-- # Conference (12), MulticastPaging (13), Record (14), CallLog (15), MonitoredCallPark (16), Menu (17) -->
-    <!-- # XMLApplication (18), Information (19), Message (20), Forward (21), DND (22), Redial (23), InstantMessages (24) -->
-    <!-- # MulticastListenAddress (25), KeypadLock (26), GDSOpenDoor (27), EventListPresence (28), Provision (29) -->
-    <!-- # AutoBLF (30), Default (31), SharedLine (32) -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, default or line, sharedline, speeddial, blf, presencewatcher, eventlistblf, speeddialaa, dialdtmf -->
-    <!-- # voicemail, callreturn, transfer, callpark, intercom, ldapsearch, conference, multicastpaging -->
-    <!-- # record, calllog, monitoredcp, moniteredcp(backward compatible version), menu, xmlapp, information, message, forward, dnd -->
-    <!-- # redial, instantmessage, multicastlistenaddress, keypadlock, gdsopendoor, presenceeventlist, provision -->
-    <!-- # P1365 = 31 -->
-
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3, 4. Default is 1. -->
-    <!-- # Mandatory  -->
-    <!-- # P1366 = 1 -->
-
-    <!-- # Description. Max length allowed is 32 characters. -->
-    <!-- # String -->
-    <!-- # P1467 =  -->
-
-    <!-- # Value. Max length allowed is 64 characters. -->
-    <!-- # String -->
-    <!-- # P1468 = -->
-
-    <!-- # Locked: 0 - uncheck, 1 - check. Default is 0 -->
-    <!-- # Mandatory -->
-    <!-- # Number: 0, 1 -->
-    <!-- # P23969 = 0 -->
-
-
-    <!-- ###################################################################################### -->
-    <!-- ############################ For GRP2614       ########################################### -->
-    <!-- ###################################################################################### -->
-    <!-- # VPK 1- fixed VPK  -->
-    <!-- ###################################################################################### -->
-    <!-- # Key Mode for line VPK. Default is 31. -->
-    <!-- # Number: -1 - 32 -->
-    <!-- # None (-1), SpeedDial (0), BLF (1), PresenceWatcher (2), EventlistBLF (3), SpeedDialViaActiveAccount (4) -->
-    <!-- # DialDTMF (5), VoiceMail (6), CallReturn (7), Transfer (8), CallPark (9), Intercom (10), LDAPSearch (11) -->
-    <!-- # Conference (12), MulticastPaging (13), Record (14), CallLog (15), MonitoredCallPark (16), Menu (17) -->
-    <!-- # XMLApplication (18), Information (19), Message (20), Forward (21), DND (22), Redial (23), InstantMessages (24) -->
-    <!-- # MulticastListenAddress (25), KeypadLock (26), GDSOpenDoor (27), EventListPresence (28), Provision (29) -->
-    <!-- # AutoBLF (30), Default (31), SharedLine (32) -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, default or line, sharedline, speeddial, blf, presencewatcher, eventlistblf, speeddialaa, dialdtmf -->
-    <!-- # voicemail, callreturn, transfer, callpark, intercom, ldapsearch, conference, multicastpaging -->
-    <!-- # record, calllog, monitoredcp, moniteredcp(backward compatible version), menu, xmlapp, information, message, forward, dnd -->
-    <!-- # redial, instantmessage, multicastlistenaddress, keypadlock, gdsopendoor, presenceeventlist, provision -->
-    <!-- # P1363 = 31 -->
-
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4 -->
-    <!-- # Number: 0, 1, 2, 3. Default is 0. -->
-    <!-- # Mandatory -->
-    <!-- # P1364 = 0 -->
-
-    <!-- # Description. Max length allowed is 32 characters. -->
-    <!-- # String -->
-    <!-- # P1465 = -->
-
-    <!-- # Value. Max length allowed is 64 characters. -->
-    <!-- # String -->
-    <!-- # P1466 = -->
-
-    <!-- # Locked: 0 - uncheck, 1 - check. Default is 0 -->
-    <!-- # Mandatory -->
-    <!-- # Number: 0, 1 -->
-    <!-- # P23968 = 0 -->
-
-
-    <!-- ###################################################################################### -->
-    <!-- ############################ For GRP2613       ########################################### -->
-    <!-- ###################################################################################### -->
-    <!-- # VPK 1- fixed VPK  -->
-    <!-- ###################################################################################### -->
-    <!-- # Key Mode for line VPK. Default is 31. -->
-    <!-- # Number: -1 - 32 -->
-    <!-- # None (-1), SpeedDial (0), BLF (1), PresenceWatcher (2), EventlistBLF (3), SpeedDialViaActiveAccount (4) -->
-    <!-- # DialDTMF (5), VoiceMail (6), CallReturn (7), Transfer (8), CallPark (9), Intercom (10), LDAPSearch (11) -->
-    <!-- # Conference (12), MulticastPaging (13), Record (14), CallLog (15), MonitoredCallPark (16), Menu (17) -->
-    <!-- # XMLApplication (18), Information (19), Message (20), Forward (21), DND (22), Redial (23), InstantMessages (24) -->
-    <!-- # MulticastListenAddress (25), KeypadLock (26), GDSOpenDoor (27), EventListPresence (28), Provision (29) -->
-    <!-- # AutoBLF (30), Default (31), SharedLine (32) -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, default, sharedline, speeddial, blf, presencewatcher, eventlistblf, speeddialaa, dialdtmf -->
-    <!-- # voicemail, callreturn, transfer, callpark, intercom, ldapsearch, conference, multicastpaging -->
-    <!-- # record, calllog, monitoredcp, moniteredcp(backward compatible version), menu, xmlapp, information, message, forward, dnd -->
-    <!-- # redial, instantmessage, multicastlistenaddress, keypadlock, gdsopendoor, presenceeventlist, provision -->
-    <!-- # P1363 = 31 -->
-
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3 -->
-    <!-- # Number: 0, 1, 2, 3. Default is 0. -->
-    <!-- # Mandatory -->
-    <!-- # P1364 = 0 -->
-
-    <!-- # Description. Max length allowed is 32 characters. -->
-    <!-- # String -->
-    <!-- # P1465 = -->
-
-    <!-- # Value. Max length allowed is 64 characters. -->
-    <!-- # String -->
-    <!-- # P1466 = -->
-
-    <!-- # Locked: 0 - uncheck, 1 - check. Default is 0 -->
-    <!-- # Mandatory -->
-    <!-- # Number: 0, 1 -->
-    <!-- # P23968 = 0 -->
-
-
-    <!-- ###################################################################################### -->
-    <!-- ## Programmable Keys/Physical Multi-Purpose Keys - GRP2614 only -->
-    <!-- ###################################################################################### -->
-    <!-- # MPK 1 -->
-    <!-- ###################################################################################### -->
-    <!-- # Key Mode. -->
-    <!-- # Number: -1 - 29 -->
-    <!-- # None (-1), SpeedDial (0), BLF (1), PresenceWatcher (2), EventlistBLF (3), SpeedDialViaActiveAccount (4) -->
-    <!-- # DialDTMF (5), VoiceMail (6), CallReturn (7), Transfer (8), CallPark (9), Intercom (10), LDAPSearch (11) -->
-    <!-- # Conference (12), MulticastPaging (13), Record (14), CallLog (15), MonitoredCallPark (16), Menu (17) -->
-    <!-- # XMLApplication (18), Information (19), Message (20), Forward (21), DND (22), Redial (23), InstantMessages (24) -->
-    <!-- # MulticastListenAddress (25), KeypadLock (26), GDSOpenDoor (27), EventListPresence (28), Provision (29) -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, speeddial, blf, presencewatcher, eventlistblf, speeddialaa, dialdtmf -->
-    <!-- # voicemail, callreturn, transfer, callpark, intercom, ldapsearch, conference, multicastpaging -->
-    <!-- # record, calllog, monitoredcp, moniteredcp(backward compatible version), menu, xmlapp, information, message -->
-    <!-- # forward, dnd, redial, instantmessage, multicastlistenaddress, keypadlock, gdsopendoor, presenceeventlist, provision -->
-    <!-- <P323>-1</P323>-->
-
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4 -->
-    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
-    <!-- # Mandatory -->
-    <!-- <P301>0</P301>-->
-
-    <!-- # Name. Max length allowed is 128 characters. -->
-    <!-- # String -->
-    <!-- <P302></P302>-->
-
-    <!-- # User ID.  Max length allowed is 64 characters. -->
-    <!-- # String -->
-    <!-- <P303></P303>-->
-
-
-{assign var=key_types value=["none"=>-1,"speed dial"=>0, "blf"=>1, "presence watcher"=>2, "eventlist blf"=>3,"speed dial active"=>4,"dial dtmf"=>5,"voicemail"=>6,"call return"=>7,"transfer"=>8,"call park"=>9,"intercom"=>10,"ldap search"=>11,"conference"=>12,"multicast paging"=>13,"record"=>14,"call log"=>15,"monitored call park"=>16,"menu"=>17]}
-{$start_id=323}
-{for $mem=1 to 7}
-{$pid=$mem*3-3}
-{if isset($keys.memory.$mem.device_key_category) && isset($keys.memory.$mem.device_key_type) && $keys.memory.$mem.device_key_type|in_array:$key_types}
-
-<!-- # Key Mode. -->
-<!-- # Number: -1 to 20 -->
-<!-- # -1 - None, 0 - Speed Dial, 1 - BLF, 2 - Presence Watcher -->
-<!-- # 3 - Eventlist BLF, 4 - Speed Dial via active account, 5 - DialDTMF -->
-<!-- # 6 - Voice Mail, 7 - Call Return, 8 - Transfer, 9 - Call Park, 10 - Intercom -->
-<!-- # 11 - LDAP Search, 12 - Conference, 13 - Multicast Paging, 14 - Record, 15 - Call Log -->
-<!-- # 16 - Monitored Call Park, 17 - Menu 18- XML Application,19 - Information, 20 - Message -->
-
-<P{$start_id+$mem-1}>{$key_types[$keys.memory.$mem.device_key_type]}</P{$start_id+$mem-1}>
-
-<!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5, 5 - Account 6 -->
-<!-- # Number: 0, 1, 2, 3, 4, 5 -->
-
-<P{$start_id+$pid-22}>{$keys.memory.$mem.device_key_line}</P{$start_id+$pid-22}>
-
-<!-- # Name. Max length allowed is 128 characters. -->
-<!-- # String -->
-
-<P{$start_id+$pid-21}>{$keys.memory.$mem.device_key_label}</P{$start_id+$pid-21}>
-
-<!-- # User ID.  Max length allowed is 64 characters. -->
-<!-- # String -->
-
-<P{$start_id+$pid-20}>{$keys.memory.$mem.device_key_value}</P{$start_id+$pid-20}>
-{else}
-<P{$start_id+$mem-1}>-1</P{$start_id+$mem-1}>
-<P{$start_id+$pid-22}>0</P{$start_id+$pid-22}>
-<P{$start_id+$pid-21}></P{$start_id+$pid-21}>
-<P{$start_id+$pid-20}></P{$start_id+$pid-20}>
-{/if}
-
-{/for}
-
-{$start_id=353}
-{for $mem=8 to 18}
-{$pid=($mem-7)*4-4}
-{if isset($keys.memory.$mem.device_key_category) && isset($keys.memory.$mem.device_key_type) && $keys.line.$line.device_key_type|in_array:$key_types}
-<P{$start_id+$pid}>{$key_types[$keys.memory.$mem.device_key_type]}</P{$start_id+$pid}>
-<P{$start_id+$pid+1}>{$keys.memory.$mem.device_key_line}</P{$start_id+$pid+1}>
-<P{$start_id+$pid+2}>{$keys.memory.$mem.device_key_label}</P{$start_id+$pid+2}>
-<P{$start_id+$pid+3}>{$keys.memory.$mem.device_key_value}</P{$start_id+$pid+3}>
-{else}
-<P{$start_id+$pid}>-1</P{$start_id+$pid}>
-<P{$start_id+$pid+1}>0</P{$start_id+$pid+1}>
-<P{$start_id+$pid+2}></P{$start_id+$pid+2}>
-<P{$start_id+$pid+3}></P{$start_id+$pid+3}>
-{/if}
-
-{/for}
-
-
-{$start_id=1440}
-{for $mem=19 to 24}
-{$pid=($mem-18)*4-4}
-{if isset($keys.memory.$mem.device_key_category) && isset($keys.memory.$mem.device_key_type) && $keys.line.$line.device_key_type|in_array:$key_types}
-<P{$start_id+$pid}>{$key_types[$keys.memory.$mem.device_key_type]}</P{$start_id+$pid}>
-<P{$start_id+$pid+1}>{$keys.memory.$mem.device_key_line}</P{$start_id+$pid+1}>
-<P{$start_id+$pid+2}>{$keys.memory.$mem.device_key_label}</P{$start_id+$pid+2}>
-<P{$start_id+$pid+3}>{$keys.memory.$mem.device_key_value}</P{$start_id+$pid+3}>
-{else}
-<P{$start_id+$pid}>-1</P{$start_id+$pid}>
-<P{$start_id+$pid+1}>0</P{$start_id+$pid+1}>
-<P{$start_id+$pid+2}></P{$start_id+$pid+2}>
-<P{$start_id+$pid+3}></P{$start_id+$pid+3}>
-{/if}
-
-{/for}
-
-
-
-    <!-- ###################################################################################### -->
-    <!-- # MPK 24 -->
-    <!-- ###################################################################################### -->
-    <!-- # Key Mode. -->
-    <!-- # Number: -1 - 29 -->
-    <!-- # None (-1), SpeedDial (0), BLF (1), PresenceWatcher (2), EventlistBLF (3), SpeedDialViaActiveAccount (4) -->
-    <!-- # DialDTMF (5), VoiceMail (6), CallReturn (7), Transfer (8), CallPark (9), Intercom (10), LDAPSearch (11) -->
-    <!-- # Conference (12), MulticastPaging (13), Record (14), CallLog (15), MonitoredCallPark (16), Menu (17) -->
-    <!-- # XMLApplication (18), Information (19), Message (20), Forward (21), DND (22), Redial (23), InstantMessages (24) -->
-    <!-- # MulticastListenAddress (25), KeypadLock (26), GDSOpenDoor (27), EventListPresence (28), Provision (29) -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, speeddial, blf, presencewatcher, eventlistblf, speeddialaa, dialdtmf -->
-    <!-- # voicemail, callreturn, transfer, callpark, intercom, ldapsearch, conference, multicastpaging -->
-    <!-- # record, calllog, monitoredcp, moniteredcp(backward compatible version), menu, xmlapp, information, message -->
-    <!-- # forward, dnd, redial, instantmessage, multicastlistenaddress, keypadlock, gdsopendoor, presenceeventlist, provision -->
-    <!-- <P1460>-1</P1460> -->
-
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4 -->
-    <!-- # Number: 0, 1, 2, 3 -->
-    <!-- # Mandatory -->
-    <!-- <P1461>0</P1461> -->
-
-    <!-- # Name. Max length allowed is 128 characters. -->
-    <!-- # String -->
-    <!-- <P1462></P1462> -->
-
-    <!-- # User ID. Max length allowed is 64 character -->
-    <!-- # String -->
-    <!-- <P1463></P1463> -->
 
     <!-- ############################################################################## -->
     <!-- ##  Settings/Programmable Keys / Softkeys Settings -->
@@ -8127,7 +5298,7 @@
     <!-- # Mandatory -->
     <P2924>0</P2924>
 
-    <!-- # Hide System Softkey on Idle Page.  -->
+    <!-- # Hide System Softkey on Main Page.  -->
     <!-- # String: Next, History, ForwardAll, Redial -->
     <P8348></P8348>
 
@@ -8145,8 +5316,8 @@
     <P2926>Answer,Reject,Forward,ReConf</P2926>
 
     <!-- # Softkey layout in calling state -->
-    <!-- # String: BTOnOff,Cancel,EndCall,ReConf,ConfRoom,ConfCall  -->
-    <P2927>BTOnOff,Cancel,EndCall,ReConf,ConfRoom,ConfCall</P2927>
+    <!-- # String: BTOnOff,EndCall,ReConf,ConfRoom,ConfCall  -->
+    <P2927>BTOnOff,EndCall,ReConf,ConfRoom,ConfCall</P2927>
 
     <!-- # Softkey layout in Call Connected state  -->
     <!-- # String: BTPhonebook,BTOnOff,EndCall,ReConf,ConfRoom,ConfCall,Cancel,NewCall,Swap,Transfer,Trnf>VM,DialDTMF,BSCCenter,URecord,Record,UCallPark,PrivateHold,CallPark, -->
@@ -8179,9 +5350,10 @@
     <!-- # Softkey 1 -->
     <!-- ###################################################################################### -->
     <!-- # Key Mode. -->
-    <!-- # -1 - Default, 0 - Speed Dial, 4 - Speed Dial via active account, 6 - Voicemail,  -->
-    <!-- # 7 - CallReturn, 10 - Intercom, 11 - LDAP Search, 15 - Call Log, 17 - Menu, 19 - Information, 20 - Message -->
-    <!-- # Number: 0,4,6,7,10,11,15,17,19,20 -->
+    <!-- # 0 - Default, 10 - Speed Dial, 14 - Speed Dial via active account, 16 - Voicemail,  -->
+    <!-- # 17 - CallReturn, 20 - Intercom, 21 - LDAP Search, 25 - Call Log, 27 - Menu, 29 - Information, 30 - Message -->
+    <!-- # Number: 0,10,14,16,17,20,21,25,27,29,30 -->
+    <!-- # Mandatory -->
 {assign var=key_types value=["speed dial"=>10, "speed dial active"=>14,"voicemail"=>16,"call return"=>17,"intercom"=>20,"ldap search"=>21,"menu"=>27]}
 {$start_id=2987}
 {for $prog=1 to 3}
@@ -8202,10 +5374,11 @@
 
 
     <!-- # <P2987>0</P2987>  -->
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3 -->
+
+    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3 -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
     <!-- # Mandatory -->
-    <!-- <P2988>0</P2988>  -->
+    <!-- # <P2988>0</P2988>  -->
 
     <!-- # Description.  -->
     <!-- # String.  -->
@@ -8219,17 +5392,16 @@
     <!-- # Softkey 2 -->
     <!-- ###################################################################################### -->
     <!-- # Key Mode. -->
-    <!-- # -1 - Default, 0 - Speed Dial, 4 - Speed Dial via active account, 6 - Voicemail,  -->
-    <!-- # 7 - CallReturn, 10 - Intercom, 11 - LDAP Search, 15 - Call Log, 17 - Menu, 19 - Information, 20 - Message -->
-    <!-- # Number: 0,4,6,7,10,11,15,17,19,20 -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, speeddial, speeddialaa, voicemail, callreturn, intercom, ldapsearch, calllog, menu, information, message -->
-    <!-- <P2991>-1</P2991>  -->
-
-    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3, 3 - Account 4, 4 - Account 5 -->
-    <!-- # Number: 0, 1, 2, 3 -->
+    <!-- # 0 - Default, 10 - Speed Dial, 14 - Speed Dial via active account, 16 - Voicemail,  -->
+    <!-- # 17 - CallReturn, 20 - Intercom, 21 - LDAP Search, 25 - Call Log, 27 - Menu, 29 - Information, 30 - Message -->
+    <!-- # Number: 0,10,14,16,17,20,21,25,27,29,30 -->
     <!-- # Mandatory -->
-    <!-- <P2992>0</P2992>  -->
+    <P2991>0</P2991>
+
+    <!-- # Account. 0 - Account 1, 1 - Account 2, 2 - Account 3 -->
+    <!-- # Number: 0, 1, 2, 3, 4, 5 -->
+    <!-- # Mandatory -->
+    <P2992>0</P2992>
 
     <!-- # Description.  -->
     <!-- # String.  -->
@@ -8246,12 +5418,11 @@
     <!-- # Softkey 1 -->
     <!-- ###################################################################################### -->
     <!-- # Key Mode. -->
-    <!-- # -1 - Default, 0 - Speed Dial, 4 - Speed Dial via active account, 6 - Voicemail,  -->
-    <!-- # 7 - CallReturn, 10 - Intercom, 11 - LDAP Search, 15 - Call Log, 17 - Menu, 19 - Information, 20 - Message -->
-    <!-- # Number: 0,4,6,7,10,11,15,17,19,20 -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, speeddial, speeddialaa, voicemail, callreturn, intercom, ldapsearch, calllog, menu, information, message -->
-    <P8475>-1</P8475>
+    <!-- # 0 - Default, 10 - Speed Dial, 14 - Speed Dial via active account, 15 - Dial DTMF, 16 - Voicemail,  -->
+    <!-- # 17 - CallReturn, 20 - Intercom, 21 - LDAP Search, 25 - Call Log, 29 - Information, 30 - Message -->
+    <!-- # Number: 0,10,14,15,16,17,20,21,25,29,30 -->
+    <!-- # Mandatory -->
+    <P8475>0</P8475>
 
     <!-- # Description.  -->
     <!-- # String.  -->
@@ -8265,12 +5436,11 @@
     <!-- # Softkey 2 -->
     <!-- ###################################################################################### -->
     <!-- # Key Mode. -->
-    <!-- # -1 - Default, 0 - Speed Dial, 4 - Speed Dial via active account, 6 - Voicemail,  -->
-    <!-- # 7 - CallReturn, 10 - Intercom, 11 - LDAP Search, 15 - Call Log, 17 - Menu, 19 - Information, 20 - Message -->
-    <!-- # Number: 0,4,6,7,10,11,15,17,19,20 -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, speeddial, speeddialaa, voicemail, callreturn, intercom, ldapsearch, calllog, menu, information, message -->
-    <P8478>-1</P8478>
+    <!-- # 0 - Default, 10 - Speed Dial, 14 - Speed Dial via active account, 15 - Dial DTMF, 16 - Voicemail,  -->
+    <!-- # 17 - CallReturn, 20 - Intercom, 21 - LDAP Search, 25 - Call Log, 29 - Information, 30 - Message -->
+    <!-- # Number: 0,10,14,15,16,17,20,21,25,29,30 -->
+    <!-- # Mandatory -->
+    <P8478>0</P8478>
 
     <!-- # Description.  -->
     <!-- # String.  -->
@@ -8279,25 +5449,6 @@
     <!-- # Value. -->
     <!-- # String. -->
     <!-- # P8480 = -->
-
-    <!-- ###################################################################################### -->
-    <!-- # Softkey 3 -->
-    <!-- ###################################################################################### -->
-    <!-- # Key Mode. -->
-    <!-- # -1 - Default, 0 - Speed Dial, 4 - Speed Dial via active account, 6 - Voicemail,  -->
-    <!-- # 7 - CallReturn, 10 - Intercom, 11 - LDAP Search, 15 - Call Log, 17 - Menu, 19 - Information, 20 - Message -->
-    <!-- # Number: 0,4,6,7,10,11,15,17,19,20 -->
-    <!-- # Please note string format is also accepted, here is the full list for the mode options strings, the string for the mode is case-insensitive.  -->
-    <!-- # none, speeddial, speeddialaa, voicemail, callreturn, intercom, ldapsearch, calllog, menu, information, message -->
-    <P8481>-1</P8481>
-
-    <!-- # Description.  -->
-    <!-- # String.  -->
-    <!-- # P8482 =  -->
-
-    <!-- # Value. -->
-    <!-- # String. -->
-    <!-- # P8483 =  -->
 
   </config>
 </gs_provision>
