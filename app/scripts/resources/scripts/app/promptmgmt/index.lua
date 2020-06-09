@@ -97,6 +97,7 @@ ttsvoice = 'Matthew'; --text to speech voice
 			' phrase number ',
 			'.'
 		},
+		phraseDefault = " the default recording.",
 		recordingChoice = "To manage recordings, enter the recording number from 1 to 9999. To hear a list of recordings for this account, press star star. To return to the main menu, press star.",
 		recordingInfoInterrupt = "Press any key at any time to return to the previous menu.",
 		recordingOptions = "To listen to this recording, press 1. To record this recording, press 2. To cancel and return to the previous menu, press star.",
@@ -438,7 +439,11 @@ end
 			local recordingID = phraseRecordingID(string.sub(phrases[1][zeropad(3, phrasenumber)]['detail']['phrase_detail_data'], 22, -2), accountnum);
 			if recordingID == nil then
 				session:execute('playback', saytext(phrase_info));
-				session:execute('playback', saytext(greetings['phraseRecNotFound']));
+				if string.sub(phrases[1][zeropad(3, phrasenumber)]['detail']['phrase_detail_data'], 1, 29) == "${lua streamfile.lua default-" then
+					session:execute('playback', saytext(greetings['phraseDefault']));
+				else
+					session:execute('playback', saytext(greetings['phraseRecNotFound']));
+				end
 			else
 				phrase_info = phrase_info .. 'recording number ' .. tostring(tonumber(recordingID)) .. '.';
 				session:execute('playback', saytext(phrase_info));
