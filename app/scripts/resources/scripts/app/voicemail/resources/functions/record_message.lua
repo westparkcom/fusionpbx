@@ -366,10 +366,8 @@
 				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
 					transcription = transcribe(finalfile, settings, start_epoch);
 				end
-				if session:getVariable("vm_hangup_play") == "true" then
-					session:execute("playback", 'ivr/ivr-thank_you.wav')
-					session:execute("sleep", "500");
-					session:execute("playback", 'voicemail/vm-goodbye.wav')
+				if session:getVariable("vm_hangup_play") ~= nil then
+					session:execute("playback", '${lua streamfile.lua ' .. session:getVariable("vm_hangup_play") .. '}')
 				end
 				session:hangup();
 				return
