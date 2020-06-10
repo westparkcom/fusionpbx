@@ -366,9 +366,6 @@
 				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
 					transcription = transcribe(finalfile, settings, start_epoch);
 				end
-				for word in vm_api_list:gmatch("[^:::]+") do
-					os.remove(word)
-				end
 				if session:getVariable("vm_hangup_play") == "true" then
 					session:execute("playback", 'ivr/ivr-thank_you.wav')
 					session:execute("sleep", "500");
