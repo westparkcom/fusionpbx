@@ -197,7 +197,7 @@ if (!class_exists('destinations')) {
 			$destination_id = str_replace("[", "_", $destination_id);
 
 			//set the css style
-			$select_style = 'width: 200px;';
+			$select_style = 'width: 400px;';
 
 			//add additional
 			if (if_group("superadmin")) {
