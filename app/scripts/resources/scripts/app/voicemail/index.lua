@@ -658,13 +658,6 @@
 --close the database connection
 	dbh:release();
 
---clean up temp files
-	if vm_api == "true" then
-		for word in vm_api_list:gmatch("[^:::]+") do
-			os.remove(word);
-		end
-	end
-
 --notes
 	--record the video
 		--records audio only
