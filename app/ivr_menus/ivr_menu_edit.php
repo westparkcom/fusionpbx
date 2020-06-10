@@ -301,9 +301,9 @@
 							$array['ivr_menus'][0]['ivr_menu_options'][$y]["ivr_menu_option_uuid"] = $ivr_menu_option_uuid;
 							$array['ivr_menus'][0]['ivr_menu_options'][$y]["ivr_menu_option_digits"] = $row["ivr_menu_option_digits"];
 							$array['ivr_menus'][0]['ivr_menu_options'][$y]["ivr_menu_option_action"] = $ivr_menu_option_action;
-							if ($destination->valid(preg_replace('/\s/', ':', $ivr_menu_option_param, 1))) {
+							//if ($destination->valid(preg_replace('/\s/', ':', $ivr_menu_option_param, 1))) {
 								$array['ivr_menus'][0]['ivr_menu_options'][$y]["ivr_menu_option_param"] = $ivr_menu_option_param;
-							}
+							//}
 							$array['ivr_menus'][0]['ivr_menu_options'][$y]["ivr_menu_option_order"] = $row["ivr_menu_option_order"];
 							$array['ivr_menus'][0]['ivr_menu_options'][$y]["ivr_menu_option_description"] = $row["ivr_menu_option_description"];
 							$y++;
