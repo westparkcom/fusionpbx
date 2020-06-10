@@ -342,7 +342,7 @@
 			if (vm_api == "true") then
 				start_epoch = os.time();
 				local files = "";
-				for word in vm_api_list:gmatch("[^,%s]+") do
+				for word in vm_api_list:gmatch("[^:::]+") do
 					files = files .. " " .. word
 				end
 				local finalfile = ""
@@ -362,7 +362,7 @@
 				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
 					transcription = transcribe(finalfile, settings, start_epoch);
 				end
-				for word in vm_api_list:gmatch("[^,%s]+") do
+				for word in vm_api_list:gmatch("[^:::]+") do
 					os.remove(word)
 				end
 				session:hangup();
