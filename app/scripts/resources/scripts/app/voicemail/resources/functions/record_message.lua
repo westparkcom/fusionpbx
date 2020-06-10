@@ -356,7 +356,7 @@
 				local cmd = "sox " .. files;
 				session:execute("system", cmd)
 				cmd = "soxi -D " .. finalfile
-				session:setVariable("vm_rec_length", "${system " .. cmd .. "}");
+				session:setVariable("vm_rec_length", "${system " .. cmd .. " 2>&1}");
 				message_length = tonumber(session:getVariable("vm_rec_length"));
 				message_length_formatted = format_seconds(message_length);
 				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
