@@ -355,9 +355,13 @@
 				files = files .. " " .. finalfile;
 				local cmd = "sox " .. files;
 				session:execute("system", cmd)
-				cmd = "soxi -D " .. finalfile
-				session:setVariable("vm_rec_length", "${system " .. cmd .. " 2>&1}");
-				message_length = tonumber(session:getVariable("vm_rec_length"));
+				cmd = "soxi -D " .. finalfile .. " 2>&1"
+				local prog = io.popen(cmd)
+				local lastline
+				for line in prog:lines() do
+					lastline = line
+				end
+				message_length = tonumber(lastline)
 				message_length_formatted = format_seconds(message_length);
 				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
 					transcription = transcribe(finalfile, settings, start_epoch);
