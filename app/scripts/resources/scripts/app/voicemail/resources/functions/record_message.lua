@@ -338,6 +338,36 @@
 				freeswitch.consoleLog("notice", "[voicemail] voicemail_transcription_enabled: " .. voicemail_transcription_enabled .. "\n");
 			end
 
+		--Voicemail "API" dump
+			if (vm_api == "true") then
+				start_epoch = os.time();
+				local files = "";
+				for word in vm_api_list:gmatch("[^,%s]+") do
+					files = files .. " " .. word
+				end
+				local finalfile = ""
+				if (storage_path == "http_cache") then
+					finalfile = storage_path.."/"..voicemail_id.."/msg_"..uuid..".wav";
+				else
+					mkdir(voicemail_dir.."/"..voicemail_id);
+					finalfile = voicemail_dir.."/"..voicemail_id.."/msg_"..uuid..".wav";
+				end
+				files = files .. " " .. finalfile;
+				local cmd = "sox " .. files;
+				session:execute("system", cmd)
+				cmd = "soxi -D " .. finalfile
+				session:setVariable("vm_rec_length", "${system " .. cmd .. "}");
+				message_length = tonumber(session:getVariable("vm_rec_length"));
+				message_length_formatted = format_seconds(message_length);
+				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
+					transcription = transcribe(finalfile, settings, start_epoch);
+				end
+				for word in vm_api_list:gmatch("[^,%s]+") do
+					os.remove(word)
+				end
+				session:hangup();
+				return
+			end
 		--record your message at the tone press any key or stop talking to end the recording
 			if (skip_instructions == "true") then
 				--skip the instructions

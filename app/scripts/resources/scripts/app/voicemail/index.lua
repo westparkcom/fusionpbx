@@ -79,6 +79,8 @@
 			voicemail_greeting_number = session:getVariable("voicemail_greeting_number");
 			skip_instructions = session:getVariable("skip_instructions");
 			skip_greeting = session:getVariable("skip_greeting");
+			vm_api = session:getVariable("vm_api");
+			vm_api_list = session:getVariable("vm_api_list");
 			vm_message_ext = session:getVariable("vm_message_ext");
 			vm_say_caller_id_number = session:getVariable("vm_say_caller_id_number");
 			vm_say_date_time = session:getVariable("vm_say_date_time");
