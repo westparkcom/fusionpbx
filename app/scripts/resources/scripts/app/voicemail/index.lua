@@ -274,7 +274,9 @@
 						--answer the session
 							if (session ~= nil and session:ready()) then
 								session:answer();
-								session:execute("sleep", "1000");
+								if vm_api ~= "true" then
+									session:execute("sleep", "1000");
+								end
 							end
 
 						--unset bind meta app
