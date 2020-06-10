@@ -371,6 +371,7 @@
 				end
 				if session:getVariable("vm_hangup_play") == "true" then
 					session:execute("playback", 'ivr/ivr-thank_you.wav')
+					session:execute("sleep", "500");
 					session:execute("playback", 'voicemail/vm-goodbye.wav')
 				end
 				session:hangup();
