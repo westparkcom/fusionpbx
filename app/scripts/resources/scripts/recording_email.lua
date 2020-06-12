@@ -34,8 +34,9 @@
 	local caller_id_name = argv[4]
 	local caller_id_number = argv[5]
 	local message_date = argv[6]
-	local domain_uuid = argv[7]
-	local domain_name = argv[8]
+	local message_time = argv[7]
+	local domain_uuid = argv[8]
+	local domain_name = argv[9]
 	local default_language = 'en'
 	local default_dialect = 'us'
 	local default_voice = 'callie'
@@ -77,7 +78,7 @@
 			--prepare the subject
 				subject = subject:gsub("${caller_id_name}", caller_id_name);
 				subject = subject:gsub("${caller_id_number}", caller_id_number);
-				subject = subject:gsub("${message_date}", message_date);
+				subject = subject:gsub("${message_date}", message_date .. " " .. message_time);
 				subject = subject:gsub("${message_duration}", message_length_formatted);
 				subject = subject:gsub("${domain_name}", domain_name);
 				subject = trim(subject);
@@ -86,7 +87,7 @@
 			--prepare the body
 				body = body:gsub("${caller_id_name}", caller_id_name);
 				body = body:gsub("${caller_id_number}", caller_id_number);
-				body = body:gsub("${message_date}", message_date);
+				body = body:gsub("${message_date}", message_date .. " " .. message_time);
 				body = body:gsub("${message_duration}", message_length_formatted);
 				body = body:gsub("${domain_name}", domain_name);
 				body = body:gsub("${dnis}", dnis);
