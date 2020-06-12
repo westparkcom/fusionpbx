@@ -346,14 +346,39 @@
 					files = files .. " " .. word
 				end
 				local finalfile = ""
+				local transcribefile = nil;
 				if (storage_path == "http_cache") then
-					finalfile = storage_path.."/"..voicemail_id.."/msg_"..uuid..".wav";
+					finalfile = storage_path.."/"..voicemail_id.."/msg_"..uuid.."."..vm_message_ext;
+					if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true" and transcribe_provider == "watson") then -- can use MP3
+						transcribefile = finalfile
+					elseif (transcribe_enabled == "true" and voicemail_transcription_enabled == "true" and transcribe_provider ~= "watson") then -- Need to use wav
+						transcribefile = storage_path.."/"..voicemail_id.."/msg_"..uuid..".wav"
+					end
 				else
 					mkdir(voicemail_dir.."/"..voicemail_id);
-					finalfile = voicemail_dir.."/"..voicemail_id.."/msg_"..uuid..".wav";
+					finalfile = voicemail_dir.."/"..voicemail_id.."/msg_"..uuid.."."..vm_message_ext;
+					if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true" and transcribe_provider == "watson") then -- can use MP3
+						transcribefile = finalfile
+					elseif (transcribe_enabled == "true" and voicemail_transcription_enabled == "true" and transcribe_provider ~= "watson") then -- Need to use wav
+						transcribefile = voicemail_dir.."/"..voicemail_id.."/msg_"..uuid..".wav"
+					end
 				end
-				files = files .. " " .. finalfile;
-				local cmd = "sox " .. files;
+				local cmd = 'sox'
+				if vm_message_ext == 'mp3' then
+					local filefinal = files .. " -C 16.01 " .. finalfile;
+					cmd = cmd .. " " .. filefinal;
+					session:execute("system", cmd)
+					if transcribefile then
+						if transcribefile ~= finalfile then
+							local cmdtrans = 'sox ' .. files .. ' ' .. transcribefile
+							session:execute("system", cmdtrans)
+						end
+					end
+				else
+					files = files .. " " .. finalfile;
+					cmd = cmd .. " " .. files;
+					session:execute("system", cmd)
+				end
 				session:execute("system", cmd)
 				cmd = "soxi -D " .. finalfile .. " 2>&1"
 				local prog = io.popen(cmd)
@@ -364,7 +389,7 @@
 				message_length = tonumber(lastline)
 				message_length_formatted = format_seconds(message_length);
 				if (transcribe_enabled == "true" and voicemail_transcription_enabled == "true") then
-					transcription = transcribe(finalfile, settings, start_epoch);
+					transcription = transcribe(transcribefile, settings, start_epoch);
 				end
 				if session:getVariable("vm_hangup_play") ~= nil then
 					session:execute("playback", '${lua streamfile.lua ' .. session:getVariable("vm_hangup_play") .. '}')
