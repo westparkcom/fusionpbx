@@ -89,7 +89,7 @@
 				body = body:gsub("${message_date}", message_date);
 				body = body:gsub("${message_duration}", message_length_formatted);
 				body = body:gsub("${domain_name}", domain_name);
-				body = body:gsub("${dis}", dnis);
+				body = body:gsub("${dnis}", dnis);
 				body = body:gsub("${message}", "Message is attached.");
 				body = trim(body);
 
@@ -97,7 +97,7 @@
 				send_mail(headers,
 					toemail,
 					{subject, body},
-					(voicemail_file == "attach") and recordingfile
+					recordingfile
 				);
 			-- Remove the recording
 				--os.remove(recordingfile)
