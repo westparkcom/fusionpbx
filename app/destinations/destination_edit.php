@@ -811,7 +811,7 @@
 		}
 		// Clear out recording stuff
 		if ($row['dialplan_detail_type'] == "set") {
-			if (in_array(row['dialplan_detail_data'], $removal_items)) {
+			if (in_array($row['dialplan_detail_data'], $removal_items)) {
 				unset($dialplan_details[$x]);
 			}
 		}
