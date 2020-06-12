@@ -94,6 +94,8 @@
 				body = body:gsub("${message}", "Message is attached.");
 				body = trim(body);
 
+			-- Separate emails into comma list
+				toemail = toemail:gsub(";", ',')
 			--send the email
 				send_mail(headers,
 					toemail,
