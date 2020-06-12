@@ -791,7 +791,6 @@
 	);
 	foreach($dialplan_details as $row) {
 		if ($row['dialplan_detail_data'] == "tone_detect_hits=1") {
-			unset($dialplan_details[$x]);
 			$fax = True;
 		}
  		if ($row['dialplan_detail_type'] == "tone_detect") {
@@ -802,7 +801,6 @@
 			unset($dialplan_details[$x]);
 		}
 		if (substr($dialplan_detail_data,0,22) == "execute_on_tone_detect") {
-			unset($dialplan_details[$x]);
 			$fax = True;
 		}
 		if ($row['dialplan_detail_type'] == "sleep" and $fax === True) {
@@ -813,7 +811,7 @@
 		}
 		// Clear out recording stuff
 		if ($row['dialplan_detail_type'] == "set") {
-			if (in_array(row['data'], $removal_items)) {
+			if (in_array(row['dialplan_detail_data'], $removal_items)) {
 				unset($dialplan_details[$x]);
 			}
 		}
