@@ -780,6 +780,15 @@
 //remove previous fax details
 	$fax = False;
 	$x = 0;
+	$removal_items = array(
+		"tone_detect_hits=1",
+		"execute_on_tone_detect=transfer ".$fax_extension." XML \${domain_name}",
+		"record_path=\${recordings_dir}/\${domain_name}/archive/\${strftime(%Y)}/\${strftime(%b)}/\${strftime(%d)}",
+		"record_name=\${uuid}.\${record_ext}",
+		"record_append=true",
+		"record_in_progress=true",
+		"recording_follow_transfer=true",
+	);
 	foreach($dialplan_details as $row) {
 		if ($row['dialplan_detail_data'] == "tone_detect_hits=1") {
 			unset($dialplan_details[$x]);
@@ -801,6 +810,12 @@
 		}
  		if ($row['dialplan_detail_type'] == "record_session") {
 			unset($dialplan_details[$x]);
+		}
+		// Clear out recording stuff
+		if ($row['dialplan_detail_type'] == "set") {
+			if (in_array(row['data'], $removal_items)) {
+				unset($dialplan_details[$x]);
+			}
 		}
 		//increment the row id
 		$x++;
