@@ -45,10 +45,11 @@
 		local settings = Settings.new(db, domain_name, domain_uuid)
 		local cmd = "soxi -D " .. recordingfile .. " 2>&1"
 		local prog = io.popen(cmd)
-		local lastline
+		local lastline = ""
 		for line in prog:lines() do
 			lastline = line
 		end
+		freeswitch.consoleLog('INFO', 'Recording Length: `' .. lastline .. '`\n')
 		local message_length_formatted = tostring(math.floor(tonumber(lastline))) .. " seconds"
 
 		--get the templates
