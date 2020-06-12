@@ -98,7 +98,7 @@
 					(voicemail_file == "attach") and recordingfile
 				);
 			-- Remove the recording
-				os.remove(recordingfile)
+				--os.remove(recordingfile)
 	end
 	
 send_email()
