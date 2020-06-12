@@ -95,7 +95,7 @@
 
 			--send the email
 				send_mail(headers,
-					voicemail_mail_to,
+					toemail,
 					{subject, body},
 					(voicemail_file == "attach") and recordingfile
 				);
