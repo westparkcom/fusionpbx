@@ -41,7 +41,7 @@
 	
 --define a function to send email
 	function send_email()
-		local db = dbh or Database.new('system')
+		local dbh = Database.new('system')
 		local settings = Settings.new(db, domain_name, domain_uuid)
 		local cmd = "soxi -D " .. recordingfile .. " 2>&1"
 		local prog = io.popen(cmd)
