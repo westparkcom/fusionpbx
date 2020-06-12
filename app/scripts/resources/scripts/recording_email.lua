@@ -35,6 +35,7 @@
 	local caller_id_number = argv[5]
 	local message_date = argv[6]
 	local domain_uuid = argv[7]
+	local domain_name = argv[8]
 	local default_language = 'en'
 	local default_dialect = 'us'
 	local default_voice = 'callie'
