@@ -921,7 +921,7 @@ function run_call()
     -- Set the default MoH
     uuid_setvar(callinfo["call_uuid"], "hold_music", "local_stream://" .. defaultmoh)
     -- Set active call counter counter for ANI and DNIS
-    api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-ani " .. callinfo["ani"] .. " -1")
+    api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-ani " .. callinfo["ani"]:gsub("[^%w_-]", "") .. " -1")
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-dnis " .. callinfo["dnis"] .. " -1")
     currentstep = seqnum_arrpos(get_first_seqnum()) -- this is the position in the call recipe we are currently executing, starting at 1st sequence number
     local alive = getvar("call_uuid")
