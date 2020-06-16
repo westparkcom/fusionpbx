@@ -628,7 +628,8 @@ end
 function transfer(destdata)
     -- Transfer to FreeSWITCH destination
     local destination = destdata[1]
-    sesssion:execute("transfer", destination)
+    api:executeString("uuid_transfer " .. callinfo["call_uuid"] .. " '" .. destination .. "' inline")
+    bridged = true
     return
 end
 
