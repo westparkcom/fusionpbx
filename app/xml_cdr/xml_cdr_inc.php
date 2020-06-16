@@ -248,7 +248,7 @@
 		foreach ($_SESSION['cdr']['field'] as $field) {
 			$array = explode(",", $field);
 			$field_name = end($array);
-			$sql .= "c.json->'variables'->>'".$field_name."' as ".$field_name.", \n";
+			$sql .= $field_name.", \n";
 		}
 	}
 	if (is_array($_SESSION['cdr']['export'])) {
@@ -343,7 +343,7 @@
 			if (isset($$field_name)) {
 				$$field_name = $_REQUEST[$field_name];
 				if (strlen($$field_name) > 0) {
-					$sql .= "and json->'variables'->>'$field_name' like :".$field_name." \n";
+					$sql .= "and $field_name like :".$field_name." \n";
 					$parameters[$field_name] = '%'.$$field_name.'%';
 				}
 			}
