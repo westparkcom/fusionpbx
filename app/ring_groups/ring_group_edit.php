@@ -246,7 +246,8 @@
 			if (strlen($ring_group_extension) == 0) { $msg .= $text['message-extension']."<br>\n"; }
 			//if (strlen($ring_group_greeting) == 0) { $msg .= $text['message-greeting']."<br>\n"; }
 			if (strlen($ring_group_strategy) == 0) { $msg .= $text['message-strategy']."<br>\n"; }
-			//if (strlen($ring_group_timeout_app) == 0) { $msg .= $text['message-timeout-action']."<br>\n"; }
+			if (strlen($ring_group_call_timeout) == 0) { $msg .= $text['message-call_timeout']."<br>\n"; }
+			//if (strlen($ring_group_timeout_app) == 0) { $msg .= $text['message-timeout_action']."<br>\n"; }
 			//if (strlen($ring_group_cid_name_prefix) == 0) { $msg .= "Please provide: Caller ID Name Prefix<br>\n"; }
 			//if (strlen($ring_group_cid_number_prefix) == 0) { $msg .= "Please provide: Caller ID Number Prefix<br>\n"; }
 			//if (strlen($ring_group_ringback) == 0) { $msg .= "Please provide: Ringback<br>\n"; }
@@ -495,6 +496,9 @@
 //set the default
 	if (strlen($ring_group_ringback) == 0) {
 		$ring_group_ringback = '${us-ring}';
+	}
+	if (strlen($ring_group_call_timeout) == 0) {
+		$ring_group_call_timeout = '30';
 	}
 
 //get the ring group destination array
@@ -829,7 +833,7 @@
 	echo "</tr>\n";
 
 	echo "<tr>\n";
-	echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
+	echo "<td class='vncellreq' valign='top' align='left' nowrap='nowrap'>\n";
 	echo "	".$text['label-call_timeout']."\n";
 	echo "</td>\n";
 	echo "<td class='vtable' align='left'>\n";
