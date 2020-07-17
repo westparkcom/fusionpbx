@@ -111,7 +111,7 @@ if (!class_exists('destinations')) {
 				$this->destination_types = array();
 				foreach ($apps as $x => &$app) {
 					if (isset($app['destinations'])) foreach ($app['destinations'] as &$row) {
-						if (!in_array($row["name"], $this->destination_types) {
+						if (!in_array($row["name"], $this->destination_types)) {
 							if (permission_exists($this->singular($row["name"])."_destinations")) {
 								$this->destinations[] = $row;
 							}
