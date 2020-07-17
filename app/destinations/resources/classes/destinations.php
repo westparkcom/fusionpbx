@@ -115,7 +115,7 @@ if (!class_exists('destinations')) {
 							if (permission_exists($this->singular($row["name"])."_destinations")) {
 								$this->destinations[] = $row;
 							}
-							$this->destination_types[] = $row["name"]
+							$this->destination_types[] = $row["name"];
 						}
 					}
 				}
