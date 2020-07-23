@@ -58,7 +58,7 @@
 		local finalname = ''
 		local deletemulti = false
 		if splitrec then
-			if splitrec == 'split' then:
+			if splitrec == 'split' then
 				for word in recordingfile:gmatch("[^:::]+") do
 					files = files .. " " .. word
 					finalname = SplitFilename(word)
