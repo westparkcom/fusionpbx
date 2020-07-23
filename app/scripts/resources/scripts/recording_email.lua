@@ -37,15 +37,45 @@
 	local message_time = argv[7]
 	local domain_uuid = argv[8]
 	local domain_name = argv[9]
+	local splitrec = argv[10]
+	local subjoverride = argv[11]
 	local default_language = 'en'
 	local default_dialect = 'us'
 	local default_voice = 'callie'
 	
+--path split function
+	function SplitFilename(strFilename)
+		-- Returns the Path, Filename, and Extension as 3 values
+		path, name, ext = string.match(strFilename, "(.-)([^/]-)%.([^/]+)$")
+		return name
+	end
 --define a function to send email
 	function send_email()
 		local dbh = Database.new('system')
 		local settings = Settings.new(db, domain_name, domain_uuid)
-		local cmd = "soxi -D " .. recordingfile .. " 2>&1"
+		local files = ''
+		local finalfile = ''
+		local finalname = ''
+		local deletemulti = false
+		if splitrec then
+			if splitrec == 'split' then:
+				for word in recordingfile:gmatch("[^:::]+") do
+					files = files .. " " .. word
+					finalname = SplitFilename(word)
+				end
+				deletemulti = true
+				finalfile = finalname .. '-final.mp3'
+			end
+		else
+			finalfile = recordingfile
+		end
+		if files != '' then
+			local cmd = 'sox ' .. files .. ' -C 16.01 ' .. finalfile
+			local prog = os.execute(cmd)
+		else
+			finalfile = recordingfile
+		end
+		local cmd = "soxi -D " .. finalfile .. " 2>&1"
 		local prog = io.popen(cmd)
 		local lastline = ""
 		for line in prog:lines() do
@@ -76,6 +106,9 @@
 			}
 
 			--prepare the subject
+				if subjoverride then
+					subject = subjoverride
+				end
 				subject = subject:gsub("${caller_id_name}", caller_id_name);
 				subject = subject:gsub("${caller_id_number}", caller_id_number);
 				subject = subject:gsub("${message_date}", message_date .. " " .. message_time);
@@ -100,10 +133,15 @@
 				send_mail(headers,
 					toemail,
 					{subject, body},
-					recordingfile
+					finalfile
 				);
 			-- Remove the recording
-				--os.remove(recordingfile)
+				if deletemulti == true then
+					os.remove(finalfile)
+					for word in recordingfile:gmatch("[^:::]+") do
+						os.remove(word)
+					end
+				end
 	end
 	
 send_email()
