@@ -69,7 +69,7 @@
 		else
 			finalfile = recordingfile
 		end
-		if files <> '' then
+		if files ~= '' then
 			local cmd = 'sox ' .. files .. ' -C 16.01 ' .. finalfile
 			local prog = os.execute(cmd)
 		else
