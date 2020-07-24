@@ -71,6 +71,7 @@
 		end
 		if files ~= '' then
 			local cmd = 'sox ' .. files .. ' -C 16.01 ' .. finalfile
+			freeswitch.consoleLog('INFO', 'Executing command: `' .. cmd .. '`\n')
 			local prog = os.execute(cmd)
 		else
 			finalfile = recordingfile
