@@ -813,6 +813,45 @@
 		}
 		{/literal}
 
+	//checkbox on change
+		{literal}
+		function checkbox_on_change(checkbox) {
+			checked = false;
+			var inputs = document.getElementsByTagName('input');
+			for (var i = 0, max = inputs.length; i < max; i++) {
+				if (inputs[i].type === 'checkbox' && inputs[i].checked == true) {
+					checked = true;
+					break;
+				}
+			}
+			btn_copy = document.getElementById("btn_copy");
+			btn_toggle = document.getElementById("btn_toggle");
+			btn_delete = document.getElementById("btn_delete");
+			if (checked == true) {
+				if (btn_copy) {
+					btn_copy.style.display = "inline";
+				}
+				if (btn_toggle) {
+					btn_toggle.style.display = "inline";
+				}
+				if (btn_delete) {
+					btn_delete.style.display = "inline";
+				}
+			}
+		 	else {
+				if (btn_copy) {
+					btn_copy.style.display = "none";
+				}
+				if (btn_toggle) {
+					btn_toggle.style.display = "none";
+				}
+				if (btn_delete) {
+					btn_delete.style.display = "none";
+				}
+		 	}
+		}
+		{/literal}
+
 	//list page functions
 		{literal}
 		function list_all_toggle(modifier) {
