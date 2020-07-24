@@ -148,7 +148,13 @@
 								$array['phrase_details'][0]['phrase_detail_tag'] = $_POST['phrase_detail_tag'];
 								$array['phrase_details'][0]['phrase_detail_pattern'] = $_POST['phrase_detail_pattern'];
 								$array['phrase_details'][0]['phrase_detail_function'] = $_POST['phrase_detail_function'];
-								$array['phrase_details'][0]['phrase_detail_data'] = $_POST['phrase_detail_data'];
+								// Single quotes seem to get ignored when used in IVRs
+								if (substr($_POST['phrase_detail_data'], 0,19) == "\${python streamtext") {
+									$new_phrase_detail_data = str_replace("'", "’", $_POST['phrase_detail_data']);
+								} else {
+									$new_phrase_detail_data = $_POST['phrase_detail_data'];
+								}
+								$array['phrase_details'][0]['phrase_detail_data'] = $new_phrase_detail_data;
 								$array['phrase_details'][0]['phrase_detail_method'] = $_POST['phrase_detail_method'];
 								$array['phrase_details'][0]['phrase_detail_type'] = $_POST['phrase_detail_type'];
 								$array['phrase_details'][0]['phrase_detail_group'] = $_POST['phrase_detail_group'];
@@ -207,7 +213,13 @@
 								$array['phrase_details'][0]['phrase_detail_tag'] = $_POST['phrase_detail_tag'];
 								$array['phrase_details'][0]['phrase_detail_pattern'] = $_POST['phrase_detail_pattern'];
 								$array['phrase_details'][0]['phrase_detail_function'] = $_POST['phrase_detail_function'];
-								$array['phrase_details'][0]['phrase_detail_data'] = $_POST['phrase_detail_data'];
+								// Single quotes seem to get ignored when used in IVRs
+								if (substr($_POST['phrase_detail_data'], 0,19) == "\${python streamtext") {
+									$new_phrase_detail_data = str_replace("'", "’", $_POST['phrase_detail_data']);
+								} else {
+									$new_phrase_detail_data = $_POST['phrase_detail_data'];
+								}
+								$array['phrase_details'][0]['phrase_detail_data'] = $new_phrase_detail_data;
 								$array['phrase_details'][0]['phrase_detail_method'] = $_POST['phrase_detail_method'];
 								$array['phrase_details'][0]['phrase_detail_type'] = $_POST['phrase_detail_type'];
 								$array['phrase_details'][0]['phrase_detail_group'] = $_POST['phrase_detail_group'];
