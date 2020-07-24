@@ -42,6 +42,7 @@
 	local default_language = 'en'
 	local default_dialect = 'us'
 	local default_voice = 'callie'
+	local stitchgap = "/usr/share/freeswitch/sounds/stitch_gap.wav"
 	
 --path split function
 	function SplitFilename(strFilename)
@@ -62,6 +63,7 @@
 			if splitrec == 'split' then
 				for word in recordingfile:gmatch("[^:::]+") do
 					files = files .. " " .. word
+					files = files .. " " .. stitchgap
 					filepath, finalname = SplitFilename(word)
 				end
 				deletemulti = true
