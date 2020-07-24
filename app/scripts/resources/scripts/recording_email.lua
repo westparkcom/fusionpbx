@@ -47,7 +47,7 @@
 	function SplitFilename(strFilename)
 		-- Returns the Path, Filename, and Extension as 3 values
 		path, name, ext = string.match(strFilename, "(.-)([^/]-)%.([^/]+)$")
-		return name
+		return path, name
 	end
 --define a function to send email
 	function send_email()
@@ -56,15 +56,16 @@
 		local files = ''
 		local finalfile = ''
 		local finalname = ''
+		local filepath = ''
 		local deletemulti = false
 		if splitrec then
 			if splitrec == 'split' then
 				for word in recordingfile:gmatch("[^:::]+") do
 					files = files .. " " .. word
-					finalname = SplitFilename(word)
+					filepath, finalname = SplitFilename(word)
 				end
 				deletemulti = true
-				finalfile = finalname .. '-final.mp3'
+				finalfile = filepath .. '/' .. finalname .. '-final.mp3'
 			end
 		else
 			finalfile = recordingfile
