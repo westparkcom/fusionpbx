@@ -65,6 +65,7 @@
 
 			--end the session if this is an invalid voicemail box
 				if (not voicemail_uuid) or (#voicemail_uuid == 0) then
+					session:execute("playback", sounds_dir.."/"..default_language.."/"..default_dialect.."/"..default_voice.."/voicemail/vm-that_was_an_invalid_ext.wav");
 					return session:hangup();
 				end
 
