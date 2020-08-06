@@ -905,11 +905,14 @@
 			unset($button_margin);
 		}
 		if (permission_exists('follow_me') || permission_exists('call_forward') || permission_exists('do_not_disturb')) {
-			echo button::create(['type'=>'button','label'=>$text['button-call_routing'],'icon'=>'project-diagram','style'=>$button_margin,'link'=>'../calls/call_edit.php?id='.urlencode($extension_uuid)]);
+			echo button::create(['type'=>'button','label'=>$text['button-call_forward'],'icon'=>'project-diagram','style'=>$button_margin,'link'=>'../calls/call_edit.php?id='.urlencode($extension_uuid)]);
 			unset($button_margin);
 		}
 		if (permission_exists('extension_copy')) {
 			echo button::create(['type'=>'button','label'=>$text['button-copy'],'icon'=>$_SESSION['theme']['button_icon_copy'],'id'=>'btn_copy','style'=>'margin-left: 15px;','onclick'=>"copy_extension();"]);
+		}
+		if (permission_exists('domain_setting_view')) {
+			echo button::create(['type'=>'button','label'=>$text['button-settings'],'icon'=>$_SESSION['theme']['button_icon_settings'],'id'=>'btn_settings','style'=>'','link'=>PROJECT_PATH.'/app/extension_settings/extension_settings.php?id='.urlencode($extension_uuid)]);
 		}
 	}
 	echo button::create(['type'=>'button','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'id'=>'btn_save','style'=>'margin-left: 15px;','onclick'=>'submit_form();']);
