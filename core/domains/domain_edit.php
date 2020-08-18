@@ -44,7 +44,7 @@
 	$text = $language->get();
 
 //action add or update
-	if (!permission_exists('domain_add') || (file_exists($_SERVER["PROJECT_ROOT"]."/app/domains/") && !permission_exists('domain_parent') && permission_exists('domain_descendants'))) {
+	if (!permission_exists('domain_add') || (file_exists($_SERVER["PROJECT_ROOT"]."/app/domains/") && !permission_exists('domain_all'))) {
 		//admin editing own domain/settings
 		$domain_uuid = $_SESSION['domain_uuid'];
 		$action = "update";
@@ -477,9 +477,6 @@
 							$_SESSION['domains'][$domain_uuid]['domain_name'] = $domain_name;
 
 						//recreate dialplan and extension xml files
-							if (is_readable($_SESSION['switch']['dialplan']['dir'])) {
-								save_dialplan_xml();
-							}
 							if (is_readable($_SESSION['switch']['extensions']['dir'])) {
 								require_once $_SERVER["DOCUMENT_ROOT"].PROJECT_PATH."/app/extensions/resources/classes/extension.php";
 								$extension = new extension;
