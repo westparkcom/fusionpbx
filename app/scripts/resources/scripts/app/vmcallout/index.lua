@@ -42,7 +42,7 @@ session:execute('sleep', '100')
 session:execute('playback', middlePromptWav)
 session:execute('sleep', '100')
 i = 0
-for c in string.gmatch(boxnum) do
+for c in string.gmatch(boxnum, ".") do
     if boxnum:len() > 1 and i == 0 then
         session:execute('playback', 'digits/' .. tostring(c) .. '0.wav')
     else
