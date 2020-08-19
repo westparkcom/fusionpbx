@@ -45,7 +45,7 @@ i = 0
 for c in string.gmatch(boxnum) do
     if boxnum:len() > 1 and i == 0 then
         session:execute('playback', 'digits/' .. tostring(c) .. '0.wav')
-    else:
+    else
         session:execute('playback', 'digits/' .. tostring(c) .. '.wav')
     end
     i = i + 1
