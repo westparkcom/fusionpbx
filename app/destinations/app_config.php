@@ -5,7 +5,7 @@
 		$apps[$x]['uuid'] = "5ec89622-b19c-3559-64f0-afde802ab139";
 		$apps[$x]['category'] = "Switch";
 		$apps[$x]['subcategory'] = "";
-		$apps[$x]['version'] = "1.0";
+		$apps[$x]['version'] = "1.1";
 		$apps[$x]['license'] = "Mozilla Public License 1.1";
 		$apps[$x]['url'] = "http://www.fusionpbx.com";
 		$apps[$x]['description']['en-us'] = "Used to define external destination numbers.";
@@ -79,11 +79,14 @@
 		$apps[$x]['permissions'][$y]['name'] = "destination_record";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
+		$apps[$x]['permissions'][$y]['name'] = "destination_trunk_prefix";
+		$y++;
+		$apps[$x]['permissions'][$y]['name'] = "destination_area_code";
+		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "destination_number";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "destination_condition_field";
-		//$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "destination_caller_id_name";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
@@ -96,7 +99,6 @@
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "destination_fax";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
-		$y++;
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "destination_destinations";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
@@ -118,6 +120,14 @@
 		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "dialplan_details";
 		$apps[$x]['default_settings'][$y]['default_setting_name'] = "boolean";
 		$apps[$x]['default_settings'][$y]['default_setting_value'] = "true";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "";
+		$y++;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "3141e4ad-a892-4a51-8789-aa27be54ee94";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "destinations";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "dialplan_mode";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "text";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "multiple";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "";
 
@@ -172,6 +182,14 @@
 		$apps[$x]['db'][$y]['fields'][$z]['type'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['search'] = 'true';
 		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "Enter the number.";
+		$z++;
+		$apps[$x]['db'][$y]['fields'][$z]['name'] = "destination_trunk_prefix";
+		$apps[$x]['db'][$y]['fields'][$z]['type'] = "text";
+		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "Enter the trunk prefix.";
+		$z++;
+		$apps[$x]['db'][$y]['fields'][$z]['name'] = "destination_area_code";
+		$apps[$x]['db'][$y]['fields'][$z]['type'] = "text";
+		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "Enter the area code.";
 		$z++;
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "destination_prefix";
 		$apps[$x]['db'][$y]['fields'][$z]['type'] = "text";
