@@ -118,6 +118,13 @@
 				xml_cdr_log("\nfail loadxml: " . $e->getMessage() . "\n");
 			}
 
+		//optional cdr_nostore variable for disabling the storage of certain calls if desired
+			if (isset($xml->variables->cdr_nostore)) {
+				if ($xml->variables->cdr_nostore == 'true') {
+					xml_cdr_log("\nCDR storage disabled for this call, exiting...\n");
+					return;
+				}
+			}
 		//convert the xml object to json
 			$json = json_encode($xml);
 			
