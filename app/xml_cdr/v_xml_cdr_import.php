@@ -119,8 +119,8 @@
 			}
 
 		//optional cdr_nostore variable for disabling the storage of certain calls if desired
-			if (isset($xml->variables->cdr_nostore)) {
-				if ($xml->variables->cdr_nostore == 'true') {
+			if (isset($xml->variables->cdr_store)) {
+				if ($xml->variables->cdr_store == 'false') {
 					xml_cdr_log("\nCDR storage disabled for this call, exiting...\n");
 					return;
 				}
