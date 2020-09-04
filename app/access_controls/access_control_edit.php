@@ -50,7 +50,7 @@
 	}
 
 //get http post variables and set them to php variables
-	if (is_array($_POST) && is_uuid($access_control_uuid)) {
+	if (is_array($_POST)) {
 		$access_control_name = $_POST["access_control_name"];
 		$access_control_default = $_POST["access_control_default"];
 		$access_control_nodes = $_POST["access_control_nodes"];
