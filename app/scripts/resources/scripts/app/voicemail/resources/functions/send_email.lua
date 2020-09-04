@@ -32,7 +32,9 @@
 	function send_email(id, uuid)
 		local db = dbh or Database.new('system')
 		local settings = Settings.new(db, domain_name, domain_uuid)
-
+		local email_method = settings:get('email', 'method', 'text');
+		local transcribe_enabled = settings:get('voicemail', 'transcribe_enabled', 'boolean');
+		
 		--get voicemail message details
 			local sql = [[SELECT * FROM v_voicemails
 				WHERE domain_uuid = :domain_uuid
@@ -126,10 +128,10 @@
 					sql = sql .. "WHERE (domain_uuid = :domain_uuid or domain_uuid is null) ";
 					sql = sql .. "AND template_language = :template_language ";
 					sql = sql .. "AND template_category = 'voicemail' "
-					if (transcription == nil) then
-						sql = sql .. "AND template_subcategory = 'default' "
-					else
+					if (transcribe_enabled == 'true') then
 						sql = sql .. "AND template_subcategory = 'transcription' "
+					else
+						sql = sql .. "AND template_subcategory = 'default' "
 					end
 					sql = sql .. "AND template_enabled = 'true' "
 					sql = sql .. "ORDER BY domain_uuid DESC "
@@ -151,6 +153,7 @@
 						["X-FusionPBX-Domain-Name"] = domain_name;
 						["X-FusionPBX-Call-UUID"]   = uuid;
 						["X-FusionPBX-Email-Type"]  = 'voicemail';
+						["X-FusionPBX-local_after_email"]  = voicemail_local_after_email;
 					}
 
 				--prepare the voicemail_name_formatted
@@ -229,7 +232,7 @@
 			end
 
 		--whether to keep the voicemail message and details local after email
-			if (string.len(voicemail_mail_to) > 2) then
+			if (string.len(voicemail_mail_to) > 2 and email_method ~= 'queue') then
 				if (voicemail_local_after_email == "false") then
 					--delete the voicemail message details
 						local sql = [[DELETE FROM v_voicemail_messages
