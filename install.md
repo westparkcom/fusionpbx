@@ -48,15 +48,20 @@ To enable FreeSWITCH mod_python you will need to do so in the FusionPBX UI:
 
 Once saved, refresh the page, find **Python** in the list of modules, then **Start** the module
 
-## ThinQ SMS
+## Voicemail
+Several enhancements have been added to voicemail including SMS, callouts, and ZIP encryption of voicemail attachments
+
+### ThinQ SMS
 To enable ThinQ SMS for sending SMS voicemail notifications you need to add a few default settings
 
+#### Default Settings
+
 * Browse to **Advanced>>Default Settings**
-* Change/add the following settings:
+* In the **Voicemail** section change/add the following settings:
   * Subcategory: **voicemail_to_sms**
     * Type: boolean
     * Value: true
-    * Enabled: True
+    * Enabled: True 
   * Subcategory: **voicemail_to_sms_did**
     * Type: text
     * Value: <DID_TO_SEND_SMS_FROM>
@@ -77,3 +82,96 @@ To enable ThinQ SMS for sending SMS voicemail notifications you need to add a fe
     * Type: text
     * Value <YOUR_THINQ_TOKEN>
     * Enabled: True
+
+### Additional Default Settings
+
+* Browse to **Advanced>>Default Settings**
+* In the **Voicemail** section change/add the following settings:
+  * Subcategory: **company_name**
+    * Type: text
+    * Value: <YOUR_COMPANY_NAME>
+    * Enabled: True
+
+
+## Recording Management
+The recording manamgement system requires phrases (referred to as prompts by the recording management system), recordings, and voicemail boxes to be set up with a particular numbering standard. Additionally, the PIN Numbers module must be activated using **Advanced>>Menu Manager**.
+
+### Numbering Patterns
+The following numbering standards apply:
+
+#### Voicemail
+Voicemails must be numbered in the format 3{ACCT} or 3{ACCT}X
+
+* **{ACCT}** is the 4 digit zero padded client account number
+* **XX** (optional) is the mailbox number from 01 to 99. If left off the mailbox number is 0
+
+#### Recordings
+Recordings must be numbered in the format {ACCT}-XXXX
+
+* **{ACCT}** is the 4 digit zero padded account number
+* **XXXX** is the prompt number from 0001 to 9999
+
+#### Phrases
+Phrases must be numbered in the format: {ACCT}-{TYPE}-XXX
+
+* **{ACCT}** is the 4 digit zero padded account number
+* **{TYPE}** is one of:
+  * PREANSWER
+    * These are prompts that are played while a caller is in queue but before the call has been answered by an agent
+  * PREQUEUE
+    * These are prompts played to a caller before being placed in queue
+  * WHISPER
+    * These are prompts that are played to the agent just before being connected to a caller
+  * EMERG
+    * These are reserved for when the system is placed in emergency mode
+  * IVR
+    * These are IVR prompts
+* **XXX** is the phrase number from 001-999
+
+### Default Settings
+The following default settings need to be set in order for recording management functions to work properly:
+
+* Browse to **Advanced>>Default Settings**
+* In the **Recordings** section change/add the following settings:
+  * Subcategory: **admin_acct**
+    * Type: numeric
+    * Value: <ANY_4_DIGIT_ACCT_NUMBER>
+    * Enabled: True
+    * Description: Administrative account for managing all system recordings
+  * Subcategory: **emergency_mode**
+    * Type: numeric
+    * Value: 0
+    * Enabled: True
+    * Description: System emergency prompt mode
+  * Subcategory: **vm_prefix**
+    * Type: text
+    * Value: <SINGLE_DIGIT_PREFIX>
+    * Enabled: True
+    * Description: Prefix for ALL voicemail boxes
+  * Subcategory: **tts_voice**
+    * Type: text
+    * Value: Matthew
+    * Enabled: True
+    * Description: Text to speech voice to use for prompt management system
+
+### PIN Numbers
+With The PIN Numbers module enabled you can add entries for each user that will be managing recordings. To do this browse to **Applications>>PIN Numbers** and add users with the following settings:
+
+* **PIN Number**: The PIN number for the user
+* **Accountcode** The 4 digit zero padded account number that the user is allowed to manage, **OR** the administrative account code if they need to manage all prompts/recordings
+* **Enabled**: True
+* **Description**: User's full name
+
+### Dialplan
+Add a dialplan entry with the following settings to access the prompt management
+
+* **Name**: prompt_mgmt
+* **Number**: *733
+* **Continue**: False
+* **Enabled**: True
+
+| Tag       | Type               | Data               | Break | Inline | Group | Order |
+|-----------|--------------------|--------------------|-------|--------|-------|-------|
+| condition | destination_number | `^\*(733)$`        |       |        | 0     | 5     |
+| action    | answer             |                    |       |        | 0     | 10    |
+| action    | lua                | app.lua promptmgmt |       |        | 0     | 20    |
