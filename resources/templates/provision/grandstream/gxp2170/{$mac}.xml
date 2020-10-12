@@ -686,7 +686,7 @@
 
     <!-- # Dial Plan Prefix -->
     <!-- # String  -->
-    <P66></P66>
+    <P66>{$grandstream_dial_prefix}</P66>
 
     <!-- # Dial Plan. Default value is { x+ | \+x+ | *x+ | *xx*x+ } -->
     <!-- # String -->
@@ -7330,7 +7330,9 @@
     <!-- # Onhook Dial Barging. 0 - Disabled, 1 - Enabled. Default is 1 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P8397>1</P8397>
+    {if isset($grandstream_onhook_dial_barging)}
+      <P8397>{$grandstream_onhook_dial_barging}</P8397>
+    {/if}
 
     <!-- # Off-hook Auto Dial -->
     <!-- # String -->
@@ -7373,7 +7375,9 @@
     <!-- # Bypass Dial Plan Through Call History and Directories. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
     <!-- # Mandatory -->
-    <P6758>0</P6758>
+    {if isset($grandstream_history_dialplan_bypass)}
+      <P6758>{$grandstream_history_dialplan_bypass}</P6758>
+    {/if}
 
     <!-- # Disable Call Waiting. 0 - No, 1 - Yes. Default is 0 -->
     <!-- # Number: 0, 1 -->
@@ -8252,7 +8256,9 @@
     <!-- # Speaker Ring Volume -->
     <!-- # Number: 0-7. Default is 5. -->
     <!-- # Mandatory -->
-    <P8352>5</P8352>
+{if isset($grandstream_speaker_ring_volume)}
+    <P8352>{$grandstream_speaker_ring_volume}</P8352>
+{/if} 
 
     <!-- # Notification Tone Volume -->
     <!-- # Number: 0-7. Default is 5. -->

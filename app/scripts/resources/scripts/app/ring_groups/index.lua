@@ -35,7 +35,6 @@
 	dbh = Database.new('system');
 
 --include json library
-	--debug["sql"] = true;
 	local json
 	if (debug["sql"]) then
 		json = require "resources.functions.lunajson"
@@ -52,6 +51,7 @@
 --- include libs
 	local route_to_bridge = require "resources.functions.route_to_bridge"
 	local play_file   = require "resources.functions.play_file"
+	local send_mail = require 'resources.functions.send_mail'
 
 --define the session hangup
 	function session_hangup_hook()
@@ -245,10 +245,19 @@
 
 --set the recording file name
 	if (session:ready()) then
-		record_name = session:getVariable("record_name");
-		if (not record_name) then
+		--record_name = session:getVariable("record_name");
+		--sip_from_user = session:getVariable("sip_from_user");
+		--sip_to_user = session:getVariable("sip_to_user");
+
+		--record_name = record_name:gsub("${caller_id_name}", caller_id_name);
+		--record_name = record_name:gsub("${caller_id_number}", caller_id_number);
+		--record_name = record_name:gsub("${sip_from_user}", sip_from_user);
+		--record_name = record_name:gsub("${sip_to_user}", sip_to_user);
+		--record_name = record_name:gsub("${dialed_user}", ring_group_extension);
+
+		--if (not record_name) then
 			record_name = uuid .. "." .. record_ext;
-		end
+		--end
 	end
 
 ---set the call_timeout to a higher value to prevent the early timeout of the ring group
@@ -294,6 +303,9 @@
 		--send missed call email
 		if (missed_call_app ~= nil and missed_call_data ~= nil) then
 			if (missed_call_app == "email") then
+				--prepare the email address
+					mail_to = missed_call_data;
+
 				--set the sounds path for the language, dialect and voice
 					default_language = session:getVariable("default_language");
 					default_dialect = session:getVariable("default_dialect");
@@ -319,10 +331,12 @@
 					end);
 
 				--prepare the headers
-					headers = '{"X-FusionPBX-Domain-UUID":"'..domain_uuid..'",';
-					headers = headers..'"X-FusionPBX-Domain-Name":"'..domain_name..'",';
-					headers = headers..'"X-FusionPBX-Call-UUID":"'..uuid..'",';
-					headers = headers..'"X-FusionPBX-Email-Type":"missed"}';
+					local headers = {
+						["X-FusionPBX-Domain-UUID"] = domain_uuid;
+						["X-FusionPBX-Domain-Name"] = domain_name;
+						["X-FusionPBX-Call-UUID"]   = uuid;
+						["X-FusionPBX-Email-Type"]  = 'missed';
+					}
 
 				--prepare the subject
 					subject = subject:gsub("${caller_id_name}", caller_id_name);
@@ -351,12 +365,14 @@
 					body = trim(body);
 
 				--send the email
-					cmd = "luarun email.lua "..missed_call_data.." "..missed_call_data.." "..headers.." '"..subject.."' '"..body.."'";
 					if (debug["info"]) then
-						freeswitch.consoleLog("notice", "[missed call] cmd: " .. cmd .. "\n");
+						freeswitch.consoleLog("notice", "[missed call]: "..mail_to.." '"..subject.."' '"..body.."'\n");
 					end
-					api = freeswitch.API();
-					result = api:executeString(cmd);
+
+					send_mail(headers,
+						mail_to,
+						{subject, body}
+					);
 			end
 		end
 	end

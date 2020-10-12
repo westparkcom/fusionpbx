@@ -686,7 +686,7 @@
 
     <!-- # Dial Plan Prefix -->
     <!-- # String  -->
-    <P66></P66>
+    <P66>{$grandstream_dial_prefix}</P66>
 
     <!-- # Dial Plan. Default value is { x+ | \+x+ | *x+ | *xx*x+ } -->
     <!-- # String -->
@@ -4285,7 +4285,7 @@
     <!-- ############################################################################## -->
     <!-- # Enable/Disable WiFi -->
     <!-- # Number: 0 - No, 2 - Off & Hide Menu From LCD, 1 - Yes. Default is 0 -->
-         {if isset($grandstream_wifi_enable)
+         {if isset($grandstream_wifi_enable)}
 	 <P7800>{$grandstream_wifi_enable}</P7800>
          {/if}
 
@@ -6431,7 +6431,9 @@
     <!-- # Speaker Ring Volume -->
     <!-- # Number: 0-7. Default is 5. -->
     <!-- # Mandatory -->
-    <P8352>5</P8352>
+{if isset($grandstream_speaker_ring_volume)}
+    <P8352>{$grandstream_speaker_ring_volume}</P8352>
+{/if} 
 
     <!-- # Notification Tone Volume -->
     <!-- # Number: 0-7. Default is 5. -->
@@ -6565,7 +6567,7 @@
 
 <!-- Detected {$template} with {$fixed_keys} fixed keys -->
 {$start_id=1363}
-{assign var=key_types value=["none"=>-1,"line"=>31,"shared line"=>32,"speed dial"=>0, "blf"=>1, "presence watcher"=>2, "eventlist blf"=>3,"speed dial active"=>4,"dial dtmf"=>5,"voicemail"=>6,"call return"=>7,"transfer"=>8,"call park"=>9,"intercom"=>10,"ldap search"=>11,"multicast paging"=>13,"record"=>14,"call log"=>15,"monitored call park"=>16,"menu"=>17]}
+{assign var=key_types value=["none"=>-1,"phonebook"=>30,"line"=>31,"shared line"=>32,"speed dial"=>0, "blf"=>1, "presence watcher"=>2, "eventlist blf"=>3,"speed dial active"=>4,"dial dtmf"=>5,"voicemail"=>6,"call return"=>7,"transfer"=>8,"call park"=>9,"intercom"=>10,"ldap search"=>11,"multicast paging"=>13,"record"=>14,"call log"=>15,"monitored call park"=>16,"menu"=>17]}
 
 {for $line=1 to 6}
 {$pid=$line*2-2}
