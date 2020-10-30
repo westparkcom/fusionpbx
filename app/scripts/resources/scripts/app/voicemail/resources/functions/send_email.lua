@@ -32,8 +32,8 @@
 	function send_email(id, uuid)
 		local db = dbh or Database.new('system')
 		local settings = Settings.new(db, domain_name, domain_uuid)
-		local email_method = settings:get('email', 'method', 'text');
 		local transcribe_enabled = settings:get('voicemail', 'transcribe_enabled', 'boolean');
+		local email_queue_enabled = settings:get('email_queue', 'enabled', 'boolean') or "false";
 		
 		--get voicemail message details
 			local sql = [[SELECT * FROM v_voicemails
@@ -204,7 +204,9 @@
 					body = body:gsub("${voicemail_name_formatted}", voicemail_name_formatted);
 					body = body:gsub("${domain_name}", domain_name);
 					body = body:gsub("${sip_to_user}", id);
-					body = body:gsub("${origination_callee_id_name}", origination_callee_id_name);
+					if (origination_callee_id_name ~= nil) then
+						body = body:gsub("${origination_callee_id_name}", origination_callee_id_name);
+					end
 					body = body:gsub("${dialed_user}", id);
 					if (voicemail_file == "attach") then
 						body = body:gsub("${message}", text['label-attached']);
@@ -242,7 +244,7 @@
 			end
 
 		--whether to keep the voicemail message and details local after email
-			if (string.len(voicemail_mail_to) > 2 and email_method ~= 'queue') then
+			if (string.len(voicemail_mail_to) > 2 and email_queue_enabled == 'false') then
 				if (voicemail_local_after_email == "false") then
 					--delete the voicemail message details
 						local sql = [[DELETE FROM v_voicemail_messages
