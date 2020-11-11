@@ -90,7 +90,7 @@ ttsvoice = 'Matthew'; --text to speech voice
 		phraseNoModify = "This phrase cannot be modified as it has custom programming enabled. Please contact your system administrator for more details.",
 		phraseNoMatch = "There were no matching recordings for this prompt. Please inform your system administrator of this issue.",
 		phraseRecNotFound = 'Recording not found. Please set a recording for this prompt.',
-		phraseRecChoose = 'Please enter the recording number from 1 to 9999 you wish to set for this prompt. For a list of recordings, press star star. To cancel, press star.',
+		phraseRecChoose = 'Please enter the recording number from 1 to 9999 you wish to set for this prompt. For a list of recordings, press star star. To cancel, press star. To remove the recording from this prompt, press 0.',
 		phraseRecSet = {
 			'Recording number ',
 			' set successfully for ',
@@ -98,6 +98,7 @@ ttsvoice = 'Matthew'; --text to speech voice
 			'.'
 		},
 		phraseDefault = " the default recording.",
+		phraseRemoved = "The recording has been removed from this prompt.",
 		recordingChoice = "To manage recordings, enter the recording number from 1 to 9999. To hear a list of recordings for this account, press star star. To return to the main menu, press star.",
 		recordingInfoInterrupt = "Press any key at any time to return to the previous menu.",
 		recordingOptions = "To listen to this recording, press 1. To record this recording, press 2. To cancel and return to the previous menu, press star.",
@@ -350,13 +351,23 @@ end
 	end
 
 -- query to set recording in phrase
-	function updatePhraseRecording(phrasenumber, phrases, recordingnumber, recordings)
+	function updatePhraseRecording(phrasenumber, phrases, recordingnumber, recordings, phrasetype)
 		local sql = [[UPDATE v_phrase_details
 						SET phrase_detail_data = :phrase_detail_data
 						WHERE phrase_detail_uuid = :phrase_detail_uuid
 						AND domain_uuid = :domain_uuid]];
+		local detail_data = '${lua streamfile.lua '
+		if recordingnumber > 0:
+			detail_data = detail_data .. recordings[1][zeropad(4, recordingnumber)]['recording_filename'] .. '}'
+		else
+			if phrasetype == 'PREANSWER' or phrasetype == 'EMERG':
+				detail_data = detail_data .. 'default-' .. phrasetype .. '.wav}'
+			else
+				detail_data = detail_data .. 'default-SILENCE.wav}'
+			end
+		end
 		local dbparams = {
-			phrase_detail_data = '${lua streamfile.lua ' .. recordings[1][zeropad(4, recordingnumber)]['recording_filename'] .. '}',
+			phrase_detail_data = detail_data,
 			phrase_detail_uuid = phrases[1][zeropad(3, phrasenumber)]['detail']['phrase_detail_uuid'],
 			domain_uuid = domain_uuid
 		};
@@ -393,11 +404,22 @@ end
 				return result;
 			elseif phraseChoice == '**' then
 				playRecordingsInfo(recordingsdata);
+			elseif phraseChoice == '0' then
+				if recordingsdata[1][zeropad(4, phraseChoice)] == nil then
+					session:execute('playback', saytext(greetings['recordingNotExist']));
+				else:
+					updatePhraseRecording(phrasenumber, phrases, tonumber(phraseChoice), recordingsdata, phrasetype);
+					-- After delete, repopulate phrase data
+					allphrases = phrasesQuery(phrasetype, accountnum);
+					phrases = allphrases['data'];
+					session:execute('playback', saytext(greetings['phraseRemoved']));
+					validchoice = true;
+					result = true;
 			else
 				if recordingsdata[1][zeropad(4, phraseChoice)] == nil then
 					session:execute('playback', saytext(greetings['recordingNotExist']));
 				else
-					updatePhraseRecording(phrasenumber, phrases, tonumber(phraseChoice), recordingsdata);
+					updatePhraseRecording(phrasenumber, phrases, tonumber(phraseChoice), recordingsdata, phrasetype);
 					-- After update, repopulate phrase data
 					allphrases = phrasesQuery(phrasetype, accountnum);
 					phrases = allphrases['data'];
