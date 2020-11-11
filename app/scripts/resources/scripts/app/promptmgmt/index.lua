@@ -415,6 +415,7 @@ end
 					session:execute('playback', saytext(greetings['phraseRemoved']));
 					validchoice = true;
 					result = true;
+				end
 			else
 				if recordingsdata[1][zeropad(4, phraseChoice)] == nil then
 					session:execute('playback', saytext(greetings['recordingNotExist']));
