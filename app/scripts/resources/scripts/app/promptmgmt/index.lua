@@ -407,7 +407,7 @@ end
 			elseif phraseChoice == '0' then
 				if recordingsdata[1][zeropad(4, phraseChoice)] == nil then
 					session:execute('playback', saytext(greetings['recordingNotExist']));
-				else:
+				else
 					updatePhraseRecording(phrasenumber, phrases, tonumber(phraseChoice), recordingsdata, phrasetype);
 					-- After delete, repopulate phrase data
 					allphrases = phrasesQuery(phrasetype, accountnum);
