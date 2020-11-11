@@ -357,10 +357,10 @@ end
 						WHERE phrase_detail_uuid = :phrase_detail_uuid
 						AND domain_uuid = :domain_uuid]];
 		local detail_data = '${lua streamfile.lua '
-		if recordingnumber > 0:
+		if recordingnumber > 0 then
 			detail_data = detail_data .. recordings[1][zeropad(4, recordingnumber)]['recording_filename'] .. '}'
 		else
-			if phrasetype == 'PREANSWER' or phrasetype == 'EMERG':
+			if phrasetype == 'PREANSWER' or phrasetype == 'EMERG' then
 				detail_data = detail_data .. 'default-' .. phrasetype .. '.wav}'
 			else
 				detail_data = detail_data .. 'default-SILENCE.wav}'
