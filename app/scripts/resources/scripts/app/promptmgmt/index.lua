@@ -405,17 +405,13 @@ end
 			elseif phraseChoice == '**' then
 				playRecordingsInfo(recordingsdata);
 			elseif phraseChoice == '0' then
-				if recordingsdata[1][zeropad(4, phraseChoice)] == nil then
-					session:execute('playback', saytext(greetings['recordingNotExist']));
-				else
-					updatePhraseRecording(phrasenumber, phrases, tonumber(phraseChoice), recordingsdata, phrasetype);
-					-- After delete, repopulate phrase data
-					allphrases = phrasesQuery(phrasetype, accountnum);
-					phrases = allphrases['data'];
-					session:execute('playback', saytext(greetings['phraseRemoved']));
-					validchoice = true;
-					result = true;
-				end
+				updatePhraseRecording(phrasenumber, phrases, tonumber(phraseChoice), recordingsdata, phrasetype);
+				-- After delete, repopulate phrase data
+				allphrases = phrasesQuery(phrasetype, accountnum);
+				phrases = allphrases['data'];
+				session:execute('playback', saytext(greetings['phraseRemoved']));
+				validchoice = true;
+				result = true;
 			else
 				if recordingsdata[1][zeropad(4, phraseChoice)] == nil then
 					session:execute('playback', saytext(greetings['recordingNotExist']));
