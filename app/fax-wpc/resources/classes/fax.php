@@ -193,9 +193,6 @@ if (!class_exists('fax')) {
 				$p->delete("dialplan_edit", 'temp');
 				$p->delete("dialplan_detail_edit", 'temp');
 
-			//synchronize the xml config
-				save_dialplan_xml();
-
 			//clear the cache
 				$cache = new cache;
 				$cache->delete("dialplan:".$_SESSION['context']);
@@ -290,9 +287,6 @@ if (!class_exists('fax')) {
 									$p->delete('fax_delete', 'temp');
 									$p->delete('dialplan_delete', 'temp');
 									$p->delete('dialplan_detail_delete', 'temp');
-
-								//syncrhonize configuration
-									save_dialplan_xml();
 
 								//apply settings reminder
 									$_SESSION["reload_xml"] = true;
@@ -593,9 +587,6 @@ if (!class_exists('fax')) {
 								//revoke temporary permissions
 									$p->delete('fax_add', 'temp');
 									$p->delete('dialplan_add', 'temp');
-
-								//syncrhonize configuration
-									save_dialplan_xml();
 
 								//apply settings reminder
 									$_SESSION["reload_xml"] = true;
