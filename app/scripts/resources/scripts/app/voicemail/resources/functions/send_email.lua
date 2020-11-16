@@ -166,12 +166,20 @@
 					}
 
 				--prepare the voicemail_name_formatted
-					voicemail_name_formatted = id;
-					local display_domain_name = settings:get('voicemail', 'display_domain_name', 'boolean');
-
-					if (display_domain_name == 'true') then
-						voicemail_name_formatted = id.."@"..domain_name;
+					
+					voicemail_name_formatted = '';
+					acctnum = tostring(tonumber(string.sub(id, 2, 5)))
+					if string.len(id) == 5: -- Means account default mailbox example 39000
+						mbnum = '0'
+					else: -- Means a non-default mailbox, example 3900020
+						mbnum = tostring(tonumber(string.sub(id, 6, -1)))
 					end
+					voicemail_name_formatted = "Account: " .. acctnum .. " Mailbox: " .. mbnum
+					--local display_domain_name = settings:get('voicemail', 'display_domain_name', 'boolean');
+
+					--if (display_domain_name == 'true') then
+						--voicemail_name_formatted = id.."@"..domain_name;
+					--end
 					if (voicemail_description ~= nil and voicemail_description ~= "" and voicemail_description ~= id) then
 						voicemail_name_formatted = voicemail_name_formatted.." ("..voicemail_description..")";
 					end

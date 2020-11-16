@@ -22,7 +22,7 @@ middlePromptWav = saytext(middlePrompt)
 
 vmacct = vmbox:sub(2, 5)
 if vmbox:len() > 5 then
-    boxnum = tostring(tonumber(vmbox:sub(6, 7)))
+    boxnum = tostring(tonumber(vmbox:sub(6, -1)))
 else
     boxnum = '0'
 end
