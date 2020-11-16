@@ -174,7 +174,7 @@
 					else -- Means a non-default mailbox, example 3900020
 						mbnum = tostring(tonumber(string.sub(id, 6, -1)))
 					end
-					voicemail_name_formatted = "Account: " .. acctnum .. " Mailbox: " .. mbnum
+					voicemail_name_formatted = "Account " .. acctnum .. ", Mailbox " .. mbnum
 					--local display_domain_name = settings:get('voicemail', 'display_domain_name', 'boolean');
 
 					--if (display_domain_name == 'true') then
