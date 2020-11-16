@@ -169,9 +169,9 @@
 					
 					voicemail_name_formatted = '';
 					acctnum = tostring(tonumber(string.sub(id, 2, 5)))
-					if string.len(id) == 5: -- Means account default mailbox example 39000
+					if string.len(id) == 5 then -- Means account default mailbox example 39000
 						mbnum = '0'
-					else: -- Means a non-default mailbox, example 3900020
+					else -- Means a non-default mailbox, example 3900020
 						mbnum = tostring(tonumber(string.sub(id, 6, -1)))
 					end
 					voicemail_name_formatted = "Account: " .. acctnum .. " Mailbox: " .. mbnum
