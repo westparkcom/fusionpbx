@@ -84,11 +84,20 @@
 					end
 					local message_date = os.date("%A, %d %b %Y %I:%M %p", created_epoch)
 
+					voicemail_name_formatted = '';
+					acctnum = tostring(tonumber(string.sub(id, 2, 5)))
+					if string.len(id) == 5 then -- Means account default mailbox example 39000
+						mbnum = '0'
+					else -- Means a non-default mailbox, example 3900020
+						mbnum = tostring(tonumber(string.sub(id, 6, -1)))
+					end
+					voicemail_name_formatted = "Account " .. acctnum .. ", Mailbox " .. mbnum
+
 					sms_body = sms_body:gsub("${caller_id_name}", caller_id_name);
 					sms_body = sms_body:gsub("${caller_id_number}", caller_id_number);
 					sms_body = sms_body:gsub("${message_date}", message_date);
 					sms_body = sms_body:gsub("${message_duration}", message_length_formatted);
-					sms_body = sms_body:gsub("${account}", id);
+					sms_body = sms_body:gsub("${account}", voicemail_name_formatted);
 					sms_body = sms_body:gsub("${domain_name}", domain_name);
 					sms_body = sms_body:gsub("${sip_to_user}", id);
 					sms_body = sms_body:gsub("${dialed_user}", id);
