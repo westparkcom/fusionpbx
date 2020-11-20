@@ -839,6 +839,7 @@
 		"record_append=true",
 		"record_in_progress=true",
 		"recording_follow_transfer=true",
+		"hold_music=".$destination_hold_music
 	);
 	foreach($dialplan_details as $row) {
 		if ($row['dialplan_detail_data'] == "tone_detect_hits=1") {
