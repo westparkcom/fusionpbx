@@ -161,7 +161,7 @@
 			if (strlen($destination_enabled) == 0) { $msg .= $text['message-required']." ".$text['label-destination_enabled']."<br>\n"; }
 
 		//check for duplicates
-			if ($destination_type == 'inbound' && $destination_number != $db_destination_number) {
+			if ($destination_type == 'inbound' && $destination_number != $db_destination_number && $_SESSION['destinations']['unique']['boolean'] == 'true') {
 				$sql = "select count(*) from v_destinations ";
 				$sql .= "where (destination_number = :destination_number or destination_prefix || destination_number = :destination_number) ";
 				$sql .= "and destination_type = 'inbound' ";
@@ -335,7 +335,7 @@
 							$dialplan["dialplan_xml"] .= "		<action application=\"set\" data=\"hold_music=".$destination_hold_music."\" inline=\"true\"/>\n";
 						}
 						if (strlen($destination_accountcode) > 0) {
-							$dialplan["dialplan_xml"] .= "		<action application=\"set\" data=\"accountcode=".$destination_accountcode."\" inline=\"true\"/>\n";
+							$dialplan["dialplan_xml"] .= "		<action application=\"export\" data=\"accountcode=".$destination_accountcode."\" inline=\"true\"/>\n";
 						}
 						if (strlen($destination_carrier) > 0) {
 							$dialplan["dialplan_xml"] .= "		<action application=\"set\" data=\"carrier=".$destination_carrier."\" inline=\"true\"/>\n";
@@ -439,7 +439,7 @@
 							if (strlen($destination_accountcode) > 0) {
 								$dialplan["dialplan_details"][$y]["domain_uuid"] = $domain_uuid;
 								$dialplan["dialplan_details"][$y]["dialplan_detail_tag"] = "action";
-								$dialplan["dialplan_details"][$y]["dialplan_detail_type"] = "set";
+								$dialplan["dialplan_details"][$y]["dialplan_detail_type"] = "export";
 								$dialplan["dialplan_details"][$y]["dialplan_detail_data"] = "accountcode=".$destination_accountcode;
 								$dialplan["dialplan_details"][$y]["dialplan_detail_inline"] = "true";
 								$dialplan["dialplan_details"][$y]["dialplan_detail_order"] = $dialplan_detail_order;
@@ -760,7 +760,7 @@
 	}
 
 //pre-populate the form
-	if (count($_GET) > 0 && $_POST["persistformvar"] != "true") {
+	if (is_array($_GET) > 0 && $_POST["persistformvar"] != "true") {
 	 	if (is_uuid($_GET["id"])) {
 	 		$destination_uuid = $_GET["id"];
 			$sql = "select * from v_destinations ";
@@ -816,7 +816,7 @@
 	unset($sql, $parameters);
 
 //add an empty row to the array
-	$x = count($dialplan_details);
+	$x = (is_array($dialplan_details)) ? count($dialplan_details) : $x = 0;
 	$limit = $x + 1;
 	while($x < $limit) {
 		$dialplan_details[$x]['domain_uuid'] = $domain_uuid;
@@ -1130,7 +1130,7 @@
 		if (is_array($dialplan_details) && @sizeof($dialplan_details) != 0) {
 			foreach($dialplan_details as $row) {
 				if ($row["dialplan_detail_tag"] != "condition") {
-					if ($row["dialplan_detail_tag"] == "action" && $row["dialplan_detail_type"] == "set") {
+					if ($row["dialplan_detail_tag"] == "action" && ($row["dialplan_detail_type"] == "set" || $row["dialplan_detail_type"] == "export")) {
 						if (strpos($row["dialplan_detail_data"], "accountcode") === 0) { continue; } //exclude set:accountcode actions
 						if (strpos($row["dialplan_detail_data"], "hangup_after_bridge") === 0) { continue; } //exclude set:hangup_after_bridge actions
 						if (strpos($row["dialplan_detail_data"], "continue_on_fail") === 0) { continue; } //exclude set:continue_on_fail actions
