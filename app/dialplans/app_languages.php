@@ -295,6 +295,27 @@ $text['option-hangup']['ru-ru'] = "Отбой";
 $text['option-hangup']['sv-se'] = "Lägg på";
 $text['option-hangup']['uk-ua'] = "роз'єднання";
 
+$text['option-answer']['en-us'] = "Answer";
+$text['option-answer']['en-gb'] = "Answer";
+$text['option-answer']['ar-eg'] = "";
+$text['option-answer']['de-at'] = ""; //copied from de-de
+$text['option-answer']['de-ch'] = ""; //copied from de-de
+$text['option-answer']['de-de'] = "";
+$text['option-answer']['es-cl'] = "";
+$text['option-answer']['es-mx'] = ""; //copied from es-cl
+$text['option-answer']['fr-ca'] = ""; //copied from fr-fr
+$text['option-answer']['fr-fr'] = "";
+$text['option-answer']['he-il'] = "";
+$text['option-answer']['it-it'] = "";
+$text['option-answer']['nl-nl'] = "";
+$text['option-answer']['pl-pl'] = "";
+$text['option-answer']['pt-br'] = ""; //copied from pt-pt
+$text['option-answer']['pt-pt'] = "";
+$text['option-answer']['ro-ro'] = "";
+$text['option-answer']['ru-ru'] = "";
+$text['option-answer']['sv-se'] = "";
+$text['option-answer']['uk-ua'] = "";
+
 $text['option-record']['en-us'] = "Record";
 $text['option-record']['en-gb'] = "Record";
 $text['option-record']['ar-eg'] = "";
