@@ -1,7 +1,7 @@
 -- Queue Recipe Processor
 
 -- The default music on hold stream
-defaultmoh = "callswitch.westparkcom.com/WPC-Hold"
+defaultmoh = "default"
 
 
 -- Need some json goodies
