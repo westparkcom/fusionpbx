@@ -290,6 +290,10 @@ function playmoh(mohdata)
     -- Plays Music on Hold
     local seconds = tonumber(mohdata[1]) or 0
     local tonestring = getvar("hold_music")
+    if tonestring == nil then
+        freeswitch.consoleLog('WARN', 'Music on hold not set, using default stream.')
+        tonestring = "local_stream://" .. defaultmoh
+    end
     local broadcast = "uuid_broadcast " .. callinfo["call_uuid"] .. " " .. tonestring .. " both"
     api:executeString(broadcast)
     local currepoch = currentepoch()
@@ -918,8 +922,6 @@ function run_call()
         uuid_setvar(callinfo['call_uuid'], 'accountcode', '0000')
     end
     callinfo["callrecipe"] = get_call_data(callinfo["pilotnumber"])
-    -- Set the default MoH
-    uuid_setvar(callinfo["call_uuid"], "hold_music", "local_stream://" .. defaultmoh)
     -- Set active call counter counter for ANI and DNIS
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-ani " .. callinfo["ani"]:gsub("[^%w_-]", "") .. " -1")
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-dnis " .. callinfo["dnis"] .. " -1")
