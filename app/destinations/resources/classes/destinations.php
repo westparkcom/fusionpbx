@@ -192,17 +192,16 @@ if (!class_exists('destinations')) {
 						}
 						$x++;
 					}
-					$x++;
-				}
-				$i = 0;
-				$this->destination_types = array();
-				foreach ($apps as $x => &$app) {
-					if (isset($app['destinations'])) foreach ($app['destinations'] as &$row) {
-						if (!in_array($row["name"], $this->destination_types)) {
-							if (permission_exists($this->singular($row["name"])."_destinations")) {
-								$this->destinations[] = $row;
+					$i = 0;
+					$this->destination_types = array();
+					foreach ($apps as $x => &$app) {
+						if (isset($app['destinations'])) foreach ($app['destinations'] as &$row) {
+							if (!in_array($row["name"], $this->destination_types)) {
+								if (permission_exists($this->singular($row["name"])."_destinations")) {
+									$this->destinations[] = $row;
+								}
+								$this->destination_types[] = $row["name"];
 							}
-							$this->destination_types[] = $row["name"];
 						}
 					}
 					//put the array in order
