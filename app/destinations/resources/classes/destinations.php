@@ -636,6 +636,11 @@ if (!class_exists('destinations')) {
 				$this->destinations[$x]['result']['data'][$y]['name'] = '*411';
 				$this->destinations[$x]['result']['data'][$y]['destination'] = '*411 XML ${context}';
 				$y++;
+				$this->destinations[$x]['result']['data'][$y]['label'] = 'answer';
+				$this->destinations[$x]['result']['data'][$y]['name'] = 'answer';
+				$this->destinations[$x]['result']['data'][$y]['application'] = 'answer';
+				$this->destinations[$x]['result']['data'][$y]['destination'] = '';
+				$y++;
 				$this->destinations[$x]['result']['data'][$y]['label'] = 'hangup';
 				$this->destinations[$x]['result']['data'][$y]['name'] = 'hangup';
 				$this->destinations[$x]['result']['data'][$y]['application'] = 'hangup';
@@ -847,6 +852,11 @@ if (!class_exists('destinations')) {
 				$this->destinations[$x]['result']['data'][$y]['name'] = '*411';
 				$this->destinations[$x]['result']['data'][$y]['extension'] = '*411';
 				$this->destinations[$x]['result']['data'][$y]['destination'] = '*411 XML ${context}';
+				$y++;
+				$this->destinations[$x]['result']['data'][$y]['label'] = 'answer';
+				$this->destinations[$x]['result']['data'][$y]['name'] = 'answer';
+				$this->destinations[$x]['result']['data'][$y]['application'] = 'answer';
+				$this->destinations[$x]['result']['data'][$y]['destination'] = '';
 				$y++;
 				$this->destinations[$x]['result']['data'][$y]['label'] = 'hangup';
 				$this->destinations[$x]['result']['data'][$y]['name'] = 'hangup';
