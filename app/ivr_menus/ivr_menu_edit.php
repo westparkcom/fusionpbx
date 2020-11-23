@@ -578,7 +578,7 @@
 	if (!isset($ivr_menu_exit_action)) { $ivr_menu_exit_action = ''; }
 
 //get installed languages
-	$language_paths = glob($_SESSION["switch"]['sounds']['dir']."/*/*/*");
+	$language_paths = glob($_SESSION["switch"]['sounds']['dir']."/??/*/*"); // This allows you to have other directories in the sounds folder by only searching 2 letter directories.
 	foreach ($language_paths as $key => $path) {
 		$path = str_replace($_SESSION["switch"]['sounds']['dir'].'/', "", $path);
 		$path_array = explode('/', $path);
