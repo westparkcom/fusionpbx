@@ -594,7 +594,7 @@
 //get the recordings
 	if ($_SESSION['ivr_menus']['show_recordings']['boolean'] == 'false') {
 		$recordings = NULL;
-	else {
+	} else {
 		$sql = "select recording_name, recording_filename from v_recordings ";
 		$sql .= "where domain_uuid = :domain_uuid ";
 		$sql .= "order by recording_name asc ";
