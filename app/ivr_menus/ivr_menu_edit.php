@@ -592,7 +592,7 @@
 	}
 
 //get the recordings
-	if ($_SESSION['ivr_menus']['show_recordings']['boolean'] == 'false') {
+	if ($_SESSION['ivr_menu']['show_recordings']['boolean'] == 'false') {
 		$recordings = NULL;
 	} else {
 		$sql = "select recording_name, recording_filename from v_recordings ";
