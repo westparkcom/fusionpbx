@@ -578,7 +578,7 @@
 	if (!isset($ivr_menu_exit_action)) { $ivr_menu_exit_action = ''; }
 
 //get installed languages
-	$language_paths = glob($_SESSION["switch"]['sounds']['dir']."/??/*/*"); // This allows you to have other directories in the sounds folder by only searching 2 letter directories.
+	$language_paths = glob($_SESSION["switch"]['sounds']['dir']."/??/*/*", GLOB_ONLYDIR); // This allows you to have other directories in the sounds folder by only searching 2 letter directories.
 	foreach ($language_paths as $key => $path) {
 		$path = str_replace($_SESSION["switch"]['sounds']['dir'].'/', "", $path);
 		$path_array = explode('/', $path);
@@ -592,13 +592,17 @@
 	}
 
 //get the recordings
-	$sql = "select recording_name, recording_filename from v_recordings ";
-	$sql .= "where domain_uuid = :domain_uuid ";
-	$sql .= "order by recording_name asc ";
-	$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
-	$database = new database;
-	$recordings = $database->select($sql, $parameters, 'all');
-	unset($sql, $parameters);
+	if ($_SESSION['ivr_menus']['show_recordings']['boolean'] == 'false') {
+		$recordings = NULL;
+	else {
+		$sql = "select recording_name, recording_filename from v_recordings ";
+		$sql .= "where domain_uuid = :domain_uuid ";
+		$sql .= "order by recording_name asc ";
+		$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+		$database = new database;
+		$recordings = $database->select($sql, $parameters, 'all');
+		unset($sql, $parameters);
+	}
 
 //get the phrases
 	$sql = "select * from v_phrases ";
