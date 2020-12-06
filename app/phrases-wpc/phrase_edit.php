@@ -180,6 +180,11 @@
 						$cache = new cache;
 						$cache->delete("languages:".$phrase_language.".".$phrase_uuid);
 
+					//clear the destinations session array
+						if (isset($_SESSION['destinations']['array'])) {
+							unset($_SESSION['destinations']['array']);
+						}
+
 					//send a redirect
 						message::add($text['message-add']);
 						header("Location: phrase_edit.php?id=".$phrase_uuid);
@@ -251,6 +256,11 @@
 					//clear the cache
 						$cache = new cache;
 						$cache->delete("languages:".$phrase_language.".".$phrase_uuid);
+
+					//clear the destinations session array
+						if (isset($_SESSION['destinations']['array'])) {
+							unset($_SESSION['destinations']['array']);
+						}
 
 					//send a redirect
 						message::add($text['message-update']);

@@ -281,6 +281,11 @@
 						$obj->voicemail_uuid = $voicemail_uuid;
 						$obj->voicemail_escalations_delete($voicemail_escalations_delete);
 					}
+				
+				//clear the destinations session array
+					if (isset($_SESSION['destinations']['array'])) {
+						unset($_SESSION['destinations']['array']);
+					}
 
 				//set message
 					if ($action == "add" && permission_exists('voicemail_add')) {
@@ -812,7 +817,7 @@
 	echo "</td>\n";
 	echo "</tr>\n";
 
-	if (permission_exists('voicemail_sms_edit')) {
+	if (permission_exists('voicemail_sms_edit')) { //&& file_exists($_SERVER['DOCUMENT_ROOT'].PROJECT_PATH.'/app/sms/')) {
 		echo "<tr>\n";
 		echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
 		echo "	".$text['label-voicemail_sms_to']."\n";
