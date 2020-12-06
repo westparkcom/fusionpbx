@@ -118,6 +118,10 @@
 					$database->app_uuid = '742714e5-8cdf-32fd-462c-cbe7e3d655db';
 					$database->save($array);
 					unset($array);
+				//clear the destinations session array
+					if (isset($_SESSION['destinations']['array'])) {
+						unset($_SESSION['destinations']['array']);
+					}
 				//revoke temporary permissions
 					$p->delete('dialplan_add', 'temp');
 			}
@@ -1054,6 +1058,11 @@
 											}
 										}
 
+									//clear the destinations session array
+										if (isset($_SESSION['destinations']['array'])) {
+											unset($_SESSION['destinations']['array']);
+										}
+
 									//set message
 										message::add($text['message-delete'].': '.@sizeof($array[$this->table]));
 
@@ -1209,9 +1218,11 @@
 								}
 								if (is_array($uuids) && @sizeof($uuids) != 0) {
 									$sql = "select ".$this->uuid_prefix."uuid as uuid, ".$this->toggle_field." as toggle, dialplan_context from v_".$this->table." ";
-									$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
-									$sql .= "and ".$this->uuid_prefix."uuid in (".implode(', ', $uuids).") ";
-									$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+									$sql .= "where ".$this->uuid_prefix."uuid in (".implode(', ', $uuids).") ";
+									if (!permission_exists('dialplan_all')) {
+										$sql .= "and (domain_uuid = :domain_uuid or domain_uuid is null) ";
+										$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+									}
 									$database = new database;
 									$rows = $database->select($sql, $parameters, 'all');
 									if (is_array($rows) && @sizeof($rows) != 0) {
@@ -1255,6 +1266,11 @@
 											foreach ($dialplan_contexts as $dialplan_context) {
 												$cache->delete("dialplan:".$dialplan_context);
 											}
+										}
+
+									//clear the destinations session array
+										if (isset($_SESSION['destinations']['array'])) {
+											unset($_SESSION['destinations']['array']);
 										}
 
 									//set message
