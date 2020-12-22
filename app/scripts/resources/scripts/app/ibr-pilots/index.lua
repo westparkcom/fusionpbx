@@ -75,7 +75,7 @@ function waitforplayfinish(datatocheck)
     -- TODO FIXME - Add a timeout here to prevent getting stuck (say, 240 seconds?)
     local recfinished = false
     while not recfinished do
-        collectgarbage("collect")
+        collectgarbage("step", 0)
         local event = con:pop(1, 1000)
         if event then
             local evt_uuid = event:getHeader('Unique-ID')
@@ -304,7 +304,7 @@ function playmoh(mohdata)
             mohfinished = true
             return
         end
-        collectgarbage("collect")
+        collectgarbage("step", 0)
         local event = con:pop(1, 1000)
         if event then
             local evt_uuid = event:getHeader('Unique-ID')
@@ -667,7 +667,7 @@ function sleep(sleepdata)
             finished = true
             return
         end
-        collectgarbage("collect")
+        collectgarbage("step", 0)
         local event = con:pop(1, 1000)
         if event then
             local evt_uuid = event:getHeader('Unique-ID')
@@ -925,7 +925,7 @@ function run_call()
         uuid_setvar(callinfo['call_uuid'], 'accountcode', '0000')
     end
     callinfo["callrecipe"] = get_call_data(callinfo["pilotnumber"])
-    collectgarbage("collect")
+    collectgarbage("step", 0)
     -- Set active call counter counter for ANI and DNIS
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-ani " .. callinfo["ani"]:gsub("[^%w_-]", "") .. " -1")
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-dnis " .. callinfo["dnis"] .. " -1")
@@ -949,7 +949,7 @@ function run_call()
             uuidlog("INFO", "Call bridged, stopping inbound route processing.")
             alive = nil
         end
-        collectgarbage("collect")
+        collectgarbage("step", 0)
     end
     uuidlog("INFO", "Inbound routing complete.")
     return
