@@ -28,7 +28,7 @@ require 'itas/acd_api'
 acd_init ( 'itas/' )
 
 function memclean()
-	collectgarbage("step", 1000)
+    collectgarbage("step", 1000)
 end
 
 function currentepoch()
@@ -58,7 +58,7 @@ function icontains(list, x)
 end
 
 function uuidlog(level, text)
-    freeswitch.consoleLog(level, callinfo["call_uuid"] .. ": " .. text)
+    freeswitch.consoleLog(level, callinfo["call_uuid"] .. ": " .. text .. "\n")
     return
 end
 
@@ -78,9 +78,9 @@ function waitforplayfinish(datatocheck)
     -- TODO FIXME - Add a timeout here to prevent getting stuck (say, 240 seconds?)
     local recfinished = false
     while not recfinished do
-        memclean()
         local event = con:pop(1, 1000)
         if event then
+            memclean()
             local evt_uuid = event:getHeader('Unique-ID')
             local bridged = getvar("bridge_uuid")
             if (
@@ -307,9 +307,9 @@ function playmoh(mohdata)
             mohfinished = true
             return
         end
-        memclean()
         local event = con:pop(1, 1000)
         if event then
+            memclean()
             local evt_uuid = event:getHeader('Unique-ID')
             local bridged = getvar("bridge_uuid")
             if (
@@ -670,9 +670,9 @@ function sleep(sleepdata)
             finished = true
             return
         end
-        memclean()
         local event = con:pop(1, 1000)
         if event then
+            memclean()
             local evt_uuid = event:getHeader('Unique-ID')
             if ((event:getHeader('Event-Name') == 'CHANNEL_DESTROY') or (event:getHeader('Event-Name') == 'CHANNEL_BRIDGE') or (event:getHeader('Event-Name') == 'CHANNEL_HANGUP')) and (evt_uuid == callinfo["call_uuid"]) then
                 finished = true
@@ -928,7 +928,6 @@ function run_call()
         uuid_setvar(callinfo['call_uuid'], 'accountcode', '0000')
     end
     callinfo["callrecipe"] = get_call_data(callinfo["pilotnumber"])
-    memclean()
     -- Set active call counter counter for ANI and DNIS
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-ani " .. callinfo["ani"]:gsub("[^%w_-]", "") .. " -1")
     api:executeString("uuid_limit " .. callinfo["call_uuid"] .. " hash queuecall-dnis " .. callinfo["dnis"] .. " -1")
@@ -952,7 +951,6 @@ function run_call()
             uuidlog("INFO", "Call bridged, stopping inbound route processing.")
             alive = nil
         end
-        memclean()
     end
     uuidlog("INFO", "Inbound routing complete.")
     return
