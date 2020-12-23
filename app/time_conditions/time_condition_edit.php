@@ -562,7 +562,11 @@
 			$sql .= "	) ";
 			$sql .= "	or ( ";
 			$sql .= "		dialplan_detail_tag = 'action' ";
-			$sql .= "		and dialplan_detail_data not like 'preset=%' ";
+			$sql .= "		and ";
+			$sql .= "		( ";
+			$sql .= "			dialplan_detail_data not like 'preset=%' ";
+			$sql .= "			or dialplan_detail_data is null ";
+			$sql .= "		) ";
 			$sql .= "	) ";
 			$sql .= ") ";
 			$sql .= "order by dialplan_detail_group asc, dialplan_detail_order asc";
@@ -578,10 +582,10 @@
 				foreach ($dialplan_details as $row) {
 					if ($row['dialplan_detail_tag'] == 'action') {
 						if ($row['dialplan_detail_group'] == '999') {
-							$dialplan_anti_action = $row['dialplan_detail_type'].(($row['dialplan_detail_data'] != '') ? ':'.$row['dialplan_detail_data'] : null);
+							$dialplan_anti_action = $row['dialplan_detail_type'].($row['dialplan_detail_data'] != '' || $row['dialplan_detail_type'] == 'hangup' ? ':'.$row['dialplan_detail_data'] : null);
 						}
 						else {
-							$dialplan_actions[$row['dialplan_detail_group']] = $row['dialplan_detail_type'].(($row['dialplan_detail_data'] != '') ? ':'.$row['dialplan_detail_data'] : null);
+							$dialplan_actions[$row['dialplan_detail_group']] = $row['dialplan_detail_type'].($row['dialplan_detail_data'] != '' || $row['dialplan_detail_type'] == 'hangup' ? ':'.$row['dialplan_detail_data'] : null);
 						}
 					}
 					else if ($row['dialplan_detail_tag'] == 'condition') {
@@ -1082,7 +1086,7 @@ if ($action == 'update') {
 						echo "		</tr>";
 						echo "		<tr>";
 						echo "			<td colspan='4' style='padding-top: 10px;'>";
-						echo 				$destination->select('dialplan', 'dialplan_action['.$preset_group_id.']', $dialplan_action);
+						echo 				$destination->select('dialplan', 'dialplan_action['.$preset_group_id.']', $dialplan_actions[$preset_group_id]);
 						echo "			</td>";
 						echo "		</tr>";
 						echo "	</table>";
@@ -1122,7 +1126,6 @@ if ($action == 'update') {
 										echo "	$('#value_".$preset_group_id."_' + condition_id + '_start option[value=\"".$cond_val_start."\"]').prop('selected', true);\n";
 										echo "	$('#value_".$preset_group_id."_' + condition_id + '_stop option[value=\"".$cond_val_stop."\"]').prop('selected', true);\n";
 									}
-									echo "	$('#dialplan_action_".$preset_group_id." option[value=\"".$dialplan_actions[$preset_group_id]."\"]').prop('selected', true);\n\n";
 									echo "</script>";
 								}
 							}
@@ -1157,7 +1160,7 @@ if ($action == 'update') {
 		echo "		<tr>";
 		echo "			<td>";
 		echo button::create(['type'=>'button','label'=>$text['button-advanced'],'icon'=>'tools','onclick'=>"$(this).fadeOut(400, function() { $('#default_preset_destination').fadeIn(400); document.getElementById('default_preset_destination_description').innerHTML += '<br>".$text['description-presets_advanced']."'; });"]);
-		echo "				<span id='default_preset_destination' style=' display: none;'>";
+		echo "				<span id='default_preset_destination' style='display: none;'>";
 		echo 				$destination->select('dialplan', 'default_preset_action', $dialplan_action);
 		echo "				</span>";
 		echo "			</td>";
