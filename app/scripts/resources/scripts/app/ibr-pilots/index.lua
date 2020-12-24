@@ -28,7 +28,7 @@ require 'itas/acd_api'
 acd_init ( 'itas/' )
 
 function memclean()
-    collectgarbage("step", 1000)
+    collectgarbage("step", 5)
 end
 
 function currentepoch()
