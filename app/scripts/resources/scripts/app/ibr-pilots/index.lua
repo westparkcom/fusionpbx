@@ -28,7 +28,7 @@ require 'itas/acd_api'
 acd_init ( 'itas/' )
 
 function memclean()
-    collectgarbage("collect")
+    collectgarbage("step", 1000)
 end
 
 function currentepoch()
@@ -80,6 +80,7 @@ function waitforplayfinish(datatocheck)
     while not recfinished do
         local event = con:pop(1, 1000)
         if event then
+            memclean()
             local evt_uuid = event:getHeader('Unique-ID')
             local bridged = getvar("bridge_uuid")
             if (
@@ -89,13 +90,11 @@ function waitforplayfinish(datatocheck)
                 (event:getHeader('Event-Name') == 'CHANNEL_HANGUP')) and (
                 evt_uuid == callinfo["call_uuid"])) or bridged ~= nil then
                     -- This means the call went elsewhere, we're done here
-                    memclean()
                     uuidlog("INFO", "Channel disconnected, not looking for audio to finish playing.")
                     api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
                     scriptstop = true
                 return
             elseif event:getHeader('Event-Name') == 'CHANNEL_EXECUTE_COMPLETE' and evt_uuid == callinfo["call_uuid"] then
-                memclean()
                 if event:getHeader('Application-Data') == datatocheck then
                     recfinished = true
                 end
@@ -310,6 +309,7 @@ function playmoh(mohdata)
         end
         local event = con:pop(1, 1000)
         if event then
+            memclean()
             local evt_uuid = event:getHeader('Unique-ID')
             local bridged = getvar("bridge_uuid")
             if (
@@ -672,9 +672,9 @@ function sleep(sleepdata)
         end
         local event = con:pop(1, 1000)
         if event then
+            memclean()
             local evt_uuid = event:getHeader('Unique-ID')
             if ((event:getHeader('Event-Name') == 'CHANNEL_DESTROY') or (event:getHeader('Event-Name') == 'CHANNEL_BRIDGE') or (event:getHeader('Event-Name') == 'CHANNEL_HANGUP')) and (evt_uuid == callinfo["call_uuid"]) then
-                memclean()
                 finished = true
                 return
             end
