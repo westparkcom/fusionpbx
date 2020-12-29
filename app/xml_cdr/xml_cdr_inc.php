@@ -187,7 +187,7 @@
 	}
 
 //create the sql query to get the xml cdr records
-	if (strlen($order_by) == 0) { $order_by  = "start_epoch"; }
+	if (strlen($order_by) == 0) { $order_by  = "start_stamp"; }
 	if (strlen($order) == 0) { $order  = "desc"; }
 
 //set a default number of rows to show
@@ -533,7 +533,7 @@
 		$database->password = $_SESSION['cdr']['archive_database_password']['text'];
 	}
 	$result = $database->select($sql, $parameters, 'all');
-	$result_count = (count($result) ? count($result) : 0);
+	$result_count = is_array($result) ? sizeof($result) : 0;
 	unset($database, $sql, $parameters);
 
 //return the paging
