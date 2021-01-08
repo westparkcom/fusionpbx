@@ -9,6 +9,7 @@ import argparse
 import configparser
 import pathlib
 import pymysql # pip install PyMySQL
+import re
 import datetime
 import arrow # pip install arrow
 from ffmpy import FFmpeg # pip install ffmpy
@@ -101,12 +102,6 @@ class G:
             help = "Paused Flag"
         )
         sysargs.add_argument(
-            '--clientid',
-            nargs = 1,
-            required = True,
-            help = "Client account number"
-        )
-        sysargs.add_argument(
             '--location',
             nargs = 1,
             help = "Location Data (optional)"
@@ -176,6 +171,15 @@ def parseconfig(configdata):
     elif configp.has_option('Notification', 'smtppass'):
         configarr['smtppass'] = configp['Notification']['smtppass']
     return configarr
+
+def parse_acd_datetime ( s ):
+    m = re.match ( r'^(\d{4})-?(\d{2})-?(\d{2})T(\d{2}):?(\d{2}):?(\d{2})?\.?(\d*)Z?$', s )
+    if m:
+        s = f'{m.group(1)}-{m.group(2)}-{m.group(3)}T{m.group(4)}:{m.group(5)}:{m.group(6)}.{m.group(7)}000Z'
+    try:
+        return arrow.get ( s ).to ( 'local' )
+    except arrow.parser.ParserError as e:
+        raise Exception ( f'{e!r} trying to parse timestamp {s!r}' ) from e
 
 def sendemail(subj, message, dbconfig):
     tolist = dbconfig['toaddr'].replace(
@@ -269,35 +273,38 @@ def dbinsert(dbconfig, loadconfig):
         paused = 1
     else:
         paused = 0
-    starttime = arrow.get(
+    starttime = parse_acd_datetime (
         loadconfig.starttime[0]
     )
-    starttime = starttime.to('local')
-    endtime = arrow.get(
+    endtime = parse_acd_datetime (
         loadconfig.endtime[0],
     )
-    starttime = starttime.to('local')
     accesstime = (endtime - starttime).total_seconds()
     try:
         conn = dbconn(dbconfig)
+        params = (
+            int(loadconfig.agentid[0]),
+            loadconfig.location[0].split('-')[0],
+            "{}".format(loadconfig.direction[0].upper()),
+            "{}".format(loadconfig.dnis[0]),
+            "{}".format(loadconfig.ani[0]),
+            "{}".format(loadconfig.csn[0]),
+            "{}".format(loadconfig.agent[0]),
+            "{}".format(loadconfig.outfile[0]),
+            "{}".format(starttime.strftime("%Y-%m-%d %H:%M:%S.%f")),
+            int(accesstime),
+            "{}".format(loadconfig.uuid[0]),
+            int(paused),
+        )
         with conn.cursor() as cur:
             cur.execute(
                 sql,
-                (
-                    int(loadconfig.agentid[0]),
-                    int(loadconfig.clientid[0]),
-                    "{}".format(loadconfig.direction[0].upper()),
-                    "{}".format(loadconfig.dnis[0]),
-                    "{}".format(loadconfig.ani[0]),
-                    "{}".format(loadconfig.csn[0]),
-                    "{}".format(loadconfig.agent[0]),
-                    "{}".format(loadconfig.outfile[0]),
-                    "{}".format(starttime.strftime("%Y-%m-%d %H:%M:%S.%f")),
-                    int(accesstime),
-                    "{}".format(loadconfig.uuid[0]),
-                    int(paused),
-                )
+                params,
             )
+        if False:
+            with open(f'/tmp/callconvert-{loadconfig.csn[0]}.log', 'w') as f:
+                f.write(f"SQL: `{sql}`\n")
+                f.write(f"PARAMS: {params!r}\n")
         conn.commit()
         conn.close()
         return True
@@ -389,4 +396,10 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as e:
+        import traceback
+        with open ( '/tmp/callconvert-crash.log', 'w' ) as f:
+            print ( 'Unhandled exception in callconvert.py:', file = f )
+            traceback.print_exc ( file = f, chain = True )
