@@ -564,6 +564,7 @@
 											$array["voicemails"][$i]["voicemail_enabled"] = $voicemail_enabled;
 											$array["voicemails"][$i]["voicemail_description"] = $description;
 											$array["voicemails"][$i]["voicemail_tutorial"] = $voicemail_tutorial;
+											$array["voicemails"][$i]["voicemail_transcription_enabled"] = $_SESSION['voicemail']['transcription_enabled_default']['boolean'] ?: false;
 									}
 							}
 
@@ -970,10 +971,15 @@
 	echo "    ".$text['label-extension']."\n";
 	echo "</td>\n";
 	echo "<td width='70%' class='vtable' align='left'>\n";
-	echo "    <input class='formfld' type='text' name='extension' autocomplete='new-password' maxlength='255' value=\"".escape($extension)."\" required='required'>\n";
-	echo "    <input type='text' style='display: none;' disabled='disabled'>\n"; //help defeat browser auto-fill
-	echo "<br />\n";
-	echo $text['description-extension']."\n";
+	if ($action == "add" || permission_exists("extension_extension")) {
+		echo "    <input class='formfld' type='text' name='extension' autocomplete='new-password' maxlength='255' value=\"".escape($extension)."\" required='required'>\n";
+		echo "    <input type='text' style='display: none;' disabled='disabled'>\n"; //help defeat browser auto-fill
+		echo "<br />\n";
+		echo $text['description-extension']."\n";
+	}
+	else {
+		echo escape($extension);
+	}
 	echo "</td>\n";
 	echo "</tr>\n";
 
