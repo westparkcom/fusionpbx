@@ -115,6 +115,7 @@ include "root.php";
 						if (!isset($this->db_name) && isset($db_name)) { $this->db_name = $db_name; }
 						if (!isset($this->db_secure) && isset($db_secure)) {
 							$this->db_secure = $db_secure;
+							$this->db_cert_authority = $db_cert_authority;
 						}
 						else {
 							$this->db_secure = false;
