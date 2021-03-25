@@ -291,6 +291,12 @@
 										$result[$key] = preg_replace('{\D}', '', $result[$key]);
 									}
 
+									//normalize the MAC address
+									if ($field_name == "device_mac_address") {
+										$result[$key] = strtolower($result[$key]);
+										$result[$key] = preg_replace('#[^a-fA-F0-9./]#', '', $result[$key]);
+									}
+
 									//build the data array
 									if (strlen($table_name) > 0) {
 										if (strlen($parent) == 0) {
@@ -350,6 +356,12 @@
 						$database->app_uuid = '4efa1a1a-32e7-bf83-534b-6c8299958a8e';
 						$database->save($array);
 						//$message = $database->message;
+					}
+				
+					if (strlen($_SESSION['provision']['path']['text']) > 0) {
+						$prov = new provision;
+						$prov->domain_uuid = $domain_uuid;
+						$response = $prov->write();
 					}
 
 				//send the redirect header
