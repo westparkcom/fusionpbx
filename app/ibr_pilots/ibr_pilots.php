@@ -179,7 +179,7 @@
 		echo "		<input type='checkbox' id='checkbox_all' name='checkbox_all' onclick='list_all_toggle();' ".($ibr_pilots ?: "style='visibility: hidden;'").">\n";
 		echo "	</th>\n";
 	}
-	echo th_order_by('ibr_pilot', $text['label-ibr_pilot'], $order_by, $order);
+	echo th_order_by('ibr_pilot', $text['label-ibr_pilots'], $order_by, $order);
 	echo th_order_by('enabled', $text['label-enabled'], $order_by, $order, null, "class='center'");
 	echo th_order_by('description', $text['label-description'], $order_by, $order, null, "class='hide-sm-dn'");
 	if (permission_exists('ibr_pilot_edit') && $_SESSION['theme']['list_row_edit_button']['boolean'] == 'true') {

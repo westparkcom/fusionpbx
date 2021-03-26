@@ -710,10 +710,10 @@ function get_call_data(pilotnumber)
     local ibr_cache_key = "ibr-pilots:" ..tostring(pilotnumber) .. ':json'
     local json_string, err = cache.get(ibr_cache_key)
     if json_string then
-        uuidlog("INFO", "Cache exists for pilot" .. pilotnumber .. ", using cache.")
+        uuidlog("INFO", "Cache exists for pilot " .. pilotnumber .. ", using cache.")
         return json.decode(json_string)
     end
-	uuidlog("INFO", "Cache DOES NOT exist for pilot" .. pilotnumber .. ", querying database.")
+	uuidlog("INFO", "Cache DOES NOT exist for pilot " .. pilotnumber .. ", querying database.")
     dbh = Database.new('system');
     
     local sql = "SELECT * FROM v_ibr_pilots WHERE domain_uuid=:domain_uuid AND ibr_pilot=:ibr_pilot LIMIT 1"
