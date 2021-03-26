@@ -208,7 +208,6 @@
 				echo escape($row['ibr_pilot']);
 			}
 			echo "	</td>\n";
-			echo "	<td>".escape($row['accountcode'])."&nbsp;</td>\n";
 			if (permission_exists('ibr_pilot_edit')) {
 				echo "	<td class='no-link center'>";
 				echo button::create(['type'=>'submit','class'=>'link','label'=>$text['label-'.$row['enabled']],'title'=>$text['button-toggle'],'onclick'=>"list_self_check('checkbox_".$x."'); list_action_set('toggle'); list_form_submit('form_list')"]);
