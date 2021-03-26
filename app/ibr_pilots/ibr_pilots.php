@@ -132,7 +132,7 @@
 	echo "	<div class='actions'>\n";
 	echo button::create(['type'=>'button','label'=>$text['button-export'],'icon'=>$_SESSION['theme']['button_icon_export'],'style'=>'margin-right: 15px;','link'=>'ibr_download.php']);
 	if (permission_exists('ibr_pilot_add')) {
-		echo button::create(['type'=>'button','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add'],'id'=>'btn_add','link'=>'ibr_pilot_edit.php']);
+		echo button::create(['type'=>'button','label'=>$text['button-add'],'icon'=>$_SESSION['theme']['button_icon_add'],'id'=>'btn_add','link'=>'ibr_pilots_edit.php']);
 	}
 	if (permission_exists('ibr_pilot_add') && $ibr_pilots) {
 		echo button::create(['type'=>'button','label'=>$text['button-copy'],'icon'=>$_SESSION['theme']['button_icon_copy'],'name'=>'btn_copy','onclick'=>"modal_open('modal-copy','btn_copy');"]);
@@ -191,7 +191,7 @@
 		$x = 0;
 		foreach ($ibr_pilots as $row) {
 			if (permission_exists('ibr_pilot_edit')) {
-				$list_row_url = "ibr_pilot_edit.php?id=".urlencode($row['ibr_pilot_uuid']);
+				$list_row_url = "ibr_pilots_edit.php?id=".urlencode($row['ibr_pilot_uuid']);
 			}
 			echo "<tr class='list-row' href='".$list_row_url."'>\n";
 			if (permission_exists('ibr_pilot_add') || permission_exists('ibr_pilot_edit') || permission_exists('ibr_pilot_delete')) {
