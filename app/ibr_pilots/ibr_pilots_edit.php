@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2016
+	Portions created by the Initial Developer are Copyright (C) 2016-2020
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -27,9 +27,9 @@
 //includes
 	require_once "root.php";
 	require_once "resources/require.php";
+	require_once "resources/check_auth.php";
 
 //check permissions
-	require_once "resources/check_auth.php";
 	if (permission_exists('ibr_pilot_add') || permission_exists('ibr_pilot_edit')) {
 		//access granted
 	}
@@ -122,6 +122,10 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 					$database->app_uuid = '4b88ccfe-cb98-30b1-a5f5-32389e14a348';
 					$database->save($array);
 					unset($array);
+				// clear cache
+				//clear the cache
+					$cache = new cache;
+					$cache->delete("ibr_pilots:".$ibr_pilot.":json");
 				//redirect
 					header("Location: ibr_pilots.php");
 					exit;
@@ -154,18 +158,22 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	$token = $object->create($_SERVER['PHP_SELF']);
 
 //show the header
+	$document['title'] = $text['title-ibr_pilot'];
 	require_once "resources/header.php";
 
 //show the content
-	echo "<form name='frm' id='frm' method='post' action=''>\n";
-	echo "<table width='100%'  border='0' cellpadding='0' cellspacing='0'>\n";
-	echo "<tr>\n";
-	echo "<td align='left' width='30%' nowrap='nowrap' valign='top'><b>".$text['title-ibr_pilot']."</b><br><br></td>\n";
-	echo "<td width='70%' align='right' valign='top'>\n";
-	echo "	<input type='button' class='btn' name='' alt='".$text['button-back']."' onclick=\"window.location='ibr_pilots.php'\" value='".$text['button-back']."'>";
-	echo "	<input type='submit' name='submit' class='btn' value='".$text['button-save']."'>";
-	echo "</td>\n";
-	echo "</tr>\n";
+	echo "<form name='frm' id='frm' method='post'>\n";
+
+	echo "<div class='action_bar' id='action_bar'>\n";
+	echo "	<div class='heading'><b>".$text['title-ibr_pilots']."</b></div>\n";
+	echo "	<div class='actions'>\n";
+	echo button::create(['type'=>'button','label'=>$text['button-back'],'icon'=>$_SESSION['theme']['button_icon_back'],'id'=>'btn_back','style'=>'margin-right: 15px;','link'=>'ibr_pilots.php']);
+	echo button::create(['type'=>'submit','label'=>$text['button-save'],'icon'=>$_SESSION['theme']['button_icon_save'],'id'=>'btn_save','name'=>'action','value'=>'save']);
+	echo "	</div>\n";
+	echo "	<div style='clear: both;'></div>\n";
+	echo "</div>\n";
+
+	echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncellreq' valign='top' align='left' nowrap='nowrap'>\n";
@@ -195,18 +203,8 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "</td>\n";
 	echo "<td class='vtable' align='left'>\n";
 	echo "	<select class='formfld' name='enabled'>\n";
-	if ($enabled == "true") {
-		echo "	<option value='true' selected='selected'>".$text['label-true']."</option>\n";
-	}
-	else {
-		echo "	<option value='true'>".$text['label-true']."</option>\n";
-	}
-	if ($enabled == "false") {
-		echo "	<option value='false' selected='selected'>".$text['label-false']."</option>\n";
-	}
-	else {
-		echo "	<option value='false'>".$text['label-false']."</option>\n";
-	}
+	echo "		<option value='true'>".$text['label-true']."</option>\n";
+	echo "		<option value='false' ".($enabled == 'false' ? "selected='selected'" : null).">".$text['label-false']."</option>\n";
 	echo "	</select>\n";
 	echo "<br />\n";
 	echo $text['description-enabled']."\n";
@@ -218,23 +216,21 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "	".$text['label-description']."\n";
 	echo "</td>\n";
 	echo "<td class='vtable' align='left'>\n";
-	echo "	<textarea class='formfld' style='width: 450px; height: 175px;' name='description' >".escape($description)."</textarea>\n";
+	echo "	<input class='formfld' type='text' name='description' maxlength='255' value=\"".escape($description)."\">\n";
 	echo "<br />\n";
 	echo $text['description-description']."\n";
 	echo "</td>\n";
 	echo "</tr>\n";
-	echo "	<tr>\n";
-	echo "		<td colspan='2' align='right'>\n";
+
+	echo "</table>";
+	echo "<br /><br />";
+
 	if ($action == "update") {
-		echo "				<input type='hidden' name='ibr_pilot_uuid' value='".escape($ibr_pilot_uuid)."'>\n";
+		echo "<input type='hidden' name='ibr_pilot_uuid' value='".escape($ibr_pilot_uuid)."'>\n";
 	}
 	echo "			<input type='hidden' name='".$token['name']."' value='".$token['hash']."'>\n";
-	echo "			<input type='submit' name='submit' class='btn' value='".$text['button-save']."'>\n";
-	echo "		</td>\n";
-	echo "	</tr>";
-	echo "</table>";
+
 	echo "</form>";
-	echo "<br /><br />";
 
 //include the footer
 	require_once "resources/footer.php";

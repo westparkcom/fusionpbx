@@ -705,6 +705,13 @@ function get_call_data(pilotnumber)
     -- Check to see if the pilot exists
     local defaultroute = '[{"seqnum":10,"command":"answer"},{"seqnum":20,"command":"newgatecall","value":["1","1","0"]},{"seqnum":30,"command":"playpreanswer"},{"seqnum":40,"command":"playmoh","value":["0"]}]'
     local Database = require "resources.functions.database";
+    --Check cache for existing JSON
+    local cache = require "resources.functions.cache"
+    local ibr_cache_key = "ibr-cache:" ..tostring(pilotnumber) .. ':json'
+    local json_string, err = cache.get(ibr_cache_key)
+    if json_string then
+        return json.decode(json_string)
+    end
     dbh = Database.new('system');
     
     local sql = "SELECT * FROM v_ibr_pilots WHERE domain_uuid=:domain_uuid AND ibr_pilot=:ibr_pilot LIMIT 1"
@@ -722,6 +729,8 @@ function get_call_data(pilotnumber)
     else
         local validjson, retcode = pcall(json.decode, pilotdata)
         if validjson then
+            -- write out cache
+            local ok, errinfo = cache.set(ibr_cache_key, pilotdata, expire["acl"])
             return json.decode(pilotdata)
         else
             uuidlog("ERR", "IBR for pilot `" .. pilotnumber .. "` contains invalid JSON! Returning failsafe instructions!!!")
