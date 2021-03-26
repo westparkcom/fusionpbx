@@ -67,7 +67,7 @@
 				break;
 			case 'delete':
 				if (permission_exists('ibr_pilot_delete')) {
-					$obj = new ibr_pilot;
+					$obj = new ibr_pilots;
 					$obj->delete($ibr_pilots);
 				}
 				break;
