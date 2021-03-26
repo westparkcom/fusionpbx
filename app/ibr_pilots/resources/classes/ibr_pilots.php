@@ -94,7 +94,6 @@ if (!class_exists('ibr_pilots')) {
 								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
 									$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
 									$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
-									$array[$this->table][$x]['ibr_pilot'] = $record['ibr_pilot'];
 									//clear the cache
 									$cache->delete("ibr-pilots:".$record['ibr_pilot'].":json");
 								}
