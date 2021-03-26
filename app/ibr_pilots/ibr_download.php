@@ -47,6 +47,7 @@
 	$available_columns[] = 'ibr_pilot_uuid';
 	$available_columns[] = 'domain_uuid';
 	$available_columns[] = 'ibr_pilot';
+	$available_columns[] = 'ibr_pilot_json';
 	$available_columns[] = 'enabled';
 	$available_columns[] = 'description';
 
