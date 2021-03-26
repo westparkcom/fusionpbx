@@ -89,11 +89,14 @@ if (!class_exists('ibr_pilots')) {
 					if (is_array($records) && @sizeof($records) != 0) {
 
 						//build the delete array
+							$cache = new cache;
 							foreach ($records as $x => $record) {
 								if ($record['checked'] == 'true' && is_uuid($record['uuid'])) {
 									$array[$this->table][$x][$this->uuid_prefix.'uuid'] = $record['uuid'];
 									$array[$this->table][$x]['domain_uuid'] = $_SESSION['domain_uuid'];
 									$array[$this->table][$x]['ibr_pilot'] = $record['ibr_pilot'];
+									//clear the cache
+									$cache->delete("ibr-pilots:".$record['ibr_pilot'].":json");
 								}
 							}
 
@@ -106,18 +109,12 @@ if (!class_exists('ibr_pilots')) {
 									$database->app_uuid = $this->app_uuid;
 									$database->delete($array);
 									unset($array);
-									
-								//clear the cache
-									$ibr_pilots = array_unique($phrase_languages);
-									$cache = new cache;
-									foreach ($ibr_pilots as $ibr_pilot) {
-										$cache->delete("ibr_pilot:".$ibr_pilot);
-									}
 
 								//set message
 									message::add($text['message-delete']);
 							}
 							unset($records);
+							unset($cache);
 					}
 			}
 		}

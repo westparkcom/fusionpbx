@@ -707,7 +707,7 @@ function get_call_data(pilotnumber)
     local Database = require "resources.functions.database";
     --Check cache for existing JSON
     local cache = require "resources.functions.cache"
-    local ibr_cache_key = "ibr-cache:" ..tostring(pilotnumber) .. ':json'
+    local ibr_cache_key = "ibr-pilots:" ..tostring(pilotnumber) .. ':json'
     local json_string, err = cache.get(ibr_cache_key)
     if json_string then
         return json.decode(json_string)

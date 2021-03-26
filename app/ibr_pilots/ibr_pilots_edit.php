@@ -125,7 +125,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 				// clear cache
 				//clear the cache
 					$cache = new cache;
-					$cache->delete("ibr_pilots:".$ibr_pilot.":json");
+					$cache->delete("ibr-pilots:".$ibr_pilot.":json");
 				//redirect
 					header("Location: ibr_pilots.php");
 					exit;
