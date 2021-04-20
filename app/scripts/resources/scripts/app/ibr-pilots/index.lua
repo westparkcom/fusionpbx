@@ -690,11 +690,11 @@ end
 
 function setvar(value)
     if not value[1] then
-        freeswitch.consoleLog('WARN', 'Unabled to set channel variable: no variable name specified!!!')
+        freeswitch.consoleLog('WARN', 'Unable to set channel variable: no variable name specified!!!')
         return
     end
     if not value[2] then
-        freeswitch.consoleLog('WARN', 'Unabled to set channel variable `' .. value[1] .. ': no value specified!!!')
+        freeswitch.consoleLog('WARN', 'Unable to set channel variable `' .. value[1] .. ': no value specified!!!')
         return
     end
     uuid_setvar(callinfo["call_uuid"], value[1], value[2])
