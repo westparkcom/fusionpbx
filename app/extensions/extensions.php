@@ -138,7 +138,7 @@ if (is_numeric($_SESSION['limit']['extensions']['numeric'])) {
 	$sql = str_replace('count(*)', '*', $sql);
 	if ($order_by == '' || $order_by == 'extension') {
 		if ($db_type == 'pgsql') {
-			$sql .= 'order by natural_sort(extension) '.$order; //function in app_defaults.php
+			$sql .= 'order by extension '.$order; //function in app_defaults.php, doesn't work with CRDB
 		}
 		else {
 			$sql .= 'order by extension '.$order;
