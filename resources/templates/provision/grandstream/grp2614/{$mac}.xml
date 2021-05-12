@@ -78,7 +78,7 @@
 
     <!-- # Voice Mail Access Number -->
     <!-- # String -->
-    <P33>*97</P33>
+    <P33>{$voicemail_number}</P33>
 
     <!-- # Account Display -->
     <!-- # Number: 0, 1. 0 - User Name, 1 - User ID. Default is 0 -->
@@ -1036,7 +1036,7 @@
 
     <!-- # Voice Mail UserID -->
     <!-- # String -->
-    <P426>*97</P426>
+    <P426>{$voicemail_number}</P426>
 
     <!-- # Account Display -->
     <!-- # Number: 0, 1. 0 - User Name, 1 - User ID. Default is 0 -->
@@ -1985,7 +1985,7 @@
     <!-- 	 -->
     <!-- # Voice Mail UserID -->
     <!-- # String -->
-    <P526>*97</P526>
+    <P526>{$voicemail_number}</P526>
 
     <!-- # Account Display -->
     <!-- # Number: 0, 1. 0 - User Name, 1 - User ID. Default is 0 -->
@@ -2933,7 +2933,7 @@
 
     <!-- # Voice Mail UserID -->
     <!-- # String -->
-    <P626>*97</P626>
+    <P626>{$voicemail_number}</P626>
 
     <!-- # Account Display -->
     <!-- # Number: 0, 1. 0 - User Name, 1 - User ID. Default is 0 -->
@@ -3818,7 +3818,7 @@
     <!-- # Internet Protocol. 0 - Both, prefer IPv4, 1 - Both, prefer IPv6, 2 - IPv4 Only, 3 - IPv6 Only. Default is 0 -->
     <!-- # Number: 0, 1, 2, 3 -->
     <!-- # Mandatory -->
-    <P1415>0</P1415>
+    {if isset($grandstream_ipv_mode)}<P1415>{$grandstream_ipv_mode}</P1415>{else}<P1415>0</P1415>{/if}
 
     <!-- # IP Address Mode. 0 - DHCP, 1 - Static IP, 2 - PPPoE. Default is 0 -->
     <!-- # Number: 0, 1, 2 -->

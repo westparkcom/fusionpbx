@@ -817,7 +817,7 @@
 
 <!-- # Voice Mail UserID -->
 <!-- # String -->
-<P33>*97</P33>
+<P33>{$voicemail_number}</P33>
 <!-- ############################################################### -->
 <!-- # Account 1/Network Settings -->
 <!-- ############################################################### -->
@@ -1528,7 +1528,7 @@
 
 <!-- # Voice Mail UserID -->
 <!-- # String -->
-<P426>*97</P426>
+<P426>{$voicemail_number}</P426>
 <!-- ############################################################### -->
 <!-- # Account 2/Network Settings -->
 <!-- ############################################################### -->
@@ -2228,7 +2228,7 @@
 <!-- 	 -->
 <!-- # Voice Mail UserID -->
 <!-- # String -->
-<P526>*97</P526>
+<P526>{$voicemail_number}</P526>
 <!-- ############################################################### -->
 <!-- # Account 3/Network Settings -->
 <!-- ############################################################### -->
@@ -5806,7 +5806,7 @@
 <!-- # Internet Protocol. 0 - Both IPv4 and IPv6, 1 - Both, prefer IPv6 , 2 - IPv4 Only, 3 - IPv6 Only. Default is 2. -->
 <!-- # Number: 0, 1, 2, 3 -->
 <!-- # Mandatory -->
-<P1415>0</P1415>
+{if isset($grandstream_ipv_mode)}<P1415>{$grandstream_ipv_mode}</P1415>{else}<P1415>0</P1415>{/if}
 
 <!-- # IPv4 Address. 0 - DHCP, 1 - Static IP, 2 - PPPoE. Default is 0 -->
 <!-- # Number: 0, 1, 2 -->

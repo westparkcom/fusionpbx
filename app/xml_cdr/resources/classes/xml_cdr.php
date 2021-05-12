@@ -151,6 +151,7 @@ if (!class_exists('xml_cdr')) {
 			$this->fields[] = "last_app";
 			$this->fields[] = "last_arg";
 			$this->fields[] = "voicemail_message";
+			$this->fields[] = "call_center_queue_uuid";
 			$this->fields[] = "cc_side";
 			$this->fields[] = "cc_member_uuid";
 			$this->fields[] = "cc_queue_joined_epoch";
@@ -176,7 +177,8 @@ if (!class_exists('xml_cdr')) {
 			$this->fields[] = "sip_hangup_disposition";
 			if (is_array($_SESSION['cdr']['field'])) {
 				foreach ($_SESSION['cdr']['field'] as $field) {
-					$this->fields[] = $field;
+					$field_name = end($field);
+					$this->fields[] = $field_name;
 				}
 			}
 		}
@@ -372,7 +374,6 @@ if (!class_exists('xml_cdr')) {
 						$this->array[$key]['cc_side'] = urldecode($xml->variables->cc_side);
 						$this->array[$key]['cc_member_uuid'] = urldecode($xml->variables->cc_member_uuid);
 						$this->array[$key]['cc_queue_joined_epoch'] = urldecode($xml->variables->cc_queue_joined_epoch);
-						$this->array[$key]['cc_queue'] = urldecode($xml->variables->cc_queue);
 						$this->array[$key]['cc_member_session_uuid'] = urldecode($xml->variables->cc_member_session_uuid);
 						$this->array[$key]['cc_agent_uuid'] = urldecode($xml->variables->cc_agent_uuid);
 						$this->array[$key]['cc_agent'] = urldecode($xml->variables->cc_agent);
@@ -387,6 +388,8 @@ if (!class_exists('xml_cdr')) {
 						if (urldecode($xml->variables->cc_side) == 'agent') {
 							$this->array[$key]['direction'] = 'inbound';
 						}
+						$this->array[$key]['cc_queue'] = urldecode($xml->variables->cc_queue);
+						$this->array[$key]['call_center_queue_uuid'] = urldecode($xml->variables->call_center_queue_uuid);
 
 					//app info
 						$this->array[$key]['last_app'] = urldecode($xml->variables->last_app);
@@ -455,13 +458,19 @@ if (!class_exists('xml_cdr')) {
 								$field_name = end($fields);
 								$this->fields[] = $field_name;
 								if (count($fields) == 1) {
-									$this->array[$key][$field_name] = urldecode($xml->variables->$fields[0]);
+									$this->array[$key][$field_name] = urldecode($xml->variables->{$fields[0]});
 								}
 								if (count($fields) == 2) {
-									$this->array[$key][$field_name] = urldecode($xml->$fields[0]->$fields[1]);
+									$this->array[$key][$field_name] = urldecode($xml->{$fields[0]}->{$fields[1]});
 								}
 								if (count($fields) == 3) {
-									$this->array[$key][$field_name] = urldecode($xml->$fields[0]->$fields[1]->$fields[2]);
+									$this->array[$key][$field_name] = urldecode($xml->{$fields[0]}->{$fields[1]}->{$fields[2]});
+								}
+								if (count($fields) == 4) {
+									$this->array[$key][$field_name] = urldecode($xml->{$fields[0]}->{$fields[1]}->{$fields[2]}->{$fields[3]});
+								}
+								if (count($fields) == 5) {
+									$this->array[$key][$field_name] = urldecode($xml->{$fields[0]}->{$fields[1]}->{$fields[2]}->{$fields[3]}->{$fields[4]});
 								}
 							}
 						}
@@ -927,34 +936,42 @@ if (!class_exists('xml_cdr')) {
 		 */
 		public function user_summary() {
 
+			//set the time zone
+				if (isset($_SESSION['domain']['time_zone']['name'])) {
+					$time_zone = $_SESSION['domain']['time_zone']['name'];
+				}
+				else {
+					$time_zone = date_default_timezone_get();
+				}
+
 			//build the date range
 				if (strlen($this->start_stamp_begin) > 0 || strlen($this->start_stamp_end) > 0) {
 					unset($this->quick_select);
 					if (strlen($this->start_stamp_begin) > 0 && strlen($this->start_stamp_end) > 0) {
-						$sql_date_range = " and start_stamp between :start_stamp_begin and :start_stamp_end \n";
-						$parameters['start_stamp_begin'] = $this->start_stamp_begin.':00.000';
-						$parameters['start_stamp_end'] = $this->start_stamp_end.':59.999';
+						$sql_date_range = " and start_stamp between :start_stamp_begin::timestamptz and :start_stamp_end::timestamptz \n";
+						$parameters['start_stamp_begin'] = $this->start_stamp_begin.':00.000 '.$time_zone;
+						$parameters['start_stamp_end'] = $this->start_stamp_end.':59.999 '.$time_zone;
 					}
 					else {
 						if (strlen($this->start_stamp_begin) > 0) { 
-							$sql_date_range = "and start_stamp >= :start_stamp_begin \n"; 
-							$parameters['start_stamp_begin'] = $this->start_stamp_begin.':00.000';
+							$sql_date_range = "and start_stamp >= :start_stamp_begin::timestamptz \n"; 
+							$parameters['start_stamp_begin'] = $this->start_stamp_begin.':00.000 '.$time_zone;
 						}
 						if (strlen($this->start_stamp_end) > 0) { 
-							$sql_date_range .= "and start_stamp <= :start_stamp_end \n"; 
-							$parameters['start_stamp_end'] = $this->start_stamp_end.':59.999';
+							$sql_date_range .= "and start_stamp <= :start_stamp_end::timestamptz \n"; 
+							$parameters['start_stamp_end'] = $this->start_stamp_end.':59.999 '.$time_zone;
 						}
 					}
 				}
 				else {
 					switch ($this->quick_select) {
-						case 1: $sql_date_range = "and start_stamp >= '".date('Y-m-d H:i:s.000', strtotime("-1 week"))."' \n"; break; //last 7 days
-						case 2: $sql_date_range = "and start_stamp >= '".date('Y-m-d H:i:s.000', strtotime("-1 hour"))."' \n"; break; //last hour
-						case 3: $sql_date_range = "and start_stamp >= '".date('Y-m-d')." "."00:00:00.000' \n"; break; //today
-						case 4: $sql_date_range = "and start_stamp between '".date('Y-m-d',strtotime("-1 day"))." "."00:00:00.000' and '".date('Y-m-d',strtotime("-1 day"))." "."23:59:59.999' \n"; break; //yesterday
-						case 5: $sql_date_range = "and start_stamp >= '".date('Y-m-d',strtotime("this week"))." "."00:00:00.000' \n"; break; //this week
-						case 6: $sql_date_range = "and start_stamp >= '".date('Y-m-')."01 "."00:00:00.000' \n"; break; //this month
-						case 7: $sql_date_range = "and start_stamp >= '".date('Y-')."01-01 "."00:00:00.000' \n"; break; //this year
+						case 1: $sql_date_range = "and start_stamp >= '".date('Y-m-d H:i:s.000', strtotime("-1 week"))." ".$time_zone."'::timestamptz \n"; break; //last 7 days
+						case 2: $sql_date_range = "and start_stamp >= '".date('Y-m-d H:i:s.000', strtotime("-1 hour"))." ".$time_zone."'::timestamptz \n"; break; //last hour
+						case 3: $sql_date_range = "and start_stamp >= '".date('Y-m-d')." "."00:00:00.000 ".$time_zone."'::timestamptz \n"; break; //today
+						case 4: $sql_date_range = "and start_stamp between '".date('Y-m-d',strtotime("-1 day"))." "."00:00:00.000 ".$time_zone."'::timestamptz and '".date('Y-m-d',strtotime("-1 day"))." "."23:59:59.999 ".$time_zone."'::timestamptz \n"; break; //yesterday
+						case 5: $sql_date_range = "and start_stamp >= '".date('Y-m-d',strtotime("this week"))." "."00:00:00.000 ".$time_zone."' \n"; break; //this week
+						case 6: $sql_date_range = "and start_stamp >= '".date('Y-m-')."01 "."00:00:00.000 ".$time_zone."'::timestamptz \n"; break; //this month
+						case 7: $sql_date_range = "and start_stamp >= '".date('Y-')."01-01 "."00:00:00.000 ".$time_zone."'::timestamptz \n"; break; //this year
 					}
 				}
 
