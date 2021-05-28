@@ -37,7 +37,6 @@ if (!class_exists('xml_cdr')) {
 		 */
 		public $db;
 		public $array;
-		public $debug;
 		public $fields;
 
 		/**
@@ -95,13 +94,33 @@ if (!class_exists('xml_cdr')) {
 		 * cdr process logging
 		 */
 		public function log($message) {
-			//save to file system (alternative to a syslog server)
-				$fp = fopen($_SESSION['server']['temp']['dir'].'/xml_cdr.log', 'a+');
-				if (!$fp) {
-					return;
+			
+			//save the log if enabled is true
+			if ($_SESSION['log']['enabled']['boolean'] == 'true') {
+
+				//save the log to the php error log
+				if ($_SESSION['log']['type']['text'] == 'error_log') {
+	    			error_log($message);
 				}
-				fwrite($fp, $message);
-				fclose($fp);
+
+				//save the log to the syslog server
+				if ($_SESSION['log']['type']['text'] == 'syslog') {
+					openlog("XML CDR", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+	    			syslog(LOG_WARNING, $message);
+					closelog();
+				}
+
+				//save the log to the file system
+				if ($_SESSION['log']['type']['text'] == 'file') {
+					$fp = fopen($_SESSION['server']['temp']['dir'].'/xml_cdr.log', 'a+');
+					if (!$fp) {
+						return;
+					}
+					fwrite($fp, $message);
+					fclose($fp);
+				}
+
+			}
 		}
 
 		/**
@@ -214,8 +233,9 @@ if (!class_exists('xml_cdr')) {
 					$database->app_uuid = '4a085c51-7635-ff03-f67b-86e834422848';
 					$database->domain_uuid = $domain_uuid;
 					$database->save($array, false);
-					//$message = $database->message;
-					//print_r($message);
+
+					//debug results	
+					$this->log(print_r($database->message, true));
 
 					//remove the temporary permission
 					$p->delete("xml_cdr_add", "temp");
@@ -255,7 +275,7 @@ if (!class_exists('xml_cdr')) {
 				}
 				catch(Exception $e) {
 					echo $e->getMessage();
-					//$this->log("\nfail loadxml: " . $e->getMessage() . "\n");
+					$this->log("\nXML parsing error: " . $e->getMessage() . "\n");
 				}
 
 			//check for duplicate call uuid's
@@ -346,13 +366,15 @@ if (!class_exists('xml_cdr')) {
 						$this->array[$key]['pin_number'] = urldecode($xml->variables->pin_number);
 
 					//time
-						$this->array[$key]['start_epoch'] = urldecode($xml->variables->start_epoch);
-						$start_stamp = urldecode($xml->variables->start_stamp);
-						$this->array[$key]['start_stamp'] = $start_stamp;
-						$this->array[$key]['answer_stamp'] = urldecode($xml->variables->answer_stamp);
-						$this->array[$key]['answer_epoch'] = urldecode($xml->variables->answer_epoch);
-						$this->array[$key]['end_epoch'] = urldecode($xml->variables->end_epoch);
-						$this->array[$key]['end_stamp'] = urldecode($xml->variables->end_stamp);
+						$start_epoch = urldecode($xml->variables->start_epoch);
+						$this->array[$key]['start_epoch'] = $start_epoch;
+						$this->array[$key]['start_stamp'] = date('c', $start_epoch);
+						$answer_epoch = urldecode($xml->variables->answer_epoch);
+						$this->array[$key]['answer_epoch'] = $answer_epoch;
+						$this->array[$key]['answer_stamp'] = date('c', $answer_epoch);
+						$end_epoch = urldecode($xml->variables->end_epoch);
+						$this->array[$key]['end_epoch'] = $end_epoch;
+						$this->array[$key]['end_stamp'] = date('c', $end_epoch);
 						$this->array[$key]['duration'] = urldecode($xml->variables->duration);
 						$this->array[$key]['mduration'] = urldecode($xml->variables->mduration);
 						$this->array[$key]['billsec'] = urldecode($xml->variables->billsec);
@@ -424,6 +446,7 @@ if (!class_exists('xml_cdr')) {
 						$this->array[$key]['pdd_ms'] = urldecode($xml->variables->progress_mediamsec) + urldecode($xml->variables->progressmsec);
 
 					//get break down the date to year, month and day
+						$start_stamp = urldecode($xml->variables->start_stamp);
 						$start_time = strtotime($start_stamp);
 						$start_year = date("Y", $start_time);
 						$start_month = date("M", $start_time);
@@ -476,7 +499,7 @@ if (!class_exists('xml_cdr')) {
 						}
 
 					//send the domain name to the cdr log
-						//$this->log("\ndomain_name is `$domain_name`; domain_uuid is '$domain_uuid'\n");
+						//$this->log("\ndomain_name is `$domain_name`;\ndomain_uuid is '$domain_uuid'\n");
 
 					//get the domain_uuid with the domain_name
 						if (strlen($domain_uuid) == 0) {
@@ -635,7 +658,7 @@ if (!class_exists('xml_cdr')) {
 									$array['call_recordings'][$x]['call_recording_name'] = $record_name;
 									$array['call_recordings'][$x]['call_recording_path'] = $record_path;
 									$array['call_recordings'][$x]['call_recording_length'] = $record_length;
-									$array['call_recordings'][$x]['call_recording_date'] = urldecode($xml->variables->start_stamp);
+									$array['call_recordings'][$x]['call_recording_date'] = date('c', $start_epoch);
 									$array['call_recordings'][$x]['call_direction'] = urldecode($xml->variables->call_direction);
 									//$array['call_recordings'][$x]['call_recording_description']= $row['zzz'];
 									//$array['call_recordings'][$x]['call_recording_base64']= $row['zzz'];
@@ -710,10 +733,9 @@ if (!class_exists('xml_cdr')) {
 						}
 
 					//insert the values
-						if ($this->debug) {
-							//$time5_insert = microtime(true);
-							//echo $sql."<br />\n";
-						}
+						//if ($this->debug) {
+						//	$time5_insert = microtime(true);
+						//}
 						try {
 							$error = "false";
 							//$this->db->exec($sql);
@@ -734,9 +756,10 @@ if (!class_exists('xml_cdr')) {
 								fwrite($fh, json_encode($xml));
 							}
 							fclose($fh);
-							if ($this->debug) {
-								echo $e->getMessage();
-							}
+
+							//debug info
+							$this->log($e->getMessage());
+
 							$error = "true";
 						}
 
@@ -761,11 +784,10 @@ if (!class_exists('xml_cdr')) {
 						}
 						unset($error);
 
-						//if ($this->debug) {
-							//GLOBAL $insert_time,$insert_count;
-							//$insert_time+=microtime(true)-$time5_insert; //add this current query.
-							//$insert_count++;
-						//}
+						//debug
+						//GLOBAL $insert_time,$insert_count;
+						//$insert_time+=microtime(true)-$time5_insert; //add this current query.
+						//$insert_count++;
 
 				} //if ($duplicate_uuid == false)
 		} //function xml_array
@@ -847,10 +869,9 @@ if (!class_exists('xml_cdr')) {
 		 */
 		public function post() {
 			if (isset($_POST["cdr"])) {
+
 				//debug method
-					if ($this->debug){
-						print_r($_POST["cdr"]);
-					}
+					//$this->log($_POST["cdr"]);
 
 				//authentication for xml cdr http post
 					if (!defined('STDIN')) {
@@ -922,11 +943,12 @@ if (!class_exists('xml_cdr')) {
 					}
 
 				//log the xml cdr
-					//xml_cdr_log("process cdr via post\n");
+					$this->log("HTTP POST\n");
 
 				//parse the xml and insert the data into the database
 					$this->xml_array(0, $leg, $xml_string);
 					$this->save();
+
 			}
 		}
 		//$this->post();
