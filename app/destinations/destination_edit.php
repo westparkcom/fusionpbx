@@ -480,7 +480,7 @@
 								$dialplan["dialplan_details"][$y]["dialplan_detail_type"] = "export";
 								$dialplan["dialplan_details"][$y]["dialplan_detail_data"] = "hold_music=".$destination_hold_music;
 								$dialplan["dialplan_details"][$y]["dialplan_detail_inline"] = "true";
-								$dialplan["dialplan_details"][$y]["dialplan_detail_order"] = $dialplan_detail_order;
+								$dialplan["dialplan_details"][$y]["dialplan_detail_order"] = $dialplan_detail_order - 5; // Seems there's an order issue...
 								$y++;
 							}
 			
