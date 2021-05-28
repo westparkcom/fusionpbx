@@ -864,6 +864,9 @@
 		"recording_follow_transfer=true",
 		"hold_music=".$destination_hold_music
 	);
+	$export_removal_items = array(
+		"hold_music=".$destination_hold_music
+	);
 	foreach($dialplan_details as $row) {
 		if ($row['dialplan_detail_data'] == "tone_detect_hits=1") {
 			$fax = True;
@@ -883,6 +886,12 @@
 		}
  		if ($row['dialplan_detail_type'] == "record_session") {
 			unset($dialplan_details[$x]);
+		}
+		// Clear out MoH stuff
+		if ($row['dialplan_detail_type'] == "export") {
+			if (in_array($row['dialplan_detail_data'], $export_removal_items)) {
+				unset($dialplan_details[$x]);
+			}
 		}
 		// Clear out recording stuff
 		if ($row['dialplan_detail_type'] == "set") {
