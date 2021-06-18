@@ -235,9 +235,9 @@
 		$apps[$x]['default_settings'][$y]['default_setting_category'] = "provision";
 		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "yealink_dtmf_hide";
 		$apps[$x]['default_settings'][$y]['default_setting_name'] = "numeric";
-		$apps[$x]['default_settings'][$y]['default_setting_value'] = "1";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "0";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
-		$apps[$x]['default_settings'][$y]['default_setting_description'] = "0-Disabled, 1-Enabled";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Enables or disables suppressing the display of DTMF digits during an active call. Enabled, the DTMF digits are displayed as asterisks. 0-Disabled (default), 1-Enabled.";
 		$y++;
 		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "968c9f53-305c-4fbd-a7dd-4dd6099e829e";
 		$apps[$x]['default_settings'][$y]['default_setting_category'] = "provision";
@@ -390,6 +390,14 @@
 		$apps[$x]['default_settings'][$y]['default_setting_value'] = "T53W(T53)-95.84.0.125.rom";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Filename of the T53w firmware ROM";
+		$y++;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "304c78ff-bbac-477e-a399-8cdf7b0264ef";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "provision";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "yealink_firmware_t53";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "text";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "T54W(T57W,T53W,T53)-96.85.0.5.rom";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Filename of the T53 firmware ROM";
 		$y++;
 		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "83e51b20-2d8d-4437-889d-dc97d9810fb5";
 		$apps[$x]['default_settings'][$y]['default_setting_category'] = "provision";
@@ -1377,5 +1385,21 @@
 		$apps[$x]['default_settings'][$y]['default_setting_order'] = "010";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "false";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Disable Settings application on the phone's screen. Separate applications with forward slashes '/'.";
+		$y++;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "0a86ac21-de2f-4a52-b6ee-3e9e63720214";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "provision";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "yealink_enhanced_dss_keys";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "boolean";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "1";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "false";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "enables customizing the functions of the DSS keys(line keys, programmable keys, and ext keys)and assign functions to custom soft keys.";
+		$y++;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "e803d3d4-d58f-413b-be33-37b91d6b64b8";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "provision";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "yealink_screensaver_wait";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "text";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "6h";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "false";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Options: 1h, 2h, 3h or 6h, the default is 6h";
 
 ?>
