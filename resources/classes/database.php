@@ -187,6 +187,7 @@ include "root.php";
 					}
 					catch (PDOException $error) {
 						print "error: " . $error->getMessage() . "<br/>";
+						error_log("error: " . $error->getMessage());
 						die();
 					}
 				}
@@ -209,6 +210,7 @@ include "root.php";
 					}
 					catch (PDOException $error) {
 						print "error: " . $error->getMessage() . "<br/>";
+						error_log("error: " . $error->getMessage());
 						die();
 					}
 				}
@@ -220,6 +222,7 @@ include "root.php";
 						}
 						catch (PDOException $e) {
 							echo 'Connection failed: ' . $e->getMessage();
+							error_log('Connection failed: ' . $e->getMessage());
 						}
 				}
 			}
@@ -518,6 +521,7 @@ include "root.php";
 							$message["parameters"] = $parameters;
 						}
 						$this->message = $message;
+						error_log("SQL error: " . $message["error"]["message"]);
 						return false;
 					}
 			}
@@ -593,6 +597,7 @@ include "root.php";
 						echo "<tr>\n";
 						echo "<td>\n";
 						echo $e->getMessage();
+						error_log("SQL add error: " . $e->getMessage());
 						echo "</td>\n";
 						echo "</tr>\n";
 						echo "</table>\n";
@@ -925,6 +930,7 @@ include "root.php";
 											$message["details"][$m]["sql"] = $sql;
 										}
 										$this->message = $message;
+										error_log("SQL delete error: " . $message["details"][$m]["message"]);
 										$m++;
 									}
 									unset($parameters);
@@ -1141,6 +1147,7 @@ include "root.php";
 							$message["parameters"] = $parameters;
 						}
 						$this->message = $message;
+						error_log("SQL error: " . $message["error"]["message"]);
 						return false;
 					}
 			} //select
@@ -1248,6 +1255,7 @@ include "root.php";
 						}
 						$this->message = $message;
 						$this->result = '';
+						error_log("SQL error: " . $message["details"][$m]["message"]);
 						$m++;
 						return $this;
 					}
@@ -1710,6 +1718,7 @@ include "root.php";
 											catch(PDOException $e) {
 												echo 'Caught exception: ',  $e->getMessage(), "<br/><br/>\n";
 												echo $sql;
+												error_log('Caught exception: ' . $e->getMessage());
 												exit;
 											}
 
@@ -1819,6 +1828,7 @@ include "root.php";
 													}
 												}
 												unset($params);
+												error_log("SQL save error: " . $message["details"][$m]["message"]);
 												$this->message = $message;
 												$m++;
 											}
@@ -1905,6 +1915,7 @@ include "root.php";
 												}
 												unset($params);
 												$this->message = $message;
+												error_log("SQL save error: " . $message["details"][$m]["message"]);
 												$m++;
 											}
 									}
@@ -2066,6 +2077,7 @@ include "root.php";
 																			unset($params);
 																		}
 																	}
+																	error_log("SQL save error: " . $message["details"][$m]["message"]);
 																	$this->message = $message;
 																	$m++;
 																}
@@ -2189,6 +2201,7 @@ include "root.php";
 																	}
 																}
 																$this->message = $message;
+																error_log("SQL save error: " . $message["details"][$m]["message"]);
 																$m++;
 															}
 														}
@@ -2334,6 +2347,7 @@ include "root.php";
 						}
 						catch(PDOException $e) {
 							echo $e->getMessage();
+							error_log("Transaction error: " . $e->getMessage());
 							exit;
 						}
 					}
