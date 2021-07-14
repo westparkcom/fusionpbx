@@ -53,10 +53,26 @@ function event_socket_create($host, $port, $password) {
 	return false;
 }
 
+function event_socket_remote($cmd) {
+	// This places files in the cache folder that run ESL commands on the remote hosts
+	$cache = new cache;
+	$sql = "select * from v_settings ";
+	$database = new database;
+	$row = $database->select($sql, null, 'row');
+	if (is_array($row) && @sizeof($row) != 0) {
+		$addl_servers = $row["addl_servers"];
+		foreach (explode('|', $addl_servers) as $value) {
+			$cache->set(strval(time()) . ':' . $value, $cmd);
+		}
+	}
+	unset($sql, $row);
+}
+
 function event_socket_request($fp, $cmd) {
 	$esl = new event_socket($fp);
 	$result = $esl->request($cmd);
 	$esl->reset_fp();
+	event_socket_remote($cmd);
 	return $result;
 }
 
@@ -85,6 +101,7 @@ function event_socket_request_cmd($cmd) {
 	}
 	$response = $esl->request($cmd);
 	$esl->close();
+	event_socket_remote($cmd);
 	return $response;
 }
 

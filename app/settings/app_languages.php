@@ -253,6 +253,27 @@ $text['label-event_socket_acl']['ru-ru'] = "ACL сокета событий";
 $text['label-event_socket_acl']['sv-se'] = "Event Socket ACL";
 $text['label-event_socket_acl']['uk-ua'] = "Event Socket ACL";
 
+$text['label-addl_servers']['en-us'] = "Additional Servers";
+$text['label-addl_servers']['en-gb'] = "Additional Servers";
+$text['label-addl_servers']['ar-eg'] = "";
+$text['label-addl_servers']['de-at'] = "";
+$text['label-addl_servers']['de-ch'] = "";
+$text['label-addl_servers']['de-de'] = "";
+$text['label-addl_servers']['es-cl'] = "";
+$text['label-addl_servers']['es-mx'] = "";
+$text['label-addl_servers']['fr-ca'] = "";
+$text['label-addl_servers']['fr-fr'] = "";
+$text['label-addl_servers']['he-il'] = "";
+$text['label-addl_servers']['it-it'] = "";
+$text['label-addl_servers']['nl-nl'] = "";
+$text['label-addl_servers']['pl-pl'] = "";
+$text['label-addl_servers']['pt-br'] = "";
+$text['label-addl_servers']['pt-pt'] = "";
+$text['label-addl_servers']['ro-ro'] = "";
+$text['label-addl_servers']['ru-ru'] = "";
+$text['label-addl_servers']['sv-se'] = "";
+$text['label-addl_servers']['uk-ua'] = "";
+
 $text['description-xml_rpc_auth_user']['en-us'] = "Enter the XML RPC Auth User. default: xmlrpc";
 $text['description-xml_rpc_auth_user']['en-gb'] = "Enter the XML RPC Auth User. default: xmlrpc";
 $text['description-xml_rpc_auth_user']['ar-eg'] = "";
@@ -441,5 +462,26 @@ $text['description-event_socket_ip']['ro-ro'] = "";
 $text['description-event_socket_ip']['ru-ru'] = "Введите IP адрес сокета событий. по умолчанию: 127.0.0.1";
 $text['description-event_socket_ip']['sv-se'] = "Fyll i event socket IP address. default: 127.0.0.1";
 $text['description-event_socket_ip']['uk-ua'] = "Enter the event socket IP address. default: 127.0.0.1 ";
+
+$text['description-addl_servers']['en-us'] = "Enter additional server hostnames, pipe ( | ) separated. PLEASE NOTE: these are case sensitive.";
+$text['description-addl_servers']['en-gb'] = "Enter additional server hostnames, pipe ( | ) separated. PLEASE NOTE: these are case sensitive.";
+$text['description-addl_servers']['ar-eg'] = "";
+$text['description-addl_servers']['de-at'] = "";
+$text['description-addl_servers']['de-ch'] = "";
+$text['description-addl_servers']['de-de'] = "";
+$text['description-addl_servers']['es-cl'] = "";
+$text['description-addl_servers']['es-mx'] = "";
+$text['description-addl_servers']['fr-ca'] = "";
+$text['description-addl_servers']['fr-fr'] = "";
+$text['description-addl_servers']['he-il'] = "";
+$text['description-addl_servers']['it-it'] = "";
+$text['description-addl_servers']['nl-nl'] = "";
+$text['description-addl_servers']['pl-pl'] = "";
+$text['description-addl_servers']['pt-br'] = "";
+$text['description-addl_servers']['pt-pt'] = "";
+$text['description-addl_servers']['ro-ro'] = "";
+$text['description-addl_servers']['ru-ru'] = "";
+$text['description-addl_servers']['sv-se'] = "";
+$text['description-addl_servers']['uk-ua'] = "";
 
 ?>

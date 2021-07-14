@@ -65,6 +65,7 @@
 		$xml_rpc_auth_realm = $_POST["xml_rpc_auth_realm"];
 		$xml_rpc_auth_user = $_POST["xml_rpc_auth_user"];
 		$xml_rpc_auth_pass = $_POST["xml_rpc_auth_pass"];
+		$addl_servers = $_POST["addl_servers"];
 		//$admin_pin = $_POST["admin_pin"];
 		$mod_shout_decoder = $_POST["mod_shout_decoder"];
 		$mod_shout_volume = $_POST["mod_shout_volume"];
@@ -112,6 +113,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 					$array['settings'][0]['xml_rpc_auth_realm'] = $xml_rpc_auth_realm;
 					$array['settings'][0]['xml_rpc_auth_user'] = $xml_rpc_auth_user;
 					$array['settings'][0]['xml_rpc_auth_pass'] = $xml_rpc_auth_pass;
+					$array['settings'][0]['addl_servers'] = $addl_servers;
 					$array['settings'][0]['mod_shout_decoder'] = $mod_shout_decoder;
 					$array['settings'][0]['mod_shout_volume'] = $mod_shout_volume;
 				//grant temporary permissions
@@ -162,6 +164,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 			$xml_rpc_auth_realm = $row["xml_rpc_auth_realm"];
 			$xml_rpc_auth_user = $row["xml_rpc_auth_user"];
 			$xml_rpc_auth_pass = $row["xml_rpc_auth_pass"];
+			$addl_servers = $row["addl_servers"];
 			$mod_shout_decoder = $row["mod_shout_decoder"];
 			$mod_shout_volume = $row["mod_shout_volume"];
 		}
@@ -286,6 +289,18 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "    <input class='formfld' type='password' name='xml_rpc_auth_pass' id='xml_rpc_auth_pass' autocomplete='new-password' onmouseover=\"this.type='text';\" onfocus=\"this.type='text';\" onmouseout=\"if (!$(this).is(':focus')) { this.type='password'; }\" onblur=\"this.type='password';\" maxlength='50' value=\"".escape($xml_rpc_auth_pass)."\">\n";
 	echo "<br />\n";
 	echo $text['description-xml_rpc_auth_pass']."\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+	
+	echo "<tr>\n";
+	echo "<td class='vncell' valign='top' align='left' nowrap>\n";
+	echo "    ".$text['label-addl_servers']."\n";
+	echo "</td>\n";
+	echo "<td class='vtable' align='left'>\n";
+	echo "    <input class='formfld' type='text' name='addl_servers' maxlength='255' autocomplete='new-password' value=\"".escape($addl_servers)."\">\n";
+	echo "    <input type='text' style='display: none;' disabled='disabled'>\n"; //help defeat browser auto-fill
+	echo "<br />\n";
+	echo $text['description-addl_servers']."\n";
 	echo "</td>\n";
 	echo "</tr>\n";
 
