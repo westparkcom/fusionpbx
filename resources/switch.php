@@ -62,7 +62,7 @@ function event_socket_remote($cmd) {
 	if (is_array($row) && @sizeof($row) != 0) {
 		$addl_servers = $row["addl_servers"];
 		foreach (explode('|', $addl_servers) as $value) {
-			$cache->set(strval(time()) . ':' . $value, $cmd);
+			$cache->set(strval(microtime(true)) . ':' . $value, $cmd);
 		}
 	}
 	unset($sql, $row);

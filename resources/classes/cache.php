@@ -51,9 +51,9 @@ class cache {
 
 		//save to the file cache
 			if ($_SESSION['cache']['method']['text'] == "file") {
-				if (file_exists($_SESSION['cache']['location']['text'] . "/" . $key)) {
+				//if (file_exists($_SESSION['cache']['location']['text'] . "/" . $key)) {
 					$result = file_put_contents($_SESSION['cache']['location']['text'] . "/" . $key, $value);
-				}
+				//}
 			}
 
 		//return result
