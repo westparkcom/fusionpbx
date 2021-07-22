@@ -48,7 +48,7 @@
 		unset($sql, $row);
 		$esl = new event_socket;
 		if (!$esl->connect($event_socket_ip_address, $event_socket_port, $event_socket_password)) {
-			return false;
+			die("Unable to connect to FreeSWITCH!!!");
 		}
 		foreach (glob($cacheloc . '*:' . $hostname) as $filename) {
 			$cmd = file_get_contents($filename);
