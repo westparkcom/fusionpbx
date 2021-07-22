@@ -170,6 +170,10 @@ def parseconfig(configdata):
         raise Exception("Notification SMTP password undefined")
     elif configp.has_option('Notification', 'smtppass'):
         configarr['smtppass'] = configp['Notification']['smtppass']
+    if not configp.has_option('Location', 'dbloc'):
+        configarr['dbloc'] = ['/usr/share/freeswitch/sounds/logger']
+    else:
+        configarr['dbloc'] = configp['Location']['dbloc']
     return configarr
 
 def parse_acd_datetime ( s ):
@@ -282,6 +286,9 @@ def dbinsert(dbconfig, loadconfig):
     accesstime = (endtime - starttime).total_seconds()
     try:
         conn = dbconn(dbconfig)
+        fpath = pathlib.Path(loadconfig.outfile[0])
+        partfname = os.path.join(*p.parts[-2:])
+        fname = os.path.join(loadconfig.dbloc[0], partfname)
         params = (
             int(loadconfig.agentid[0]),
             loadconfig.location[0].split('-')[0],
@@ -290,7 +297,7 @@ def dbinsert(dbconfig, loadconfig):
             "{}".format(loadconfig.ani[0]),
             "{}".format(loadconfig.csn[0]),
             "{}".format(loadconfig.agent[0]),
-            "{}".format(loadconfig.outfile[0]),
+            "{}".format(fname),
             "{}".format(starttime.strftime("%Y-%m-%d %H:%M:%S.%f")),
             int(accesstime),
             "{}".format(loadconfig.uuid[0]),
@@ -316,7 +323,7 @@ def dbinsert(dbconfig, loadconfig):
             msg = "Unable to insert recording into database: {}\r\n\r\nThe following metadata is associated with this recording:\r\n\r\nAgent ID: {}\r\nClient ID: {}\r\nDirection: {}\r\nDNIS: {}\r\nANI: {}\r\nCSN: {}\r\nAgent: {}\r\nOutfile: {}\r\nStart Time: {}\r\nDuration: {}\r\nUUID: {}\r\nPaused: {}".format(
                 e,
                 loadconfig.agentid[0],
-                loadconfig.clientid[0],
+                loadconfig.location[0].split('-')[0],
                 loadconfig.direction[0].upper(),
                 loadconfig.dnis[0],
                 loadconfig.ani[0],
