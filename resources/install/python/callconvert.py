@@ -171,7 +171,7 @@ def parseconfig(configdata):
     elif configp.has_option('Notification', 'smtppass'):
         configarr['smtppass'] = configp['Notification']['smtppass']
     if not configp.has_option('Location', 'dbloc'):
-        configarr['dbloc'] = ['/usr/share/freeswitch/sounds/logger']
+        configarr['dbloc'] = '/usr/share/freeswitch/sounds/logger'
     else:
         configarr['dbloc'] = configp['Location']['dbloc']
     return configarr
@@ -288,7 +288,7 @@ def dbinsert(dbconfig, loadconfig):
         conn = dbconn(dbconfig)
         fpath = pathlib.Path(loadconfig.outfile[0])
         partfname = os.path.join(*fpath.parts[-2:])
-        fname = os.path.join(loadconfig.dbloc[0], partfname)
+        fname = os.path.join(dbconfig['dbloc'], partfname)
         params = (
             int(loadconfig.agentid[0]),
             loadconfig.location[0].split('-')[0],
