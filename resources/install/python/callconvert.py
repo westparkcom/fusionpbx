@@ -287,7 +287,7 @@ def dbinsert(dbconfig, loadconfig):
     try:
         conn = dbconn(dbconfig)
         fpath = pathlib.Path(loadconfig.outfile[0])
-        partfname = os.path.join(*p.parts[-2:])
+        partfname = os.path.join(*fpath.parts[-2:])
         fname = os.path.join(loadconfig.dbloc[0], partfname)
         params = (
             int(loadconfig.agentid[0]),
