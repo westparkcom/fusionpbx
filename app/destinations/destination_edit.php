@@ -192,6 +192,70 @@
 				return;
 			}
 
+		//get the destination row values
+			if ($action == 'update' && is_uuid($destination_uuid)) {
+				$sql = "select * from v_destinations ";
+				$sql .= "where destination_uuid = :destination_uuid ";
+				$parameters['destination_uuid'] = $destination_uuid;
+				$database = new database;
+				$row = $database->select($sql, $parameters, 'row');
+				unset($sql, $parameters);
+			}
+
+		//get the dialplan_uuid from the database
+			if (is_array($row) && @sizeof($row) != 0) {
+				$dialplan_uuid = $row["dialplan_uuid"];
+			}
+
+		//if the user doesn't have the correct permission then 
+		//override destination_number and destination_context values
+			if (is_array($row) && @sizeof($row) != 0) {
+				if (!permission_exists('destination_trunk_prefix')) {
+					$destination_trunk_prefix = $row["destination_trunk_prefix"];
+				}
+				if (!permission_exists('destination_area_code')) {
+					$destination_area_code = $row["destination_area_code"];
+				}
+				if (!permission_exists('destination_number')) {
+					$destination_prefix = $row["destination_prefix"];
+					$destination_number = $row["destination_number"];
+				}
+				if (!permission_exists('destination_condition_field')) {
+					$destination_condition_field = $row["destination_condition_field"];
+				}
+				if (!permission_exists('destination_context')) {
+					$destination_context = $row["destination_context"];
+				}
+			}
+			unset($row);
+
+		//build the destination_numbers array
+			$array = explode('-', $destination_number);
+			$array = array_map('trim', $array);
+			if (count($array) == 2 && is_numeric($array[0]) && is_numeric($array[1])) {
+				$destination_numbers = range($array[0], $array[1]);
+				$destination_number_range = true;
+			}
+			elseif (stristr($destination_number, 'n') || stristr($destination_number, 'x') || stristr($destination_number, 'z')) {
+				//n = 2-9, x = 0-9, z = 1-9
+				$destination_start = $destination_number;
+				$destination_end = $destination_number;
+				$destination_start = str_ireplace("n", "2", $destination_start);
+				$destination_end = str_ireplace("n", "9", $destination_end);
+				$destination_start = str_ireplace("x", "0", $destination_start);
+				$destination_end = str_ireplace("x", "9", $destination_end);
+				$destination_start = str_ireplace("z", "1", $destination_start);
+				$destination_end = str_ireplace("z", "9", $destination_end);
+				$destination_numbers = range($destination_start, $destination_end);
+				$destination_number_range = true;
+			}
+			else {
+				//$destination_numbers[] = $destination_number;
+				$destination_numbers = $array;
+				$destination_number_range = false;
+			}
+			unset($array);
+
 		//save the inbound destination and add the dialplan for the inbound route
 			if ($destination_type == 'inbound' || $destination_type == 'local') {
 				//get the array
@@ -769,6 +833,7 @@
 					$database->app_uuid = '5ec89622-b19c-3559-64f0-afde802ab139';
 					$database->save($array);
 					$dialplan_response = $database->message;
+					unset($array);
 
 				//clear the destinations session array
 					if (isset($_SESSION['destinations']['array'])) {
@@ -980,6 +1045,8 @@
 	echo "			if (document.getElementById('tr_buy')) { document.getElementById('tr_buy').style.display = 'none'; }\n";
 	echo "			if (document.getElementById('tr_carrier')) { document.getElementById('tr_carrier').style.display = 'none'; }\n";
 	echo "			document.getElementById('tr_account_code').style.display = 'none';\n";
+	echo "			if (document.getElementById('tr_user')) { document.getElementById('tr_user').style.display = 'none'; }\n";
+	echo "			if (document.getElementById('tr_hold_music')) { document.getElementById('tr_hold_music').style.display = 'none'; }\n";
 	//echo "			document.getElementById('destination_context').value = '".$destination_context."'";
 	echo "		}\n";
 	echo "		else if (dir == 'inbound') {\n";
@@ -991,6 +1058,8 @@
 	echo "			if (document.getElementById('tr_sell')) { document.getElementById('tr_sell').style.display = ''; }\n";
 	echo "			if (document.getElementById('tr_buy')) { document.getElementById('tr_buy').style.display = ''; }\n";
 	echo "			if (document.getElementById('tr_carrier')) { document.getElementById('tr_carrier').style.display = ''; }\n";
+	echo "			if (document.getElementById('tr_user')) { document.getElementById('tr_user').style.display = ''; }\n";
+	echo "			if (document.getElementById('tr_hold_music')) { document.getElementById('tr_hold_music').style.display = ''; }\n";
 	echo "			document.getElementById('tr_account_code').style.display = '';\n";
 	echo "			document.getElementById('destination_context').value = 'public'";
 	echo "		}\n";
@@ -1282,7 +1351,7 @@
 	}
 
 	if (permission_exists('user_edit')) {
-		echo "<tr>\n";
+		echo "<tr id='tr_user'>\n";
 		echo "<td class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
 		echo "	".$text['label-user']."\n";
 		echo "</td>\n";
@@ -1335,7 +1404,7 @@
 	}
 
 	if (is_dir($_SERVER["DOCUMENT_ROOT"].PROJECT_PATH.'/app/music_on_hold')) {
-		echo "<tr>\n";
+		echo "<tr id='tr_hold_music'>\n";
 		echo "<td width=\"30%\" class='vncell' valign='top' align='left' nowrap='nowrap'>\n";
 		echo "	".$text['label-destination_hold_music']."\n";
 		echo "</td>\n";
