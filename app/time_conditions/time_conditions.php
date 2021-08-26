@@ -89,8 +89,9 @@
 		$sql_search .= " 	or lower(dialplan_name) like :search ";
 		$sql_search .= " 	or lower(dialplan_number) like :search ";
 		$sql_search .= " 	or lower(dialplan_continue) like :search ";
-		if (is_numeric($search)) {
-			$sql_search .= " 	or dialplan_order = :search ";
+		if (is_int($search)) {
+			$sql_search .= " 	or dialplan_order = :intsearch ";
+			$parameters['intsearch'] = intval($search);
 		}
 		$sql_search .= " 	or lower(dialplan_enabled) like :search ";
 		$sql_search .= " 	or lower(dialplan_description) like :search ";
