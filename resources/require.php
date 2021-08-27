@@ -49,6 +49,10 @@
 				spl_autoload_register(array($this, 'loader'));
 			}
 			private function loader($class_name) {
+				//set app preferred classes
+					$app_preferred = array(
+						'destinations'
+					);
 				//set the default value
 					$class_found = false;
 
@@ -63,12 +67,14 @@
 				//find the most relevant class name
 					if (!$class_found && file_exists($_SERVER["DOCUMENT_ROOT"] . PROJECT_PATH . "/resources/classes/".$class_name.".php")) {
 						//first priority
-						$path = $_SERVER["DOCUMENT_ROOT"] . PROJECT_PATH . "/resources/classes/".$class_name.".php";
-						$class_found = true;
-						if ($_REQUEST['debug'] == 'true') {
-							syslog(LOG_WARNING, "[php][autoloader] name: ".$class_name.", path: ".$path.", line: ".__line__);
+						if (!in_array($class_name, $app_preferred)) {
+							$path = $_SERVER["DOCUMENT_ROOT"] . PROJECT_PATH . "/resources/classes/".$class_name.".php";
+							$class_found = true;
+							if ($_REQUEST['debug'] == 'true') {
+								syslog(LOG_WARNING, "[php][autoloader] name: ".$class_name.", path: ".$path.", line: ".__line__);
+							}
+							include $path;
 						}
-						include $path;
 					}
 					elseif (!$class_found && file_exists($_SERVER["DOCUMENT_ROOT"] . PROJECT_PATH . "/core/".$class_name."/resources/classes/".$class_name.".php")) {
 						//second priority
