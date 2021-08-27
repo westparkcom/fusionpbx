@@ -751,6 +751,7 @@
 		$script .= "var objs;\n";
 		$script .= "\n";
 		$script .= "function changeToInput".$destination_id."(obj){\n";
+		$script .= "	sel2=obj.nextElementSibling;\n";
 		$script .= "	tb=document.createElement('INPUT');\n";
 		$script .= "	tb.type='text';\n";
 		$script .= "	tb.name=obj.name;\n";
@@ -780,6 +781,7 @@
 		$script .= "	obj[2].parentNode.insertBefore(obj[0],obj[2]);\n";
 		$script .= "	obj[0].parentNode.removeChild(obj[1]);\n";
 		$script .= "	obj[0].parentNode.removeChild(obj[2]);\n";
+		$script .= "	$(document.getElementById('".$destination_id."')).select2();\n";
 		$script .= "	document.getElementById('btn_select_to_input_".$destination_id."').style.visibility = 'visible';\n";
 		if ($on_change != '') {
 			$script .= "	".$on_change.";\n";
@@ -892,6 +894,7 @@
 		$script .= "var objs;\n";
 		$script .= "\n";
 		$script .= "function changeToInput".$destination_id."(obj){\n";
+		$script .= "	sel2=obj.nextElementSibling;\n";
 		$script .= "	tb=document.createElement('INPUT');\n";
 		$script .= "	tb.type='text';\n";
 		$script .= "	tb.name=obj.name;\n";
@@ -921,6 +924,7 @@
 		$script .= "	obj[2].parentNode.insertBefore(obj[0],obj[2]);\n";
 		$script .= "	obj[0].parentNode.removeChild(obj[1]);\n";
 		$script .= "	obj[0].parentNode.removeChild(obj[2]);\n";
+		$script .= "	$(document.getElementById('".$destination_id."')).select2();\n";
 		$script .= "	document.getElementById('btn_select_to_input_".$destination_id."').style.visibility = 'visible';\n";
 		if ($on_change != '') {
 			$script .= "	".$on_change.";\n";
