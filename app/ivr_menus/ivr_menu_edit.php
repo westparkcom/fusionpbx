@@ -774,6 +774,7 @@
 		$script .= "	obj.parentNode.insertBefore(tb,obj);\n";
 		$script .= "	obj.parentNode.insertBefore(tbb,obj);\n";
 		$script .= "	obj.parentNode.removeChild(obj);\n";
+		$script .= "	sel2.remove();\n";
 		$script .= "	Replace".$destination_id."(this.objs);\n";
 		$script .= "}\n";
 		$script .= "\n";
@@ -917,6 +918,7 @@
 		$script .= "	obj.parentNode.insertBefore(tb,obj);\n";
 		$script .= "	obj.parentNode.insertBefore(tbb,obj);\n";
 		$script .= "	obj.parentNode.removeChild(obj);\n";
+		$script .= "	sel2.remove();\n";
 		$script .= "	Replace".$destination_id."(this.objs);\n";
 		$script .= "}\n";
 		$script .= "\n";
