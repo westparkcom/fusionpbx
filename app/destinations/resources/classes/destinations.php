@@ -297,10 +297,16 @@ if (!class_exists('destinations')) {
 
 				//set the css style
 				$select_style = 'width: 400px;';
-
+				$response = "<link href='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' rel='stylesheet' />\n";
+				$response .= "<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'></script>\n";
+				$resposne .= "<script>\n";
+				$response .= "$(document).ready(function() {\n";
+				$response .= "	$('.formfld').select2();\n";
+				$response .= "});\n";
+				$response .= "</script>\n";
 				//add additional
 				if (if_group("superadmin")) {
-					$response = "<script>\n";
+					$response .= "<script>\n";
 					$response .= "var Objs;\n";
 					$response .= "\n";
 					$response .= "function changeToInput".$destination_id."(obj){\n";
