@@ -301,7 +301,7 @@ if (!class_exists('destinations')) {
 				$response .= "<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'></script>\n";
 				$response .= "<script>\n";
 				$response .= "$(document).ready(function() {\n";
-				$response .= "	$('.formfld').select2();\n";
+				$response .= "	$(document.getElementsByTagName('select')).select2();\n";
 				$response .= "});\n";
 				$response .= "</script>\n";
 				//add additional
@@ -310,6 +310,7 @@ if (!class_exists('destinations')) {
 					$response .= "var Objs;\n";
 					$response .= "\n";
 					$response .= "function changeToInput".$destination_id."(obj){\n";
+					$response .= "	sel2=obj.nextElementSibling;\n";
 					$response .= "	tb=document.createElement('INPUT');\n";
 					$response .= "	tb.type='text';\n";
 					$response .= "	tb.name=obj.name;\n";
@@ -332,6 +333,7 @@ if (!class_exists('destinations')) {
 					$response .= "	obj.parentNode.insertBefore(tb,obj);\n";
 					$response .= "	obj.parentNode.insertBefore(tbb,obj);\n";
 					$response .= "	obj.parentNode.removeChild(obj);\n";
+					$response .= "  sel2.remove();\n";
 					$response .= "	Replace".$destination_id."(this.objs);\n";
 					$response .= "}\n";
 					$response .= "\n";
@@ -339,6 +341,7 @@ if (!class_exists('destinations')) {
 					$response .= "	obj[2].parentNode.insertBefore(obj[0],obj[2]);\n";
 					$response .= "	obj[0].parentNode.removeChild(obj[1]);\n";
 					$response .= "	obj[0].parentNode.removeChild(obj[2]);\n";
+					$response .= "	$(document.getElementById('".$destination_id."')).select2();\n";
 					$response .= "	document.getElementById('btn_select_to_input_".$destination_id."').style.visibility = 'visible';\n";
 					if ($onchange != '') {
 						$response .= "	".$onchange.";\n";
