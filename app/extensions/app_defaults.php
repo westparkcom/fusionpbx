@@ -79,7 +79,7 @@
 			$p->delete('default_setting_edit', 'temp');
 
 		//create natural sort function (source: http://www.rhodiumtoad.org.uk/junk/naturalsort.sql)
-			if ($db_type == 'pgsql') {
+			/*if ($db_type == 'pgsql') {
 				$sql = "create or replace function natural_sort(text)\n";
 				$sql .= "	returns bytea language sql immutable strict as \$f\$\n";
 				$sql .= "	select string_agg(convert_to(coalesce(r[2], length(length(r[1])::text) || length(r[1])::text || r[1]), 'UTF8'),'\\x00')\n";
@@ -88,7 +88,7 @@
 				$database = new database;
 				$database->execute($sql);
 				unset($sql);
-			}
+			}*/
 
 	}
 
