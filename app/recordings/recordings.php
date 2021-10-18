@@ -196,7 +196,8 @@
 					//build array
 						$array['recordings'][0]['recording_uuid'] = $found_recording_uuid;
 						$array['recordings'][0]['domain_uuid'] = $domain_uuid;
-						$array['recordings'][0]['recording_base64'] = null;
+						$recording_base64 = base64_encode(file_get_contents($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename));
+						$array['recordings'][0]['recording_base64'] = $recording_base64;
 					//set temporary permissions
 						$p = new permissions;
 						$p->add('recording_edit', 'temp');
@@ -205,11 +206,9 @@
 						$database->app_name = 'recordings';
 						$database->app_uuid = '83913217-c7a2-9e90-925d-a866eb40b60e';
 						$database->save($array);
-						unset($array);
+						unset($array, $recording_base64);
 					//remove temporary permissions
 						$p->delete('recording_edit', 'temp');
-					//set base64 exists to false
-						$array_base64_exists[$found_recording_uuid] = false;
 				}
 			}
 
