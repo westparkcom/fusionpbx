@@ -108,40 +108,6 @@
 		exit;
 	}
 
-//upload the recording
-	if (
-		$_POST['a'] == "upload"
-		&& permission_exists('recording_upload')
-		&& $_POST['type'] == 'rec'
-		&& is_uploaded_file($_FILES['ulfile']['tmp_name'])
-		) {
-
-		//remove special characters
-			$recording_filename = str_replace(" ", "_", $_FILES['ulfile']['name']);
-			$recording_filename = str_replace("'", "", $recording_filename);
-
-		//make sure the destination directory exists
-			if (!is_dir($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'])) {
-				event_socket_mkdir($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name']);
-			}
-
-		//move the uploaded files
-			move_uploaded_file($_FILES['ulfile']['tmp_name'], $_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename);
-
-		//clear the destinations session array
-			if (isset($_SESSION['destinations']['array'])) {
-				unset($_SESSION['destinations']['array']);
-			}
-
-		//set the message
-			message::add($text['message-uploaded'].": ".htmlentities($recording_filename));
-
-		//set the file name to be inserted as the recording description
-			$recording_description = $_FILES['ulfile']['name'];
-			header("Location: recordings.php?rd=".urlencode($recording_description));
-			exit;
-	}
-
 //check the permission
 	if (permission_exists('recording_view')) {
 		//access granted
@@ -197,6 +163,64 @@
 		}
 	}
 	unset($sql, $parameters, $result, $result2, $row, $row2);
+
+//upload the recording
+	if (
+		$_POST['a'] == "upload"
+		&& permission_exists('recording_upload')
+		&& $_POST['type'] == 'rec'
+		&& is_uploaded_file($_FILES['ulfile']['tmp_name'])
+		) {
+
+		//remove special characters
+			$recording_filename = str_replace(" ", "_", $_FILES['ulfile']['name']);
+			$recording_filename = str_replace("'", "", $recording_filename);
+
+		//make sure the destination directory exists
+			if (!is_dir($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'])) {
+				event_socket_mkdir($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name']);
+			}
+
+		//move the uploaded files
+			move_uploaded_file($_FILES['ulfile']['tmp_name'], $_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename);
+
+		//clear the destinations session array
+			if (isset($_SESSION['destinations']['array'])) {
+				unset($_SESSION['destinations']['array']);
+			}
+			
+		//check if this recording already exists, clear base64 if it does
+			if ($_SESSION['recordings']['storage_type']['text'] == 'base64') {
+				$found_recording_uuid = array_search($recording_filename, $array_recordings);
+				if ($array_base64_exists[$found_recording_uuid]) {
+					//build array
+						$array['recordings'][0]['recording_uuid'] = $found_recording_uuid;
+						$array['recordings'][0]['domain_uuid'] = $domain_uuid;
+						$array['recordings'][0]['recording_base64'] = null;
+					//set temporary permissions
+						$p = new permissions;
+						$p->add('recording_edit', 'temp');
+					//execute update
+						$database = new database;
+						$database->app_name = 'recordings';
+						$database->app_uuid = '83913217-c7a2-9e90-925d-a866eb40b60e';
+						$database->save($array);
+						unset($array);
+					//remove temporary permissions
+						$p->delete('recording_edit', 'temp');
+					//set base64 exists to false
+						$array_base64_exists[$found_recording_uuid] = false;
+				}
+			}
+
+		//set the message
+			message::add($text['message-uploaded'].": ".htmlentities($recording_filename));
+
+		//set the file name to be inserted as the recording description
+			$recording_description = $_FILES['ulfile']['name'];
+			header("Location: recordings.php?rd=".urlencode($recording_description));
+			exit;
+	}
 
 //add recordings to the database
 	if (is_dir($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/')) {
