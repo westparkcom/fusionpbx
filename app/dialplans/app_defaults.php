@@ -26,7 +26,15 @@
 
 //get the $apps array from the installed apps from the core and mod directories
 	if ($domains_processed == 1) {
-
+		//ensure dialplan index in place
+			$database = new database;
+			$sql = "CREATE INDEX IF NOT EXISTS v_dialplan_details_query ON v_dialplan_details (\n";
+			$sql .= "	domain_uuid, \n";
+			$sql .= "	dialplan_detail_group, \n";
+			$sql .= "	dialplan_detail_order \n";
+			$sql .= "); \n";
+			$database->execute($sql, null);
+			unset($sql);
 		//get the list of domains
 			$sql = "select * from v_domains ";
 			$database = new database;

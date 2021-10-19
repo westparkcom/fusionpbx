@@ -31,7 +31,14 @@
 
 //process one time
 	if ($domains_processed == 1) {
-
+		//ensure proper indexes created
+			$database = new database;
+			$sql = "CREATE INDEX IF NOT EXISTS v_recordings_query ON v_recordings (\n";
+			$sql .= "	domain_uuid, \n";
+			$sql .= "	recording_name \n";
+			$sql .= "); \n";
+			$database->execute($sql, null);
+			unset($sql);
 		//if base64, populate from existing recording files, then remove
 			if (is_array($_SESSION['recordings']['storage_type']) && $_SESSION['recordings']['storage_type']['text'] == 'base64') {
 				//get recordings without base64 in db

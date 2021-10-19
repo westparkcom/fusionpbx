@@ -26,7 +26,14 @@
 
 //process this only one time
 if ($domains_processed == 1) {
-
+	//ensure voicemail index in place
+			$database = new database;
+			$sql = "CREATE INDEX IF NOT EXISTS v_voicemail_messages_query ON v_voicemail_messages (\n";
+			$sql .= "	domain_uuid, \n";
+			$sql .= "	message_status \n";
+			$sql .= "); \n";
+			$database->execute($sql, null);
+			unset($sql);
 	// define initial, get current, define correct languages folder paths
 	$switch_configuration_dir = $_SESSION['switch']['conf']['dir'] != '' ? $_SESSION['switch']['conf']['dir'] : '/etc/freeswitch';
 	$switch_phrases_dir_initial = $switch_configuration_dir.'/lang';
