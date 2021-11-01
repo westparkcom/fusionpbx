@@ -25,15 +25,11 @@ class AWSPolly(object):
 
 
 	def genspeech(self, text, voice, recpath):
-		fname = "{}.wav".format(
-			hashlib.sha224(
-				b"{}-{}-{}".format(
-					'polly',
-					text,
-					voice
-				)
-			).hexdigest()
+		namestr = f"polly-{text}-{voice}"
+		fhash = hashlib.sha224(
+			namestr.encode('utf-8')
 		)
+		fname = f"{fhash}.wav"
 		filename = os.path.join(
 			recpath,
 			fname

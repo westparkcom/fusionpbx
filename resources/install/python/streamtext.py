@@ -2,12 +2,13 @@
 import freeswitch
 import os
 import fsglobs
-reload(fsglobs)
+import importlib
+importlib.reload(fsglobs)
 from fsglobs import G
 
 def ttsgen(text, voice):
 	import polly
-	reload(polly)
+	importlib.reload(polly)
 	from polly import AWSPolly
 	polly_voice = AWSPolly(
 		G.aws_access_key,
