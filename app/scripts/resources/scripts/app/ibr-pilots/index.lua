@@ -443,6 +443,7 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
     local acceptablecond = {}
     acceptablecond["gate-manned"] = {"^%d+$"}
     acceptablecond["gate-avail"] = {"^%d+$"}
+    acceptablecond["gate-queued"] = {"^(%d+),(%d+)$"}
     acceptablecond["num-calls-dnis"] = {"^%d+$"}
     acceptablecond["num-calls-ani"] = {"^%d+$"}
     acceptablecond["time-waiting"] = {"^%d+$"}
@@ -486,7 +487,7 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
     end
 
     -- validate the operand
-    if tonumber(valtocheck) ~= nil then --we're dealing with a number here
+    if tonumber(valtocheck) ~= nil or vartocheck == "gate-queued" then --we're dealing with a number here
         if not contains(numop, operand) then
             uuidlog("ERR", "Operand `" .. operand .. "` invalid for numeric data type")
             return false
@@ -577,6 +578,23 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
             else
                 exec_command(exec_if_false["command"], exec_if_false["value"])
             end
+            return
+        end
+    elseif vartocheck == "gate-queued" then
+        local num_calls_queued = 0
+        local gate, num_calls = string.match(valtocheck, acceptablecond["gate-queued"][1])
+        local gatequeued = acd_gate_inqueue ( tonumber(gate) ) -- example: "+OK 42"
+        if gatequeued:sub(1, 3) == "+OK" then
+            num_calls_queued = tonumber(agentsready:sub(5, -1)) or 0
+        end
+        local matches = compare_op(num_calls_queued, operand, tonumber(num_calls))
+        if matches then
+            uuidlog("INFO", "gate_queued gate `" .. gate .. "`: `" .. num_calls_queued .. "` " .. operand .. " `" .. numcalls .. "` (threshold exceeded)" )
+            exec_command(exec_if_true["command"], exec_if_true["value"])
+            return
+        else
+            uuidlog("INFO", "gate_queued gate `" .. gate .. "`: `" .. num_calls_queued .. "` " .. operand .. " `" .. numcalls .. "` (threshold OK)" )
+            exec_command(exec_if_false["command"], exec_if_false["value"])
             return
         end
     elseif vartocheck == "num-calls-dnis" or vartocheck == "num-calls-ani" or vartocheck == "num-calls-pool" then
