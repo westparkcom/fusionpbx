@@ -585,7 +585,7 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
         local gate, num_calls = string.match(valtocheck, acceptablecond["gate-queued"][1])
         local gatequeued = acd_gate_inqueue ( tonumber(gate) ) -- example: "+OK 42"
         if gatequeued:sub(1, 3) == "+OK" then
-            num_calls_queued = tonumber(agentsready:sub(5, -1)) or 0
+            num_calls_queued = tonumber(gatequeued:sub(5, -1)) or 0
         end
         local matches = compare_op(num_calls_queued, operand, tonumber(num_calls))
         if matches then
