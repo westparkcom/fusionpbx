@@ -589,11 +589,11 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
         end
         local matches = compare_op(num_calls_queued, operand, tonumber(num_calls))
         if matches then
-            uuidlog("INFO", "gate_queued gate `" .. gate .. "`: `" .. num_calls_queued .. "` " .. operand .. " `" .. numcalls .. "` (threshold exceeded)" )
+            uuidlog("INFO", "gate_queued gate `" .. gate .. "`: `" .. num_calls_queued .. "` " .. operand .. " `" .. num_calls .. "` (threshold exceeded)" )
             exec_command(exec_if_true["command"], exec_if_true["value"])
             return
         else
-            uuidlog("INFO", "gate_queued gate `" .. gate .. "`: `" .. num_calls_queued .. "` " .. operand .. " `" .. numcalls .. "` (threshold OK)" )
+            uuidlog("INFO", "gate_queued gate `" .. gate .. "`: `" .. num_calls_queued .. "` " .. operand .. " `" .. num_calls .. "` (threshold OK)" )
             exec_command(exec_if_false["command"], exec_if_false["value"])
             return
         end
