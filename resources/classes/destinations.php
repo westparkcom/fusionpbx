@@ -14,6 +14,7 @@ if (!class_exists('destinations')) {
 		*/
 		public $destinations;
 		public $db;
+		public $maindb;
 
 		/**
 		* declare private variables
@@ -30,11 +31,12 @@ if (!class_exists('destinations')) {
 		*/
 		public function __construct() {
 			//connect to the database if not connected
-				if (!$this->db) {
+				if (!$this->maindb) {
 					require_once "resources/classes/database.php";
-					$database = new database;
-					$database->connect();
-					$this->db = $database->db;
+					$this->maindb = new database;
+					$this->maindb->connect();
+					$this->db = $this->maindb->db;
+					
 				}
 
 			//assign private variables
@@ -125,8 +127,8 @@ if (!class_exists('destinations')) {
 						}
 						$sql .= "order by ".trim($row['order_by']);
 						$sql = str_replace("\${domain_uuid}", $_SESSION['domain_uuid'], $sql);
-						$database = new database;
-						$result = $database->select($sql, null, 'all');
+						//$database = new database; //REDUNDANT???
+						$result = $this->maindb->select($sql, null, 'all');
 
 						$this->destinations[$x]['result']['sql'] = $sql;
 						$this->destinations[$x]['result']['data'] = $result;
@@ -375,8 +377,8 @@ if (!class_exists('destinations')) {
 						}
 						$sql .= "order by ".trim($row['order_by']);
 						$sql = str_replace("\${domain_uuid}", $_SESSION['domain_uuid'], $sql);
-						$database = new database;
-						$result = $database->select($sql, null, 'all');
+						//$database = new database; //REDUNDANT??
+						$result = $this->maindb->select($sql, null, 'all');
 
 						$this->destinations[$x]['result']['sql'] = $sql;
 						$this->destinations[$x]['result']['data'] = $result;
@@ -551,8 +553,8 @@ if (!class_exists('destinations')) {
 										$sql = "select dialplan_uuid, destination_context from v_destinations ";
 										$sql .= "where destination_uuid = :destination_uuid ";
 										$parameters['destination_uuid'] = $record['uuid'];
-										$database = new database;
-										$row = $database->select($sql, $parameters, 'row');
+										//$database = new database;
+										$row = $this->maindb->select($sql, $parameters, 'row');
 										unset($sql, $parameters);
 
 									//include dialplan in array
@@ -574,10 +576,10 @@ if (!class_exists('destinations')) {
 									$p->add('dialplan_detail_delete', 'temp');
 
 								//execute delete
-									$database = new database;
-									$database->app_name = $this->app_name;
-									$database->app_uuid = $this->app_uuid;
-									$database->delete($array);
+									//$database = new database;
+									$this->maindb->app_name = $this->app_name;
+									$this->maindb->app_uuid = $this->app_uuid;
+									$this->maindb->delete($array);
 									unset($array);
 
 								//revoke temporary permissions
