@@ -38,6 +38,7 @@ if (!class_exists('destinations')) {
 		*/
 		public $destinations;
 		public $domain_uuid;
+		public $maindb;
 
 		/**
 		* declare private variables
@@ -58,6 +59,12 @@ if (!class_exists('destinations')) {
 			//set the domain details
 				if (is_null($this->domain_uuid)) {
 					$this->domain_uuid = $_SESSION['domain_uuid'];
+				}
+			//connect to the database if not connected
+				if (!$this->maindb) {
+					require_once "resources/classes/database.php";
+					$this->maindb = new database;
+					$this->maindb->connect();
 				}
 
 			//assign private variables
@@ -172,8 +179,7 @@ if (!class_exists('destinations')) {
 			$sql = "select domain_name from v_domains ";
 			$sql .= "where domain_uuid = :domain_uuid ";
 			$parameters['domain_uuid'] = $this->domain_uuid;
-			$database = new database;
-			$this->domain_name = $database->select($sql, $parameters, 'column');
+			$this->domain_name = $this->maindb->select($sql, $parameters, 'column');
 
 			//create a single destination select list
 			if ($_SESSION['destinations']['select_mode']['text'] == 'default') {
@@ -245,8 +251,7 @@ if (!class_exists('destinations')) {
 								}
 								$sql .= "order by ".trim($row['order_by']);
 								$sql = str_replace("\${domain_uuid}", $this->domain_uuid, $sql);
-								//$database = new database; //REDUNDANT?
-								$result = $database->select($sql, null, 'all');
+								$result = $this->maindb->select($sql, null, 'all');
 
 								$this->destinations[$x]['result']['sql'] = $sql;
 								$this->destinations[$x]['result']['data'] = $result;
@@ -564,8 +569,7 @@ if (!class_exists('destinations')) {
 			$sql = "select domain_name from v_domains ";
 			$sql .= "where domain_uuid = :domain_uuid ";
 			$parameters['domain_uuid'] = $this->domain_uuid;
-			$database = new database;
-			$this->domain_name = $database->select($sql, $parameters, 'column');
+			$this->domain_name = $this->maindb->select($sql, $parameters, 'column');
 
 			//get the destinations
 			if (!is_array($this->destinations)) {
@@ -629,8 +633,7 @@ if (!class_exists('destinations')) {
 						}
 						$sql .= "order by ".trim($row['order_by']);
 						$sql = str_replace("\${domain_uuid}", $this->domain_uuid, $sql);
-						//$database = new database; //REDUNDANT???
-						$result = $database->select($sql, null, 'all');
+						$result = $this->maindb->select($sql, null, 'all');
 
 						$this->destinations[$x]['result']['sql'] = $sql;
 						$this->destinations[$x]['result']['data'] = $result;
@@ -775,8 +778,7 @@ if (!class_exists('destinations')) {
 			$sql = "select domain_name from v_domains ";
 			$sql .= "where domain_uuid = :domain_uuid ";
 			$parameters['domain_uuid'] = $this->domain_uuid;
-			$database = new database;
-			$this->domain_name = $database->select($sql, $parameters, 'column');
+			$this->domain_name = $this->maindb->select($sql, $parameters, 'column');
 
 			//get the destinations
 			if (!is_array($this->destinations)) {
@@ -841,8 +843,7 @@ if (!class_exists('destinations')) {
 						}
 						$sql .= "order by ".trim($row['order_by']);
 						$sql = str_replace("\${domain_uuid}", $this->domain_uuid, $sql);
-						//$database = new database; //REDUNDANT??
-						$result = $database->select($sql, null, 'all');
+						$result = $this->maindb->select($sql, null, 'all');
 
 						$this->destinations[$x]['result']['sql'] = $sql;
 						$this->destinations[$x]['result']['data'] = $result;
@@ -1034,9 +1035,6 @@ if (!class_exists('destinations')) {
 		*/
 		public function delete($records) {
 			if (permission_exists($this->permission_prefix.'delete')) {
-
-				//Create database object
-					$database = new database;
 				//add multi-lingual support
 					$language = new text;
 					$text = $language->get();
@@ -1063,8 +1061,7 @@ if (!class_exists('destinations')) {
 										$sql = "select dialplan_uuid, destination_context from v_destinations ";
 										$sql .= "where destination_uuid = :destination_uuid ";
 										$parameters['destination_uuid'] = $record['uuid'];
-										//$database = new database; //REDUNDANT?
-										$row = $database->select($sql, $parameters, 'row');
+										$row = $this->maindb->select($sql, $parameters, 'row');
 										unset($sql, $parameters);
 
 									//include dialplan in array
@@ -1086,10 +1083,9 @@ if (!class_exists('destinations')) {
 									$p->add('dialplan_detail_delete', 'temp');
 
 								//execute delete
-									//$database = new database; //REDUNDANT?
-									$database->app_name = $this->app_name;
-									$database->app_uuid = $this->app_uuid;
-									$database->delete($array);
+									$this->maindb->app_name = $this->app_name;
+									$this->maindb->app_uuid = $this->app_uuid;
+									$this->maindb->delete($array);
 									unset($array);
 
 								//revoke temporary permissions
