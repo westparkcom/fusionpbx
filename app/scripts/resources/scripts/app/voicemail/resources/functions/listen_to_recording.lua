@@ -181,7 +181,7 @@
 		--post listen options
 			if (session:ready()) then
 				if (string.len(dtmf_digits) == 0) then
-					dtmf_digits = session:playAndGetDigits(1, 1, max_tries, digit_timeout, "#", "phrase:voicemail_listen_file_options:1:2:3:5:7:8:9:0", "", "^[\\d\\*#]$");
+					dtmf_digits = session:playAndGetDigits(1, 1, max_tries, digit_timeout, "#", "phrase:voicemail_listen_file_options:1:2:3:7:8", "", "^[\\d\\*#]$");
 				end
 			end
 		--wait for more digits
@@ -204,9 +204,9 @@
 						session:execute("set", "timezone="..current_time_zone.."");
 					end
 					session:say(created_epoch, default_language, "current_date_time", "pronounced");
-				elseif (dtmf_digits == "5") then
-					message_saved(voicemail_id, uuid);
-					return_call(caller_id_number);
+				--elseif (dtmf_digits == "5") then
+					--message_saved(voicemail_id, uuid);
+					--return_call(caller_id_number);
 				elseif (dtmf_digits == "7") then
 					delete_recording(voicemail_id, uuid);
 					message_waiting(voicemail_id, domain_uuid);
@@ -214,20 +214,20 @@
 						if (voicemail_id_copy ~= voicemail_id  and voicemail_id_copy ~= nil) then
 							message_waiting(voicemail_id_copy, domain_uuid);
 						end
+				--elseif (dtmf_digits == "8") then
+					--forward_to_extension(voicemail_id, uuid);
+					--dtmf_digits = '';
+					--session:execute("playback", "phrase:voicemail_ack:saved");
 				elseif (dtmf_digits == "8") then
-					forward_to_extension(voicemail_id, uuid);
-					dtmf_digits = '';
-					session:execute("playback", "phrase:voicemail_ack:saved");
-				elseif (dtmf_digits == "9") then
 					send_email(voicemail_id, uuid);
 					dtmf_digits = '';
 					session:execute("playback", "phrase:voicemail_ack:emailed");
 				elseif (dtmf_digits == "*") then
 					timeouts = 0;
 					return main_menu();
-				elseif (dtmf_digits == "0") then
-					message_saved(voicemail_id, uuid);
-					session:transfer("0", "XML", context);
+				--elseif (dtmf_digits == "0") then
+					--message_saved(voicemail_id, uuid);
+					--session:transfer("0", "XML", context);
 				elseif (dtmf_digits == "#") then
 					return;
 				else
