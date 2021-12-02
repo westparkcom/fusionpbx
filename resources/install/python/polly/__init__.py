@@ -28,7 +28,7 @@ class AWSPolly(object):
 		namestr = f"polly-{text}-{voice}"
 		fhash = hashlib.sha224(
 			namestr.encode('utf-8')
-		)
+		).hexdigest()
 		fname = f"{fhash}.wav"
 		filename = os.path.join(
 			recpath,
