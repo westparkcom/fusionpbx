@@ -181,7 +181,7 @@
 		--post listen options
 			if (session:ready()) then
 				if (string.len(dtmf_digits) == 0) then
-					dtmf_digits = session:playAndGetDigits(1, 1, max_tries, digit_timeout, "#", "phrase:voicemail_listen_file_options:1:2:3:7:8", "", "^[\\d\\*#]$");
+					dtmf_digits = session:playAndGetDigits(1, 1, max_tries, digit_timeout, "#", "phrase:voicemail_listen_file_options:1:2:3:7:8:0", "", "^[\\d\\*#]$");
 				end
 			end
 		--wait for more digits
