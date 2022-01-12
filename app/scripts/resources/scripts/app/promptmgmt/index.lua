@@ -360,7 +360,7 @@ end
 		if recordingnumber > 0 then
 			detail_data = detail_data .. recordings[1][zeropad(4, recordingnumber)]['recording_filename'] .. '}'
 		else
-			if phrasetype == 'PREANSWER' or phrasetype == 'EMERG' then
+			if phrasetype == 'PREANSWER' or phrasetype == 'EMERG' or phrasetype == 'WHISPER' then
 				detail_data = detail_data .. 'default-' .. phrasetype .. '.wav}'
 			else
 				detail_data = detail_data .. 'default-SILENCE.wav}'
