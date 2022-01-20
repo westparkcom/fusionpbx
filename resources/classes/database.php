@@ -198,14 +198,14 @@ include "root.php";
 						if (strlen($this->host) > 0) {
 							if (strlen($this->port) == 0) { $this->port = "5432"; }
 							if ($this->db_secure == true) {
-								$this->db = new PDO("pgsql:host=$this->host port=$this->port dbname=$this->db_name user=$this->username password=$this->password sslmode=verify-ca sslrootcert=$this->db_cert_authority");
+								$this->db = new PDO("pgsql:host=$this->host port=$this->port dbname=$this->db_name user=$this->username password=$this->password sslmode=verify-ca sslrootcert=$this->db_cert_authority application_name=fusionpbx_php");
 							}
 							else {
-								$this->db = new PDO("pgsql:host=$this->host port=$this->port dbname=$this->db_name user=$this->username password=$this->password");
+								$this->db = new PDO("pgsql:host=$this->host port=$this->port dbname=$this->db_name user=$this->username password=$this->password application_name=fusionpbx_php");
 							}
 						}
 						else {
-							$this->db = new PDO("pgsql:dbname=$this->db_name user=$this->username password=$this->password");
+							$this->db = new PDO("pgsql:dbname=$this->db_name user=$this->username password=$this->password application_name=fusionpbx_php");
 						}
 					}
 					catch (PDOException $error) {
