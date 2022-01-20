@@ -49,7 +49,15 @@
 			else
 				sms_body = 'You have a new voicemail from: ${caller_id_name} - ${caller_id_number} length ${message_length_formatted}';
 			end
-
+			
+		--get the sms carrier to usse
+			if (settings['voicemail']['sms_carrier'] ~= nil) then
+				if (settings['voicemail']['sms_carrier']['text'] ~= nil) then
+					sms_carrier = settings['voicemail']['sms_carrier']['text'];
+				end
+			else
+				sms_carrier = 'thinq';
+			end
 
 		--require the sms address to send to
 			if (string.len(voicemail_sms_to) > 2) then
@@ -111,7 +119,7 @@
 
 --					sms_body = "hello";
 					for sms_to in string.gmatch(voicemail_sms_to, '([^,]+)') do -- Comma separated SMS list
-						cmd = "luarun app.lua sms outbound " .. sms_to .. "@" .. domain_name .. " " .. voicemail_to_sms_did .. " '" .. sms_body .. "'";
+						cmd = "luarun app.lua sms-" .. sms_carrier .. " outbound " .. sms_to .. "@" .. domain_name .. " " .. voicemail_to_sms_did .. " '" .. sms_body .. "'";
 						freeswitch.msleep(1100); -- Most carriers only accept 1 SMS per number per second
 					end
 					api:executeString(cmd);
