@@ -34,7 +34,6 @@
 	local cache = require "resources.functions.cache"
 	local ivr_menu_cache_key = "configuration:ivr.conf:" .. ivr_menu_uuid
 	XML_STRING, err = cache.get(ivr_menu_cache_key)
-	XML_STRING = nil -- this forces pull from DB
 
 --set the cache
 	if not XML_STRING  then

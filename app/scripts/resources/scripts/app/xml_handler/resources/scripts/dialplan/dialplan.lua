@@ -40,7 +40,6 @@
 --get the dialplan mode from the cache
 	dialplan_mode_key = "dialplan:mode";
 	dialplan_mode, err = cache.get(dialplan_mode_key);
-	err = 'NOT FOUND'; -- this forces pull from DB
 
 --if not found in the cache then get it from the database
 	if (err == 'NOT FOUND') then

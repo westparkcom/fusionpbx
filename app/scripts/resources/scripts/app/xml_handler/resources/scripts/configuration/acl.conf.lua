@@ -36,7 +36,6 @@
 	local cache = require "resources.functions.cache"
 	local acl_cache_key = "configuration:acl.conf"
 	XML_STRING, err = cache.get(acl_cache_key)
-	XML_STRING = nil -- this forces pull from DB
 
 --set the cache
 	if not XML_STRING then

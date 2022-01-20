@@ -29,7 +29,6 @@
 	local hostname = trim(api:execute("switchname", ""))
 	local sofia_cache_key = "configuration:sofia.conf:" .. hostname
 	XML_STRING, err = cache.get(sofia_cache_key)
-	XML_STRING = nil -- this forces pull from DB
 
 --set the cache
 	if not XML_STRING then
