@@ -252,14 +252,14 @@ if ($db_type == "pgsql") {
 		if (strlen($db_host) > 0) {
 			if (strlen($db_port) == 0) { $db_port = "5432"; }
 			if ($db_secure == true) {
-				$db = new PDO("pgsql:host=$db_host port=$db_port dbname=$db_name user=$db_username password=$db_password sslmode=verify-ca sslrootcert=$db_cert_authority");
+				$db = new PDO("pgsql:host=$db_host port=$db_port dbname=$db_name user=$db_username password=$db_password sslmode=verify-ca sslrootcert=$db_cert_authority application_name=fusionpbx_php");
 			}
 			else {
-				$db = new PDO("pgsql:host=$db_host port=$db_port dbname=$db_name user=$db_username password=$db_password");
+				$db = new PDO("pgsql:host=$db_host port=$db_port dbname=$db_name user=$db_username password=$db_password application_name=fusionpbx_php");
 			}
 		}
 		else {
-			$db = new PDO("pgsql:dbname=$db_name user=$db_username password=$db_password");
+			$db = new PDO("pgsql:dbname=$db_name user=$db_username password=$db_password application_name=fusionpbx_php");
 		}
 	}
 	catch (PDOException $error) {
