@@ -110,7 +110,10 @@
 					end
 
 --					sms_body = "hello";
-					cmd = "luarun app.lua sms outbound " .. voicemail_sms_to .. "@" .. domain_name .. " " .. voicemail_to_sms_did .. " '" .. sms_body .. "'";
+					for sms_to in string.gmatch(voicemail_sms_to, '([^,]+)') do -- Comma separated SMS list
+						cmd = "luarun app.lua sms outbound " .. sms_to .. "@" .. domain_name .. " " .. voicemail_to_sms_did .. " '" .. sms_body .. "'";
+						freeswitch.msleep(1100); -- Most carriers only accept 1 SMS per number per second
+					end
 					api:executeString(cmd);
 
 			end
