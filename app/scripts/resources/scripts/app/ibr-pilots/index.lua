@@ -661,9 +661,9 @@ function transfer(destdata)
     -- Transfer to FreeSWITCH destination
     delgatecall(destdata) -- Remove call from queue
     local destination = destdata[1]
-	api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
+    api:executeString("uuid_break " .. callinfo["call_uuid"] .. " all")
     api:executeString("uuid_transfer " .. callinfo["call_uuid"] .. " " .. destination)
-    bridged = true
+    scriptstop = true
     return
 end
 
