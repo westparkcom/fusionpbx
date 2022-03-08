@@ -52,7 +52,6 @@ else
     return "exit";
 end
 
-settings = settings(domain_uuid)
 if (settings['voicemail']['sms_twilio_api_sid'] ~= nil) then
     sms_twilio_api_sid = settings['voicemail']['sms_twilio_api_sid']['text'];
 else
