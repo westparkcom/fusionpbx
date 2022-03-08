@@ -6,7 +6,7 @@ function split(s, sep)
     return fields
 end
 
-function send_msg(twiliosid, twilioapisid, twiliotoken, smsto, smsfrom, smsmsge)
+function send_msg(twiliosid, twilioapisid, twiliotoken, smsto, smsfrom, smsmsg)
     local json = require "resources.functions.lunajson"
     local send_sms_cmd = 'curl -X POST --data-urlencode "Body=' .. smsmsg .. '" --data-urlencode "From=' .. smsfrom .. '" --data-urlencode "To=+' .. smsto .. '" "https://api.twilio.com/2010-04-01/Accounts/' .. twiliosid .. '/Messages.json" -u "' .. twilioapisid .. ':' .. twiliotoken .. '"'
     local handle = io.popen(send_sms_cmd)
