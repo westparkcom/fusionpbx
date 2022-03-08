@@ -17,11 +17,10 @@ function send_msg(twiliosid, twilioapisid, twiliotoken, smsto, smsfrom, smsmsge)
     local sms_retcode = sms_json["status"] or 'sent';
     if sms_retcode == 'sent' or sms_retcode == 'queued' then
         freeswitch.consoleLog('info', 'Message sent! SID: ' .. sms_json["sid"])
+		return true
     else
         freeswitch.consoleLog('err', "Unable to send voicemail SMS: " .. send_sms_result);
         return false
-    else
-        return true
     end
 end
 
