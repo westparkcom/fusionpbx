@@ -36,6 +36,10 @@ local domain_name = to_uri[2]
 local sms_from = argv[4]
 local sms_body = argv[5]
 
+sms_body = sms_body:gsub("\\n", "\n")
+sms_body = sms_body:gsub("\\'", "'")
+sms_body = sms_body:gsub("\\\\", "\\")
+
 local domain_uuid = ""
 local sql = "SELECT domain_uuid FROM v_domains WHERE domain_name = :domain_name"
 local params = {
