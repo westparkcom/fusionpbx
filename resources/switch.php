@@ -38,6 +38,7 @@
 			$row = $database->select($sql, null, 'row');
 			if (is_array($row) && @sizeof($row) != 0) {
 				$_SESSION['event_socket_ip_address'] = $row["event_socket_ip_address"];
+				$_SESSION['event_socket_listen_address'] = $row["event_socket_listen_address"];
 				$_SESSION['event_socket_port'] = $row["event_socket_port"];
 				$_SESSION['event_socket_password'] = $row["event_socket_password"];
 			}
@@ -89,6 +90,7 @@ function event_socket_request_cmd($cmd) {
 		$row = $database->select($sql, null, 'row');
 		if (is_array($row) && @sizeof($row) != 0) {
 			$event_socket_ip_address = $row["event_socket_ip_address"];
+			$event_socket_listen_address = $row["event_socket_listen_address"];
 			$event_socket_port = $row["event_socket_port"];
 			$event_socket_password = $row["event_socket_password"];
 		}
@@ -159,12 +161,13 @@ function save_setting_xml() {
 		fclose($fout);
 
 		$event_socket_ip_address = $row['event_socket_ip_address'];
-		if (strlen($event_socket_ip_address) == 0) { $event_socket_ip_address = '127.0.0.1'; }
+		$event_socket_listen_address = $row['event_socket_listen_address'];
+		if (strlen($event_socket_listen_address) == 0) { $event_socket_listen_address = '127.0.0.1'; }
 
 		$fout = fopen($_SESSION['switch']['conf']['dir']."/autoload_configs/event_socket.conf.xml","w");
 		$xml = "<configuration name=\"event_socket.conf\" description=\"Socket Client\">\n";
 		$xml .= "  <settings>\n";
-		$xml .= "    <param name=\"listen-ip\" value=\"" . $event_socket_ip_address . "\"/>\n";
+		$xml .= "    <param name=\"listen-ip\" value=\"" . $event_socket_listen_address . "\"/>\n";
 		$xml .= "    <param name=\"listen-port\" value=\"" . $row['event_socket_port'] . "\"/>\n";
 		$xml .= "    <param name=\"password\" value=\"" . $row['event_socket_password'] . "\"/>\n";
 		if (strlen($row['event_socket_acl']) > 0) {
