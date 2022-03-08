@@ -6,10 +6,10 @@ function split(s, sep)
     return fields
 end
 
-function send_msg(twiliosid, twiliotoken, smsto, smsfrom, smsmsge)
+function send_msg(twiliosid, twilioapisid, twiliotoken, smsto, smsfrom, smsmsge)
     local smsmsg = string.gsub(smsmsge, "\n", "\\n")
     local json = require "resources.functions.lunajson"
-    local send_sms_cmd = 'curl -X POST --data-urlencode "Body=' .. smsmsg .. '" --data-urlencode "From=' .. smsfrom .. '" --data-urlencode "To=+' .. smsto .. '" "https://api.twilio.com/2010-04-01/Accounts/' .. twiliosid .. '/Messages.json" -u "' .. twiliosid .. ':' .. twiliotoken .. '"'
+    local send_sms_cmd = 'curl -X POST --data-urlencode "Body=' .. smsmsg .. '" --data-urlencode "From=' .. smsfrom .. '" --data-urlencode "To=+' .. smsto .. '" "https://api.twilio.com/2010-04-01/Accounts/' .. twiliosid .. '/Messages.json" -u "' .. twilioapisid .. ':' .. twiliotoken .. '"'
     local handle = io.popen(send_sms_cmd)
     local send_sms_result = handle:read("*a")
     handle:close();
@@ -52,6 +52,14 @@ else
     return "exit";
 end
 
+settings = settings(domain_uuid)
+if (settings['voicemail']['sms_twilio_api_sid'] ~= nil) then
+    sms_twilio_api_sid = settings['voicemail']['sms_twilio_api_sid']['text'];
+else
+    freeswitch.consoleLog("err", "No sms_twilio_api_sid set, aborting SMS send\n");
+    return "exit";
+end
+
 if (settings['voicemail']['sms_twilio_token'] ~= nil) then
     sms_twilio_token = settings['voicemail']['sms_twilio_token']['text'];
 else
@@ -59,4 +67,4 @@ else
     return "exit";
 end
 
-send_msg(sms_twilio_sid, sms_twilio_token, sms_to, sms_from, sms_body)
+send_msg(sms_twilio_sid, sms_twilio_api_sid, sms_twilio_token, sms_to, sms_from, sms_body)
