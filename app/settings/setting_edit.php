@@ -57,6 +57,7 @@
 		//$default_gateway = $_POST["default_gateway"];
 		$setting_uuid = $_POST["setting_uuid"];
 		$event_socket_ip_address = $_POST["event_socket_ip_address"];
+		$event_socket_listen_address = $_POST["event_socket_listen_address"];
 		if (strlen($event_socket_listen_address) == 0) { $event_socket_listen_address = '127.0.0.1'; }
 		if (strlen($event_socket_ip_address) == 0) { $event_socket_ip_address = '127.0.0.1'; }
 		$event_socket_port = $_POST["event_socket_port"];
