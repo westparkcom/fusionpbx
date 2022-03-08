@@ -58,7 +58,16 @@
 			else
 				sms_carrier = 'thinq';
 			end
-
+		
+		--get the from numbmer
+			if (settings['voicemail']['sms_from_number'] ~= nil) then
+				if (settings['voicemail']['sms_from_number']['text'] ~= nil) then
+					sms_from_number = settings['voicemail']['sms_from_number']['text'];
+				end
+			else
+				sms_from_number = '+15553211234';
+			end
+		
 		--require the sms address to send to
 			if (string.len(voicemail_sms_to) > 2) then
 				--include languages file
@@ -119,7 +128,7 @@
 
 --					sms_body = "hello";
 					for sms_to in string.gmatch(voicemail_sms_to, '([^,]+)') do -- Comma separated SMS list
-						cmd = "luarun app.lua sms-" .. sms_carrier .. " outbound " .. sms_to .. "@" .. domain_name .. " " .. voicemail_to_sms_did .. " '" .. sms_body .. "'";
+						cmd = "luarun app.lua sms-" .. sms_carrier .. " outbound " .. sms_to .. "@" .. domain_name .. " " .. sms_from_number .. " '" .. sms_body .. "'";
 						freeswitch.msleep(1100); -- Most carriers only accept 1 SMS per number per second
 					end
 					api:executeString(cmd);
