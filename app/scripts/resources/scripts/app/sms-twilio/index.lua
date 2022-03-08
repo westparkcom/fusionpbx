@@ -59,4 +59,4 @@ else
     return "exit";
 end
 
-send_msg(sms_twilio_sid, sms_twilio_token, sms_to, sms_from, smsmsge)
+send_msg(sms_twilio_sid, sms_twilio_token, sms_to, sms_from, sms_body)
