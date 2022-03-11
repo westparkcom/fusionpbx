@@ -58,7 +58,7 @@
 			else
 				sms_carrier = 'thinq';
 			end
-
+		
 		--require the sms address to send to
 			if (string.len(voicemail_sms_to) > 2) then
 				--include languages file
@@ -109,6 +109,9 @@
 					sms_body = sms_body:gsub("${domain_name}", domain_name);
 					sms_body = sms_body:gsub("${sip_to_user}", id);
 					sms_body = sms_body:gsub("${dialed_user}", id);
+					sms_body = sms_body:gsub("\\", "\\\\");
+					sms_body = sms_body:gsub("\n", "\\n");
+					sms_body = sms_body:gsub("'", "\\'");
 					if (transcription ~= nil) then
 						sms_body = sms_body:gsub("${message_text}", transcription);
 					end

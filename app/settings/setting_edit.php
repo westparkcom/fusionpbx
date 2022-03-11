@@ -57,6 +57,8 @@
 		//$default_gateway = $_POST["default_gateway"];
 		$setting_uuid = $_POST["setting_uuid"];
 		$event_socket_ip_address = $_POST["event_socket_ip_address"];
+		$event_socket_listen_address = $_POST["event_socket_listen_address"];
+		if (strlen($event_socket_listen_address) == 0) { $event_socket_listen_address = '127.0.0.1'; }
 		if (strlen($event_socket_ip_address) == 0) { $event_socket_ip_address = '127.0.0.1'; }
 		$event_socket_port = $_POST["event_socket_port"];
 		$event_socket_password = $_POST["event_socket_password"];
@@ -106,6 +108,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 				//build array
 					$array['settings'][0]['setting_uuid'] = $action == "add" ? uuid() : $setting_uuid;
 					$array['settings'][0]['event_socket_ip_address'] = $event_socket_ip_address;
+					$array['settings'][0]['event_socket_listen_address'] = $event_socket_listen_address;
 					$array['settings'][0]['event_socket_port'] = $event_socket_port;
 					$array['settings'][0]['event_socket_password'] = $event_socket_password;
 					$array['settings'][0]['event_socket_acl'] = $event_socket_acl;
@@ -157,6 +160,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 		if (is_array($row) && @sizeof($row) != 0) {
 			$setting_uuid = $row['setting_uuid'];
 			$event_socket_ip_address = $row["event_socket_ip_address"];
+			$event_socket_listen_address = $row["event_socket_listen_address"];
 			$event_socket_port = $row["event_socket_port"];
 			$event_socket_password = $row["event_socket_password"];
 			$event_socket_acl = $row["event_socket_acl"];
@@ -208,6 +212,17 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "    <input class='formfld' type='text' name='event_socket_ip_address' maxlength='255' value=\"".escape($event_socket_ip_address)."\">\n";
 	echo "<br />\n";
 	echo $text['description-event_socket_ip']."\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+
+	echo "<tr>\n";
+	echo "<td width='30%' class='vncellreq' valign='top' align='left' nowrap>\n";
+	echo "    ".$text['label-event_socket_listen_ip']."\n";
+	echo "</td>\n";
+	echo "<td width='70%' class='vtable' align='left'>\n";
+	echo "    <input class='formfld' type='text' name='event_socket_listen_address' maxlength='255' value=\"".escape($event_socket_listen_address)."\">\n";
+	echo "<br />\n";
+	echo $text['description-event_socket_listen_ip']."\n";
 	echo "</td>\n";
 	echo "</tr>\n";
 

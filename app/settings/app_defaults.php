@@ -34,6 +34,7 @@ if ($domains_processed == 1) {
 		if (strlen($event_socket_ip_address) == 0) {
 			//add default settings
 				$event_socket_ip_address = "127.0.0.1";
+				$event_socket_listen_address = "127.0.0.1";
 				$event_socket_port = "8021";
 				$event_socket_password = "ClueCon";
 				$xml_rpc_http_port = "8080";
@@ -45,6 +46,7 @@ if ($domains_processed == 1) {
 			//build array
 				$array['settings'][0]['setting_uuid'] = uuid();
 				$array['settings'][0]['event_socket_ip_address'] = $event_socket_ip_address;
+				$array['settings'][0]['event_socket_listen_address'] = $event_socket_listen_address;
 				$array['settings'][0]['event_socket_port'] = $event_socket_port;
 				$array['settings'][0]['event_socket_password'] = $event_socket_password;
 				$array['settings'][0]['xml_rpc_http_port'] = $xml_rpc_http_port;
@@ -72,6 +74,7 @@ if ($domains_processed == 1) {
 			if (isset($_SESSION['event_socket_password'])) { $event_socket_password = $_SESSION['event_socket_password']; }
 			//build array
 				$array['settings'][0]['event_socket_ip_address'] = $event_socket_ip_address;
+				$array['settings'][0]['event_socket_listen_address'] = $event_socket_listen_address;
 				$array['settings'][0]['event_socket_port'] = $event_socket_port;
 				$array['settings'][0]['event_socket_password'] = $event_socket_password;
 			//grant temporary permissions
