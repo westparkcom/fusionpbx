@@ -273,7 +273,7 @@
 				}
 
 			//redirect the user
-				if ($_REQUEST['submit'] == $text['button-add']) {
+				if ($_REQUEST['submit'] == $text['button-add'] or $_REQUEST['submit'] == $text['button-save']) {
 					header("Location: menu_item_edit.php?id=".urlencode($menu_uuid)."&menu_item_uuid=".urlencode($menu_item_uuid)."&menu_uuid=".urlencode($menu_uuid));
 				}
 				else {
