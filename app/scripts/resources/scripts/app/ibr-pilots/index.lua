@@ -262,7 +262,24 @@ function newgatecall(gatedata)
     local gatelist = gatedata[1]
     local priority = gatedata[2]
     local timeadvance = gatedata[3] or "0"
-    local apistring = "lua itas/acd.lua call add " .. callinfo["call_uuid"] .. " " .. caller_destination .. " " .. gatelist .. " " .. priority .. " " .. tostring(timeadvance)
+    local calltype = gatedata[4] or "LIVE"
+    local calltypes = {
+        "PRSC",
+        "GAA",
+        "PAA",
+        "RVRT",
+        "XFER",
+        "ADMN",
+        "LIVE"
+    }
+
+    if not contains(calltypes, calltype) then
+        uuidlog("WARNING", "Invalid calltype " .. tostring(calltype) .. " set, reverting to `LIVE`")
+        calltype = "LIVE"
+    else
+        uuidlog("INFO", "Calltype set to" .. tostring(calltype))
+    end
+    local apistring = "lua itas/acd.lua call add " .. callinfo["call_uuid"] .. " " .. caller_destination .. " " .. gatelist .. " " .. priority .. " " .. tostring(timeadvance) .. " " .. tostring(calltype)
     uuidlog("INFO", "Executing `" .. apistring)
     api:executeString(apistring)
     return
