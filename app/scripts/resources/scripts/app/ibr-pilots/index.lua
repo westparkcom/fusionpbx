@@ -277,7 +277,7 @@ function newgatecall(gatedata)
         uuidlog("WARNING", "Invalid calltype " .. tostring(calltype) .. " set, reverting to `LIVE`")
         calltype = "LIVE"
     else
-        uuidlog("INFO", "Calltype set to" .. tostring(calltype))
+        uuidlog("INFO", "Calltype set to " .. tostring(calltype))
     end
     local apistring = "lua itas/acd.lua call add " .. callinfo["call_uuid"] .. " " .. caller_destination .. " " .. gatelist .. " " .. priority .. " " .. tostring(timeadvance) .. " " .. tostring(calltype)
     uuidlog("INFO", "Executing `" .. apistring)
