@@ -394,7 +394,6 @@
 			local settings = Settings.new(db, domain_name, domain_uuid)
 			local message_max_length = settings:get('voicemail', 'message_max_length', 'numeric') or 300;
 			local message_silence_threshold = settings:get('voicemail', 'message_silence_threshold', 'numeric') or 200;
-			local message_silence_seconds = settings:get('voicemail', 'message_silence_seconds', 'numeric') or 3;
 			local email_queue_enabled = settings:get('email_queue', 'enabled', 'boolean') or "false";
 			local transcribe_provider = settings:get('voicemail', 'transcribe_provider', 'text') or '';
 			transcribe_enabled = settings:get('voicemail', 'transcribe_enabled', 'boolean') or "false";

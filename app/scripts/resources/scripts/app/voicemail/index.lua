@@ -30,6 +30,7 @@
 	max_timeouts = 3;
 	digit_timeout = 3000;
 	stream_seek = false;
+	message_silence_seconds = 3;
 
 --direct dial
 	direct_dial = {}
@@ -169,6 +170,14 @@
 			require "resources.functions.settings";
 			settings = settings(domain_uuid);
 			if (settings['voicemail'] ~= nil) then
+				if (settings['voicemail']['message_silence_seconds'] ~= nil) then
+					if (settings['voicemail']['message_silence_seconds']['numeric'] ~= nil) then
+						message_silence_seconds = settings['voicemail']['message_silence_seconds']['numeric'];
+					end
+				end
+				if session:getVariable("message_silence_seconds") ~= nil then
+					message_silence_seconds = session:getVariable("message_silence_seconds");
+				end
 				storage_type = '';
 				if (settings['voicemail']['storage_type'] ~= nil) then
 					if (settings['voicemail']['storage_type']['text'] ~= nil) then
