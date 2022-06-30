@@ -118,7 +118,7 @@
 	}
 
 //get existing recordings
-	$sql = "select recording_uuid, recording_filename, case when recording_base64 = '' then false else true end as base64_exists ";
+	$sql = "select recording_uuid, recording_filename, case when recording_base64_exists = '' then false else true end as base64_exists ";
 	$sql .= "from v_recordings ";
 	$sql .= "where domain_uuid = :domain_uuid ";
 	$parameters['domain_uuid'] = $domain_uuid;
@@ -147,6 +147,8 @@
 						$array['recordings'][0]['recording_uuid'] = $row['recording_uuid'];
 						$array['recordings'][0]['domain_uuid'] = $domain_uuid;
 						$array['recordings'][0]['recording_base64'] = null;
+						$array['recordings'][0]['recording_base64_exists'] = null;
+						$array['recordings'][0]['recording_base64_size'] = null;
 					//set temporary permissions
 						$p = new permissions;
 						$p->add('recording_edit', 'temp');
@@ -198,6 +200,8 @@
 						$array['recordings'][0]['domain_uuid'] = $domain_uuid;
 						$recording_base64 = base64_encode(file_get_contents($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename));
 						$array['recordings'][0]['recording_base64'] = $recording_base64;
+						$array['recordings'][0]['recording_base64_exists'] = 'true';
+						$array['recordings'][0]['recording_base64_size'] = filesize($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename);
 					//set temporary permissions
 						$p = new permissions;
 						$p->add('recording_edit', 'temp');
@@ -241,6 +245,8 @@
 							if ($_SESSION['recordings']['storage_type']['text'] == 'base64') {
 								$recording_base64 = base64_encode(file_get_contents($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename));
 								$array['recordings'][0]['recording_base64'] = $recording_base64;
+								$array['recordings'][0]['recording_base64_exists'] = 'true';
+								$array['recordings'][0]['recording_base64_size'] = filesize($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename);
 							}
 						//set temporary permissions
 							$p = new permissions;
@@ -264,6 +270,8 @@
 										$array['recordings'][0]['domain_uuid'] = $domain_uuid;
 										$array['recordings'][0]['recording_uuid'] = $found_recording_uuid;
 										$array['recordings'][0]['recording_base64'] = $recording_base64;
+										$array['recordings'][0]['recording_base64_exists'] = 'true';
+										$array['recordings'][0]['recording_base64_size'] = filesize($_SESSION['switch']['recordings']['dir'].'/'.$_SESSION['domain_name'].'/'.$recording_filename);
 									//set temporary permissions
 										$p = new permissions;
 										$p->add('recording_edit', 'temp');
@@ -347,10 +355,7 @@
 
 //get the recordings from the database
 	if ($_SESSION['recordings']['storage_type']['text'] == 'base64') {
-		switch ($db_type) {
-			case 'pgsql': $sql_file_size = "length(decode(recording_base64,'base64')) as recording_size, "; break;
-			case 'mysql': $sql_file_size = "length(from_base64(recording_base64)) as recording_size, "; break;
-		}
+		$sql_file_size = "recording_base64_size as recording_size, ";
 	}
 	$sql = str_replace('count(*)', 'recording_uuid, domain_uuid, recording_filename, '.$sql_file_size.' recording_name, recording_description', $sql);
 	$sql .= order_by($order_by, $order, 'recording_name', 'asc');

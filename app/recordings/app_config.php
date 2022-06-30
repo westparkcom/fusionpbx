@@ -172,5 +172,13 @@
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "recording_base64";
 		$apps[$x]['db'][$y]['fields'][$z]['type'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "Recording file encoded in base64.";
+		$z++;
+		$apps[$x]['db'][$y]['fields'][$z]['name'] = "recording_base64_exists";
+		$apps[$x]['db'][$y]['fields'][$z]['type'] = "text";
+		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "Set if recording file encoded in base64.";
+		$z++;
+		$apps[$x]['db'][$y]['fields'][$z]['name'] = "recording_base64_size";
+		$apps[$x]['db'][$y]['fields'][$z]['type'] = "numeric";
+		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "Recording size if encoded in base64.";
 
 ?>

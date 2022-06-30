@@ -62,6 +62,8 @@
 										$array['recordings'][0]['recording_uuid'] = $recording_uuid;
 										$array['recordings'][0]['domain_uuid'] = $recording_domain_uuid;
 										$array['recordings'][0]['recording_base64'] = $recording_base64;
+										$array['recordings'][0]['recording_base64_exists'] = 'true';
+										$array['recordings'][0]['recording_base64_size'] = filesize($recording_directory.'/'.$recording_filename);
 									//grant temporary permissions
 										$p = new permissions;
 										$p->add('recording_edit', 'temp');
@@ -107,6 +109,8 @@
 								$array['recordings'][0]['recording_uuid'] = $recording_uuid;
 								$array['recordings'][0]['domain_uuid'] = $recording_domain_uuid;
 								$array['recordings'][0]['recording_base64'] = null;
+								$array['recordings'][0]['recording_base64_exists'] = null;
+								$array['recordings'][0]['recording_base64_size'] = null;
 							//grant temporary permissions
 								$p = new permissions;
 								$p->add('recording_edit', 'temp');

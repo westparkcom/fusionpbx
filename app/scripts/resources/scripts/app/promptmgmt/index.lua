@@ -972,7 +972,9 @@ end
 					recording_filename,
 					recording_name,
 					recording_description,
-					recording_base64
+					recording_base64,
+					recording_base64_exists,
+					recording_base64_size
 					)
 					VALUES
 					(:recording_uuid,
@@ -980,7 +982,9 @@ end
 					:recording_filename,
 					:recording_name,
 					:recording_description,
-					:recording_base64
+					:recording_base64,
+					:recording_base64_exists,
+					:recording_base64_size
 					)]];
 		else
 			recording_file_loc = storage_path .. '/' .. recordinglist[1][zeropad(4, recordingnumber)]['recording_filename'];
@@ -990,7 +994,9 @@ end
 			recording_UUID = recordinglist[1][zeropad(4, recordingnumber)]['recording_uuid'];
 			recording_filename = recordinglist[1][zeropad(4, recordingnumber)]['recording_filename'];
 			sql = [[UPDATE v_recordings
-					SET recording_base64 = :recording_base64
+					SET recording_base64 = :recording_base64,
+					recording_base64_exists = :recording_base64_exists,
+					recording_base64_size = :recording_base64_size
 					WHERE recording_uuid = :recording_uuid
 					AND domain_uuid = :domain_uuid]];
 			session:execute('playback', saytext(greetings['recordingExisting']));
@@ -1013,11 +1019,18 @@ end
 					record_complete = true;
 					if storage_type == "base64" then
 						recording_base64 = file.read_base64(tmp_file_loc);
+						recording_base64_exists = 'true';
+						local tmpf = io.open(tmp_file_loc, 'r+b');
+						recording_base64_size = tonumber(tmpf:seek("end"));
 						if recording_base64 == nil then
 							recording_base64 = '';
+							recording_base64_exists = nil;
+							recording_base64_size = nil;
 						end
 					else
 						recording_base64 = '';
+						recording_base64_exists = nil;
+						recording_base64_size = nil;
 					end
 					local dbparams = {
 						recording_uuid = recording_UUID,
@@ -1025,7 +1038,9 @@ end
 						recording_filename = recording_filename,
 						recording_name = recording_name,
 						recording_description = recording_description,
-						recording_base64 = recording_base64
+						recording_base64 = recording_base64,
+						recording_base64_exists = recording_base64_exists,
+						recording_base64_size = recording_base64_size
 					};
 					if storage_type == "base64" then
 						local dbh64 = Database.new('system', 'base64');
