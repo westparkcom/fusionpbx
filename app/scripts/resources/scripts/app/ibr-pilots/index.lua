@@ -591,9 +591,9 @@ function checkif(checkifdata, execcmdiftrue, execcmdiffalse, execvaliftrue, exec
         else
             uuidlog("INFO", "Gate `" .. valtocheck .. "` DOES NOT HAVE available agent(s)!")
             if operand == "==" then
-                exec_command(exec_if_true["command"], exec_if_true["value"])
-            else
                 exec_command(exec_if_false["command"], exec_if_false["value"])
+            else
+                exec_command(exec_if_true["command"], exec_if_true["value"])
             end
             return
         end
