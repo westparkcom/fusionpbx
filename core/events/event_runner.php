@@ -39,22 +39,37 @@
 		$cacheloc = '/var/cache/fusionpbx/';
 		$sql = "select * from v_settings ";
 		$database = new database;
+		error_log( '[INFO] event_runner: querying v_settings' );
 		$row = $database->select($sql, null, 'row');
 		if (is_array($row) && @sizeof($row) != 0) {
 			$event_socket_ip_address = $row["event_socket_ip_address"];
 			$event_socket_port = $row["event_socket_port"];
 			$event_socket_password = $row["event_socket_password"];
 		}
+		else {
+			error_log( '[ERR] event_runner: unable to query v_settings' );
+			die( 'Unable to get event socket settings' );
+		}
 		unset($sql, $row);
 		$esl = new event_socket;
+		error_log( "[INFO] event_runner: connecting to {$event_socket_ip_address}:{$event_socket_port}" );
 		if (!$esl->connect($event_socket_ip_address, $event_socket_port, $event_socket_password)) {
+			error_log( "[ERR] event_runner: Unable to connect to FreeSWITCH!!!" );
 			die("Unable to connect to FreeSWITCH!!!");
 		}
+		$event_limit = 100;
+		$event_count = 0;
 		foreach (glob($cacheloc . '*:' . $hostname) as $filename) {
 			$cmd = file_get_contents($filename);
 			echo $cmd . "\n";
+			error_log( "[DEBUG] event_runner: executing cmd {$cmd}" );
 			$esl->request($cmd);
 			unlink($filename);
+			if( ++$event_count >= $event_limit ){
+				error_log( '[INFO] event_running: event_limit reached' );
+				break;
+			}
 		}
+		error_log( '[INFO] event_runner: closing esl' );
 		$esl->close();
 	}
